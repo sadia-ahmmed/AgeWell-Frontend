@@ -6,7 +6,8 @@ export default function App() {
   return (
     
     <SafeAreaView style={styles.container}>
-      <Text>Hello</Text>
+      <Text>Hello huhuhu</Text>
+      {/* <AccountSelection /> */}
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -15,7 +16,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'skyblue',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
