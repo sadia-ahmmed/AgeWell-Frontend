@@ -1,17 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, TouchableWithoutFeedback, StyleSheet, Text, View , Image, SafeAreaView, TouchableOpacity} from 'react-native';
+import { StyleSheet, SafeAreaView} from 'react-native';
+import AccountSelection from './src/screens/Accountselection';
+
 
 export default function App() {
     
   return (
     
     <SafeAreaView style={styles.container}>
-      <Text>Hello huhuhu</Text>
-      {/* <AccountSelection /> */}
+     <AccountSelection />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
