@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Button, TouchableWithoutFeedback, StyleSheet, Text, View , Image, SafeAreaView, TouchableOpacity} from 'react-native';
 import Qp1 from './src/screens/Qp1';
 
+const i = 10
+
 export default function App() {
     
   return (
