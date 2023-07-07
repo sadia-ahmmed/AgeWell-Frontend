@@ -46,16 +46,68 @@
 // https://icons.expo.fyi/
 
 // lets start the code for this screen
+import 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import React from 'react'
-import { View, Text } from 'react-native'
+const CareGiver = () => {
+  const caregiverName = 'Sahid Hossain Mustakim'; // Replace with the caregiver's name
 
-const CareGiver = (props) => {
-    return (
-        <View>
-            <Text>CareGiver</Text>
+  const Drawer = createDrawerNavigator();
+
+  const handleLogout = () => {
+    // Add your logout logic here
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.iconContainer}>
+          <Image source={require('../../../public/boy.png')} style={styles.icon} />
+          <Text style={styles.caregiverName}>{caregiverName}</Text>
         </View>
-    )
-}
+        <TouchableOpacity onPress={handleLogout}>
+          <Text style={styles.logoutButton}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    
+    </View>
+  );
+};
 
-export default CareGiver
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingTop: 20,
+    paddingBottom: 10,
+    backgroundColor: '#f2f2f2',
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    borderRadius: 15,
+    marginRight: 10,
+  },
+  caregiverName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'red',
+  },
+});
+
+export default CareGiver;

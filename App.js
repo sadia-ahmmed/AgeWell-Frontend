@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import LogIn from './src/screens/auth/LogIn';
 import Dummy from './src/screens/dashboard/Dummy';
 import SignUp from './src/screens/auth/SignUp';
+import CareGiver from './src/screens/dashboard/CareGiver';
 
 
 const AuthStack = createStackNavigator()
@@ -26,7 +27,7 @@ const HomeStackScreens = ({ user }) => {
     <HomeStack.Navigator>
       {/* SADIA OPEN THIS COMMENT AFTER YOURE DONE WITH ACCOUNT SELECTION */}
       {/* <HomeStack.Screen name='account-selection' component={AccountSelection} /> */}
-      <HomeStack.Screen name='dummy' component={Dummy} />
+      <HomeStack.Screen name='Care Giver' component={CareGiver} />
     </HomeStack.Navigator>
   )
 }
