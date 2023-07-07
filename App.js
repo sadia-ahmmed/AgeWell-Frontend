@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, TouchableWithoutFeedback, StyleSheet, Text, View , Image, SafeAreaView, TouchableOpacity} from 'react-native';
+import Qp1 from './src/screens/Qp1';
 
 export default function App() {
     
   return (
     
     <SafeAreaView style={styles.container}>
-      <Text>Hello huhuhu</Text>
       {/* <AccountSelection /> */}
+      <Qp1/> 
       <StatusBar style="auto" />
     </SafeAreaView>
   );
