@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, TouchableWithoutFeedback, StyleSheet, Text, View , Image, SafeAreaView, TouchableOpacity} from 'react-native';
+import { Button, StyleSheet, Text , Image, SafeAreaView} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';                         
 
 import AccountSelection from './src/screens/account-selection';
+import CareGiver from './src/screens/CareGiver';
 
 export default function App() {
   return (
@@ -9,7 +11,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <Text>Hello huhuhu</Text>
       <AccountSelection />
-      <Button title="Click Me" onPress={() => alert('Button Clicked')} />
+      <Button title="Go to CareGiver" onPress={() => navigation.navigate('CareGiver')} />
 
     </SafeAreaView>
   );
