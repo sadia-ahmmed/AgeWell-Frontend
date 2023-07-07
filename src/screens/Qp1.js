@@ -16,19 +16,12 @@ const Qp1 = () => {
         style={styles.input}
         onChangeText={onChangeNumber}
         value={number}
-        placeholder="useless placeholder"
+        placeholder="Gender"
         keyboardType="numeric"
       />
 
    <View>
-      <Text style={styles.title}>
-        The title and onPress handler are required. It is recommended to set
-        accessibilityLabel to help make your app usable by everyone.
-      </Text>
-      <Button
-        title="Press me"
-        onPress={() => Alert.alert('Simple Button pressed')}
-      />
+      <Button title = "Next" onPress={() => alert('HHHHHH')}/>
    </View>
  </SafeAreaView>
   );
