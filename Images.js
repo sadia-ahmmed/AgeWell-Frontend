@@ -1,4 +1,4 @@
-const LOGIN_IMAGE = require('./public/login illustration.png')
+const LOGIN_IMAGE = require('./assets/login-illustration.png')
 const SIGNUP_IMAGE = ""
 
 

@@ -4,14 +4,15 @@ import { AuthContext } from '../../providers/AuthProviders'
 import { useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { LOGIN_IMAGE } from '../../../Images'
-import { signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { auth, app } from '../../firebase/firebaseConfigs'
 import { Dialog } from '@rneui/themed'
+import { invokeLoginService } from '../../services/user/authService'
 
 const LogIn = (props) => {
 
     // TODO: FIX IMAGE PATH
-    let image_path = LOGIN_IMAGE
+    // let image_path = LOGIN_IMAGE
 
 
     const [email, setEmail] = useState()
@@ -23,16 +24,22 @@ const LogIn = (props) => {
     const [passdialog_visible, setPassDialogVisible] = useState(false)
 
 
-    const submit = (authCtx) => {
+    const onLoginButtonPress = (authCtx) => {
+        // TODO: create a fetch request to the backend
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Signed in 
                 const user = userCredential.user
                 const user_access_token = user.stsTokenManager.accessToken
 
                 const userObject = {
                     uid: user.uid,
                     user_access_token
+                }
+
+                const res = invokeLoginService(email, password, user_access_token)
+
+                if (res) {
+                    console.log("DONE")
                 }
 
                 authCtx.setUserCache(userObject)
@@ -43,26 +50,8 @@ const LogIn = (props) => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage)
+                alert(errorMessage)
             });
-    }
-
-
-
-
-    const googleLogin = async () => {
-        const provider = new GoogleAuthProvider(app)
-        provider.setCustomParameters({
-            prompt: "select_account"
-        });
-
-        console.log(provider)
-
-        try {
-            const res = await signInWithPopup(auth, provider)
-        } catch (err) {
-            console.log(err)
-        }
     }
 
 
@@ -91,7 +80,7 @@ const LogIn = (props) => {
                     >
 
                         <View style={styles.image_container}>
-                            <Image source={require('../../../public/login illustration.png')} style={styles.image_styles} />
+                            <Image source={require('../../../assets/login-illustration.png')} style={styles.image_styles} />
                         </View>
 
 
@@ -132,7 +121,7 @@ const LogIn = (props) => {
                         </View>
 
                         <View style={{ margin: 10 }}>
-                            <Button title="Log In" onPress={() => submit(authCtx)} />
+                            <Button title="Log In" onPress={() => onLoginButtonPress(authCtx)} />
                         </View>
 
 
@@ -181,8 +170,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image_styles: {
-        width: 100,
-        height: 100,
+        width: 250,
+        height: 250,
         margin: 30,
         alignSelf: "center"
     },
