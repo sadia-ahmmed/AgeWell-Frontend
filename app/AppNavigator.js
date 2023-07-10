@@ -8,7 +8,7 @@ const AppNavigator = (props) => {
     return (
 
         <Stack.Navigator>
-            <Stack.Screen name='Your Medicine Reminder' component={HomePage_MedicineTracker} options={{ headerShown: false }} />
+            <Stack.Screen name='homePage' component={HomePage_MedicineTracker} options={{ headerShown: false }} />
             <Stack.Screen name='Add a new medicine' component={CreateRecord_medicineTracker} />
             {/* <Stack.Screen name='Home' component={HomePage_MedicineTracker} options={{ headerShown: false }} /> */}
         </Stack.Navigator>

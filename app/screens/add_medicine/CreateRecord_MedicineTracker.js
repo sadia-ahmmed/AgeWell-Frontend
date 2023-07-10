@@ -4,12 +4,23 @@ import React, { useState } from 'react'
 import { Modal } from 'react-native'
 import DatePicker from 'react-native-modern-datepicker'
 import { getToday, getFormatedDate } from 'react-native-modern-datepicker'
+import { db } from '../../firebase'
+import {
+  query,
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  addDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 
-export default function CreateRecord_medicineTracker() {
-  const [name, setName]= useState('napa')
+
+export default function CreateRecord_medicineTracker(props) {
+  const [name, setName]= useState('')
   const [startDate, setStartDate]= useState('2023/07/12')
   const [endDate, setEndDate]= useState('2023/07/12')
-  const [time, setTime]= useState('8 pm')
+  const [time, setTime]= useState('')
   const today = new Date()
   const [openOnStartDate, setOpenOnStartDate] = useState(false)
   const [openOnEndDate, setOpenOnEndDate] = useState(false)
@@ -44,10 +55,33 @@ export default function CreateRecord_medicineTracker() {
     )
   }
 
-  console.log(name)
-  console.log(startDate)
-  console.log(endDate)
-  console.log(time)
+  // console.log(name)
+  // console.log(startDate)
+  // console.log(endDate)
+  // console.log(time)
+
+
+// Add med information
+const addMedicine = async (e) => {
+  e.preventDefault(e);
+  if (name === '' || time === '') {
+    alert('Please enter a valid todo');
+    return;
+  }
+  await addDoc(collection(db, 'medicine-tracker-info'), {
+    name: name,
+    startDate : startDate,
+    endDate : endDate,
+    time : time,
+  });
+  setName('');
+  setTime('');
+
+  props.navigation.navigate('homePage')
+};
+
+
+
   return (
     <View >
       <View style = {{margin: 30}}>
@@ -169,6 +203,10 @@ export default function CreateRecord_medicineTracker() {
         />
       </View>
       </View>
+
+      <TouchableOpacity onPress = {addMedicine}>
+        <Text>Done</Text>
+      </TouchableOpacity>
     </View>
   )
 }
