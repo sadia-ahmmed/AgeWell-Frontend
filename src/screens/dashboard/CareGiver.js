@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  SafeAreaView,
+  Button ,
+  FlatList,
 } from "react-native";
 
 const CareGiver = () => {
@@ -15,6 +16,52 @@ const CareGiver = () => {
   const handleLogout = () => {
     // Add your logout logic here
   };
+
+  const [requests, setRequests] = useState([
+    {
+      id: 1,
+      patientName: "Sahid Hossain Mustakim",
+      requestType: "Medicine",
+      requestTime: "10:00 AM",
+      requestDate: "10/10/2021",
+    },
+    {
+      id: 2,
+      patientName: "Sahid Hossain",
+      requestType: "Medicine",
+      requestTime: "10:00 AM",
+      requestDate: "10/10/2021",
+    },
+  ]);
+
+  const handleAccept = (requestId) => {
+    console.log("Accepted request with id: ", requestId);
+  };
+
+  const handleReject = (requestId) => {
+    console.log("Rejected request with id: ", requestId);
+  };
+
+  const renderRequest = ({ item }) => (
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: 10,
+        paddingHorizontal: 20,
+      }}
+    >
+      <Text>
+        {item.patientName} - {item.requestType}
+      </Text>
+      <View style={{ flexDirection: "row" }}>
+        <Button title="Accept" onPress={() => handleAccept(item.id)} />
+        <Button title="Reject" onPress={() => handleReject(item.id)} />
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -43,8 +90,25 @@ const CareGiver = () => {
           <Text style={styles.boxText}>Points</Text>
           <Text style={styles.boxTextPoint}>100</Text>
         </View>
-      </View>
 
+        <View style={{ marginTop: 20 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              marginBottom: 10,
+              paddingHorizontal: 20,
+            }}
+          >
+            Incoming Requests
+          </Text>
+          <FlatList
+            data={requests}
+            renderItem={renderRequest}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </View>
+      </View>
     </View>
   );
 };
