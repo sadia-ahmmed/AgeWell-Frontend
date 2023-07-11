@@ -5,6 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import LogIn from './src/screens/auth/LogIn';
 import Dummy from './src/screens/dashboard/Dummy';
 import SignUp from './src/screens/auth/SignUp';
+import BookingList from './src/screens/booking/BookingList';
+import NurseHighlight from './src/screens/booking/NurseHighlight';
+import BookingScreen from './src/screens/booking/BookingScreen';
 
 
 const AuthStack = createStackNavigator()
@@ -27,14 +30,13 @@ const HomeStackScreens = ({ user }) => {
     <HomeStack.Navigator>
       {/* SADIA OPEN THIS COMMENT AFTER YOURE DONE WITH ACCOUNT SELECTION */}
       {/* <HomeStack.Screen name='account-selection' component={AccountSelection} /> */}
-      <HomeStack.Screen name='dummy' component={Dummy} />
+      <HomeStack.Screen name='dummy' component={Dummy} options={{ headerShown: true, headerTitle: `Welcome!` }} />
+      <HomeStack.Screen name='booking-list' component={BookingList} options={{ headerShown: true, headerTitle: "All nurses" }} />
+      <HomeStack.Screen name='nurse-highlight' component={NurseHighlight} options={{ headerTitle: "View nurse", headerShown: true }} />
+      <HomeStack.Screen name='nurse-booking' component={BookingScreen} options={{ headerTitle: "Book nurse", headerShown: true }} />
     </HomeStack.Navigator>
   )
 }
-
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView} from 'react-native';
-import AccountSelection from './src/screens/Accountselection';
 
 
 export default function App() {
