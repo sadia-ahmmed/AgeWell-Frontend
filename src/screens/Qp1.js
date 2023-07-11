@@ -18,6 +18,7 @@ const Qp1 = () => {
         value={number}
         placeholder="Gender"
         keyboardType="numeric"
+        needsOffscreenAlphaCompositing
       />
 
    <View>
