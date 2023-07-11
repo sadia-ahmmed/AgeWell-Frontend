@@ -32,6 +32,10 @@ const HomeStackScreens = ({ user }) => {
   )
 }
 
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, SafeAreaView} from 'react-native';
+import AccountSelection from './src/screens/Accountselection';
+
 
 export default function App() {
 
@@ -50,3 +54,5 @@ export default function App() {
     // <LogIn />
   );
 }
+
+
