@@ -27,7 +27,7 @@ const HomeStackScreens = ({ user }) => {
     <HomeStack.Navigator>
       {/* SADIA OPEN THIS COMMENT AFTER YOURE DONE WITH ACCOUNT SELECTION */}
       {/* <HomeStack.Screen name='account-selection' component={AccountSelection} /> */}
-      <HomeStack.Screen name='Care Giver' component={CareGiver} />
+      <HomeStack.Screen name='Care Giver' component={CareGiver} options={{ headerShown: false }}/>
     </HomeStack.Navigator>
   )
 }
