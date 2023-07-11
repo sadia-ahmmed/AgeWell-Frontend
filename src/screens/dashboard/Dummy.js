@@ -20,9 +20,16 @@ const Dummy = (props) => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    <View>
-                        <Text>Dummy</Text>
-                        <Button title='LOGOUT' onPress={() => onLogoutButtonPress(authCtx)} />
+                    <View style={{ padding: 30 }}>
+                        <Text>This is a test dashboard</Text>
+                        <View style={{ margin: 10 }}>
+                            <Button title='BOOKING' onPress={() => props.navigation.navigate('booking-list')} />
+                        </View>
+
+                        <View style={{ margin: 10 }}>
+                            <Button color='red' title='LOGOUT' onPress={() => onLogoutButtonPress(authCtx)} />
+                        </View>
+
                     </View>
                 )
             }

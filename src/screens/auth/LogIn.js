@@ -4,7 +4,7 @@ import { AuthContext } from '../../providers/AuthProviders'
 import { useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import { LOGIN_IMAGE } from '../../../Images'
-import { signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut } from "firebase/auth";
 import { auth, app } from '../../firebase/firebaseConfigs'
 import { Dialog } from '@rneui/themed'
 import { invokeLoginService } from '../../services/user/authService'
@@ -36,11 +36,7 @@ const LogIn = (props) => {
                     user_access_token
                 }
 
-                const res = invokeLoginService(email, password, user_access_token)
-
-                if (res) {
-                    console.log("DONE")
-                }
+                invokeLoginService(email, password, user_access_token)
 
                 authCtx.setUserCache(userObject)
                 authCtx.setLoggedIn(true)
@@ -79,9 +75,9 @@ const LogIn = (props) => {
                     // edges={['top']}
                     >
 
-                        <View style={styles.image_container}>
+                        {/* <View style={styles.image_container}>
                             <Image source={require('../../../assets/login-illustration.png')} style={styles.image_styles} />
-                        </View>
+                        </View> */}
 
 
                         < Input

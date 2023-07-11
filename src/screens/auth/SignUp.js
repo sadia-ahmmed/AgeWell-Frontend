@@ -23,21 +23,21 @@ const SignUp = (props) => {
         }
 
         const user = { fullname, email, password, phone }
-        const res = invokeSignupService(user)
-        if (res === "success") {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Signed Up!")
-                    props.navigation.navigate('login')
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(`Error ${errorCode}: ${errorMessage}`)
-                });
-        } else {
-            alert(`Error ${res}`)
-        }
+
+        invokeSignupService(user)
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                alert("Signed Up!")
+                props.navigation.navigate('login')
+                // userCredential.user.updateProfile({
+                //     displayName: fullname
+                // })
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(`Error ${errorCode}: ${errorMessage}`)
+            });
     }
 
 
@@ -47,7 +47,7 @@ const SignUp = (props) => {
             {
                 (authCtx) => (
                     <View style={styles.page_container}>
-                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'center', width: 150, }}>
+                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'center', width: 300, }}>
                             <Input label='Full Name' onChangeText={setFullName} />
                         </View>
                         <View style={{ flexDirection: "row", alignItems: 'stretch', width: 300, }}>
