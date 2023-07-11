@@ -204,9 +204,16 @@ const addMedicine = async (e) => {
       </View>
       </View>
 
-      <TouchableOpacity onPress = {addMedicine}>
-        <Text>Done</Text>
-      </TouchableOpacity>
+      <View style={{flex:1, justifyContent:'center', alignItems:'center', marginTop:20}}>
+        <TouchableOpacity onPress = {addMedicine} style={{height:40,
+          width:80, 
+          backgroundColor:'#439be8', 
+          justifyContent: 'center', 
+          alignItems:'center',
+          borderRadius: 15}}>
+          <Text>Done</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -216,7 +223,8 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     padding: 10, 
     backgroundColor:'white',
-    flex:3
+    flex:3,
+    marginTop: 10,
   },
   centeredView:{
     flex: 1,

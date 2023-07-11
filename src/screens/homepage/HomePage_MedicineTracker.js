@@ -53,20 +53,35 @@ export default function HomePage_MedicineTracker(props) {
           renderItem={
             ({ item }) => (
               <View style= {styles.cardView}>
+                
+              <View style={{flex:10}}>
+
                 <View style={{flexDirection:'row'}}>
-                  <Text style={{flex: 1}}>Name:</Text>
-                  <Text style={{flex: 3}}>{item.name}</Text>
+                    <Text style={{flex: 1.5}}>Name:</Text>
+                    <Text style={{flex: 3.5,}}>{item.name}</Text> 
                 </View>
+
                 <View style={{flexDirection:'row'}}>
                   <Text style={{flex: 1}}>Starting at:</Text>
-                  <Text style={{flex: 3}}>{item.startDate}</Text>
-                </View><View style={{flexDirection:'row'}}>
+                  <Text style={{flex: 3,}}>{item.startDate}</Text>
+                </View>
+                <View style={{flexDirection:'row'}}>
                   <Text style={{flex: 1}}>Ends at:</Text>
                   <Text style={{flex: 3}}>{item.endDate}</Text>
-                </View><View style={{flexDirection:'row'}}>
+                </View>
+                <View style={{flexDirection:'row'}}>
                   <Text style={{flex: 1}}>Time:</Text>
                   <Text style={{flex: 3}}>{item.time}</Text>
                 </View>
+
+              </View>
+              <View style={{flex: .25, justifyContent: 'center', alignItems: 'flex-end',paddingBottom:50}}>
+
+                    <Image
+                      style= {styles.dontedIcon}
+                      source={require('../../images/editOrdeleteIcon.png')}
+                    />
+              </View>
                 
               </View>   
             )
@@ -100,10 +115,16 @@ const styles = StyleSheet.create({
       height: 90,
       resizeMode: 'contain'
     },
+    dontedIcon:{
+      width: 20,
+      height: 30,
+      resizeMode: 'contain'
+    },
 
     cardView:{
       // flexDirection: 'row',
       margin:15,
+      flexDirection: 'row',
       backgroundColor: '#f7fafe',
       borderRadius:20,
       width:'90%',
