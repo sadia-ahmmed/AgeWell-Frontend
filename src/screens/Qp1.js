@@ -1,28 +1,42 @@
 import React from 'react';
-import {SafeAreaView, Text, Button, View, StyleSheet, TextInput} from 'react-native';
+import {SafeAreaView, Text, Button, View, StyleSheet, TextInput, Alert} from 'react-native';
 
 const Qp1 = () => {
   const [text, onChangeText] = React.useState('Useless Text');
   const [number, onChangeNumber] = React.useState('');
 
   return (
-    <SafeAreaView style={styles.container}> 
+    <SafeAreaView style={styles.container}>
+       <Text style={styles.title}>
+       Tell me more
+       about yourself
+      </Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeNumber}
+        value={number}
+        placeholder="Age"
+        keyboardType="numeric"
+      />
       <TextInput
         style={styles.input}
         onChangeText={onChangeText}
         value={text}
+        placeholder="Gender"
       />
       <TextInput
         style={styles.input}
         onChangeText={onChangeNumber}
         value={number}
-        placeholder="Gender"
+        placeholder="Weight"
         keyboardType="numeric"
-        needsOffscreenAlphaCompositing
-      />
+      /> 
 
    <View>
-      <Button title = "Next" onPress={() => alert('HHHHHH')}/>
+      <Button
+        title="Next"
+        onPress={() => Alert.alert('Simple Button pressed')}
+      />
    </View>
  </SafeAreaView>
   );
@@ -45,5 +59,7 @@ const styles = StyleSheet.create({
         title: {
           textAlign: 'center',
           marginVertical: 8,
+          fontSize:25,
+          fontWeight: 'bold',
         }
   });
