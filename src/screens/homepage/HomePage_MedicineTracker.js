@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Pressable, Image, TouchableOpacity, Modal,FlatList } from 'react-native'
+import { StyleSheet, Text, View,Pressable, Image,  TouchableWithoutFeedback, TouchableOpacity, Modal,FlatList } from 'react-native'
 import {calenderIcon} from '../../images/calendarIcon.png'
 import React, { useState,useEffect } from 'react'
 import CreateRecord_medicineTracker from '../add_medicine/CreateRecord_medicineTracker'
@@ -15,7 +15,36 @@ import {
 export default function HomePage_MedicineTracker(props) {
 
   const [medInfo, setMedInfo] = useState('')
+  const { cardView } = styles;
+  const [combineStyles, setCombineStyles] = useState(StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}]))
+  const [done, setDone] = useState([]) 
 
+  const k = StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}])
+  const changeCardStyle = () => {
+    if (done === true) 
+      {
+        setDone(!done)
+        setCombineStyles(StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}]))
+      }
+    else 
+      {
+        setDone(!done)
+        return setCombineStyles(StyleSheet.flatten([cardView, {backgroundColor:'#c3ebcb'}]))
+      } 
+  }
+  // console.log(combineStyles)
+  // console.log(done)
+
+  const doUndoButton  = () => {
+
+    return (
+    <TouchableWithoutFeedback onPress = { changeCardStyle}>
+                    <View style={styles.doundo}>
+                      <Text>{done? 'Undo':'Done'}</Text>
+                    </View>
+                  </TouchableWithoutFeedback>    
+    )
+  }
   // Read todo from firebase
   useEffect(() => {
     const q = query(collection(db, 'medicine-tracker-info'));
@@ -29,7 +58,41 @@ export default function HomePage_MedicineTracker(props) {
     return () => unsubscribe();
   }, []);
 
-  console.log(medInfo)
+
+  function getDatesInRange(startDate, endDate) {
+    const date = new Date(startDate.getTime());
+  
+    const dates = [];
+  
+    while (date <= endDate) {
+      dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+  
+    return dates;
+  }
+  
+ 
+  let obj = []
+  let count = 0;
+  for (i of medInfo) {
+
+    const d1 = new Date(i.startDate.replaceAll("/","-"));
+    
+    const d2 = new Date(i.endDate.replaceAll("/","-"));
+
+    const dates = getDatesInRange(d1, d2)
+
+    for (j of dates){
+      obj.push({'name': i.name, 'time':i.time, 'date':j, 'id':i.id, 'idx' : count})
+      count += 1
+    }
+
+    
+
+
+  }
+
 
   return (
     <View style= {styles.homepageBackground}>
@@ -48,45 +111,64 @@ export default function HomePage_MedicineTracker(props) {
 
       {/* flat list */}
 
-      <View>
-        <FlatList data={medInfo}
+      <View  style={{flex:1}}>
+        <FlatList data={obj}
           renderItem={
             ({ item }) => (
-              <View style= {styles.cardView}>
+              <View>
+              <View style= {combineStyles}>
                 
-              <View style={{flex:10}}>
+                  <View style={{flex:10}}>
 
-                <View style={{flexDirection:'row'}}>
-                    <Text style={{flex: 1.5}}>Name:</Text>
-                    <Text style={{flex: 3.5,}}>{item.name}</Text> 
-                </View>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={{flex: 1.5}}>Name:</Text>
+                        <Text style={{flex: 3.5,}}>{item.name}</Text> 
+                    </View>
 
-                <View style={{flexDirection:'row'}}>
-                  <Text style={{flex: 1}}>Starting at:</Text>
-                  <Text style={{flex: 3,}}>{item.startDate}</Text>
-                </View>
-                <View style={{flexDirection:'row'}}>
-                  <Text style={{flex: 1}}>Ends at:</Text>
-                  <Text style={{flex: 3}}>{item.endDate}</Text>
-                </View>
-                <View style={{flexDirection:'row'}}>
-                  <Text style={{flex: 1}}>Time:</Text>
-                  <Text style={{flex: 3}}>{item.time}</Text>
-                </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={{flex: 1}}>Date:</Text>
+                      <Text style={{flex: 3,}}>{item.date.toString()}</Text>
+                    </View>
 
-              </View>
-              <View style={{flex: .25, justifyContent: 'center', alignItems: 'flex-end',paddingBottom:50}}>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={{flex: 1}}>Time:</Text>
+                      <Text style={{flex: 3}}>{item.time}</Text>
+                    </View>
+                    
+                  </View>
+              
+                    {/* <View style={{flex: .25, justifyContent: 'center', alignItems: 'flex-end',paddingBottom:50}}>
 
-                    <Image
-                      style= {styles.dontedIcon}
-                      source={require('../../images/editOrdeleteIcon.png')}
-                    />
-              </View>
-                
-              </View>   
+                          <Image
+                            style= {styles.dontedIcon}
+                            source={require('../../images/editOrdeleteIcon.png')}
+                          />
+                    </View> */}
+                    
+              
+
+              </View>  
+
+              {/* <Modal
+                transparent={true}
+                visible={true}
+              >
+                  <TouchableWithoutFeedback >
+                    <View style={styles.doundo}>
+                      <Text>Done</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+              </Modal>     */}
+
+              {doUndoButton()}
+
+    
+
+              
+            </View> 
             )
           }
-        keyExtractor={item => item.id.toString()} />
+        keyExtractor={item => item.idx.toString()} />
 
 
       </View>
@@ -115,7 +197,7 @@ const styles = StyleSheet.create({
       height: 90,
       resizeMode: 'contain'
     },
-    dontedIcon:{
+    dotedIcon:{
       width: 20,
       height: 30,
       resizeMode: 'contain'
@@ -123,13 +205,17 @@ const styles = StyleSheet.create({
 
     cardView:{
       // flexDirection: 'row',
-      margin:15,
+      marginTop:15,
+      marginLeft:20,
+      marginRight:15,
       flexDirection: 'row',
       backgroundColor: '#f7fafe',
-      borderRadius:20,
+      borderTopEndRadius:20,
+      borderTopStartRadius:20,
       width:'90%',
       //height:'45%',
       padding:20,
+      
       alignItems: 'center',
       shadowColor: '#000',
       shadowOffset:{
@@ -139,6 +225,30 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.15,
       shadowRadius: 4,
       elevation: 2
+    },
+    doundo:{
+      
+      
+      marginLeft:19.5,
+      // marginRight:20,
+      flexDirection: 'row',
+      backgroundColor: '#439be8',
+      borderBottomEndRadius:20,
+      borderBottomStartRadius: 20,
+      width: '90.35%',
+      //height:'45%',
+      padding:10,
+      justifyContent:'center',
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset:{
+        width:0,
+        height:1,
+      },
+      shadowOpacity: 0.15,
+      shadowRadius: 4,
+      elevation: 2
+      
     }
     // centered_view: {
     //   flex: 1,

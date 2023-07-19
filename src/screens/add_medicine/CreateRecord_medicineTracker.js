@@ -18,10 +18,11 @@ import {
 
 export default function CreateRecord_medicineTracker(props) {
   const [name, setName]= useState('')
-  const [startDate, setStartDate]= useState('2023/07/12')
-  const [endDate, setEndDate]= useState('2023/07/12')
   const [time, setTime]= useState('')
-  const today = new Date()
+  const today = new Date().toLocaleDateString('en-ZA')
+  console.log(today)
+  const [startDate, setStartDate]= useState(today)
+  const [endDate, setEndDate]= useState(today)
   const [openOnStartDate, setOpenOnStartDate] = useState(false)
   const [openOnEndDate, setOpenOnEndDate] = useState(false)
 
@@ -68,6 +69,7 @@ const addMedicine = async (e) => {
     alert('Please enter a valid todo');
     return;
   }
+  props.navigation.navigate('homePage')
   await addDoc(collection(db, 'medicine-tracker-info'), {
     name: name,
     startDate : startDate,
@@ -78,6 +80,7 @@ const addMedicine = async (e) => {
   setTime('');
 
   props.navigation.navigate('homePage')
+  return
 };
 
 
