@@ -11,43 +11,44 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  getDocs,
+  where,
 } from 'firebase/firestore';
 export default function HomePage_MedicineTracker(props) {
 
   const [medInfo, setMedInfo] = useState('')
-  const { cardView } = styles;
-  const [combineStyles, setCombineStyles] = useState(StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}]))
-  const [done, setDone] = useState([]) 
+  // const { cardView } = styles;
+  // const [combineStyles, setCombineStyles] = useState(StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}]))
+  // const [done, setDone] = useState([]) 
 
-  const k = StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}])
-  const changeCardStyle = () => {
-    if (done === true) 
-      {
-        setDone(!done)
-        setCombineStyles(StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}]))
-      }
-    else 
-      {
-        setDone(!done)
-        return setCombineStyles(StyleSheet.flatten([cardView, {backgroundColor:'#c3ebcb'}]))
-      } 
-  }
-  // console.log(combineStyles)
-  // console.log(done)
+  // const k = StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}])
+  // const changeCardStyle = () => {
+  //   if (done === true) 
+  //     {
+  //       setDone(!done)
+  //       setCombineStyles(StyleSheet.flatten([cardView, {backgroundColor:'#f7fafe'}]))
+  //     }
+  //   else 
+  //     {
+  //       setDone(!done)
+  //       return setCombineStyles(StyleSheet.flatten([cardView, {backgroundColor:'#c3ebcb'}]))
+  //     } 
+  // }
 
-  const doUndoButton  = () => {
 
-    return (
-    <TouchableWithoutFeedback onPress = { changeCardStyle}>
-                    <View style={styles.doundo}>
-                      <Text>{done? 'Undo':'Done'}</Text>
-                    </View>
-                  </TouchableWithoutFeedback>    
-    )
-  }
+  // const doUndoButton  = () => {
+
+  //   return (
+  //   <TouchableWithoutFeedback onPress = { changeCardStyle}>
+  //                   <View style={styles.doundo}>
+  //                     <Text>{done? 'Undo':'Done'}</Text>
+  //                   </View>
+  //                 </TouchableWithoutFeedback>    
+  //   )
+  // }
   // Read todo from firebase
   useEffect(() => {
-    const q = query(collection(db, 'medicine-tracker-info'));
+    const q = query(collection(db, 'medicine-tracker-info-test'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let medInfo = [];
       querySnapshot.forEach((doc) => {
@@ -59,66 +60,109 @@ export default function HomePage_MedicineTracker(props) {
   }, []);
 
 
-  function getDatesInRange(startDate, endDate) {
-    const date = new Date(startDate.getTime());
+  // Update in firebase
+  const changeDoUndo = async (id,done,name, time, date) => {
+    await updateDoc(doc(db, 'medicine-tracker-info-test', id), {
+      done: !done,
+    });
+
+    if (done == false){
+
+      await addDoc(collection(db, 'medicine-tracker-completed-task'), {
+        name: name,
+        date : date,
+        time: time,
+        completedAt : new Date().toLocaleString(),
+        taskId: id
+      });
+
   
-    const dates = [];
-  
-    while (date <= endDate) {
-      dates.push(new Date(date));
-      date.setDate(date.getDate() + 1);
+    }else{
+
+      //delete
+      const collectionRef = collection(db,'medicine-tracker-completed-task')
+      const qr =query(collectionRef, where ('taskId','==',id))
+      const snapShot = await getDocs(qr)
+
+      const result = snapShot.docs.map(doc => ({...doc.data(),id :doc.id}))
+
+      result.forEach(async result => {
+        const docRef = doc(db, 'medicine-tracker-completed-task',result.id)
+        await deleteDoc(docRef)
+      })
     }
-  
-    return dates;
-  }
-  
- 
-  let obj = []
-  let count = 0;
-  for (i of medInfo) {
-
-    const d1 = new Date(i.startDate.replaceAll("/","-"));
     
-    const d2 = new Date(i.endDate.replaceAll("/","-"));
+  };
 
-    const dates = getDatesInRange(d1, d2)
-
-    for (j of dates){
-      obj.push({'name': i.name, 'time':i.time, 'date':j, 'id':i.id, 'idx' : count})
-      count += 1
-    }
-
-    
-
-
-  }
+  const onDelete = async (id) => {
+    await deleteDoc(doc(db, 'medicine-tracker-info-test', id));
+  };
 
 
   return (
     <View style= {styles.homepageBackground}>
       <View style= {styles.headline}>
-        <Text style= {{flex:4, fontSize: 25,fontWeight: 'bold',}}>Your Medicine Reminder</Text>
+        <Text style= {{flex:4.5, fontSize: 25,fontWeight: 'bold',}}>Your Medicine Reminder</Text>
         
-        <View style={{flex:1, width: '100%', height:"100%"}}>
+        <View style={{flex:1,marginEnd:10, width: '100%', height:"100%"}}>
           <TouchableOpacity onPress={() => props.navigation.navigate('Add a new medicine')}>
               <Image
               style= {styles.icon}
-              source={require('../../images/calendarIcon.png')}
+              source={require('../../images/createIcon.png')}
               />
           </TouchableOpacity>
         </View>
+
+        <View style={{flex:1, width: '100%', height:"100%"}}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('View All Completed Tasks')}>
+              <Image
+              style= {styles.icon}
+              source={require('../../images/viewIcon.png')}
+              />
+          </TouchableOpacity>
+        </View>
+
       </View>
+
+      
 
       {/* flat list */}
 
       <View  style={{flex:1}}>
-        <FlatList data={obj}
+
+       
+      <FlatList data={medInfo}
           renderItem={
             ({ item }) => (
               <View>
-              <View style= {combineStyles}>
+
+              {/* <View style= {combineStyles}>   */}
+              <View style= {{
+                marginTop:15,
+                marginLeft:20,
+                marginRight:15,
+                flexDirection: 'row',
+                backgroundColor: item.done ? '#f0d5db' : '#f7fafe',
+                borderTopEndRadius:20,
+                borderTopStartRadius:20,
+                width:'90%',
+                //height:'45%',
+                padding:20,
                 
-                  <View style={{flex:10}}>
+                alignItems: 'center',
+                shadowColor: '#000',
+                shadowOffset:{
+                  width:0,
+                  height:1,
+                },
+                shadowOpacity: 0.15,
+                shadowRadius: 4,
+                elevation: 2
+
+
+              }}>
+                
+                  <View style={{flex:16}}>
 
                     <View style={{flexDirection:'row'}}>
                         <Text style={{flex: 1.5}}>Name:</Text>
@@ -136,39 +180,30 @@ export default function HomePage_MedicineTracker(props) {
                     </View>
                     
                   </View>
-              
-                    {/* <View style={{flex: .25, justifyContent: 'center', alignItems: 'flex-end',paddingBottom:50}}>
 
-                          <Image
-                            style= {styles.dontedIcon}
-                            source={require('../../images/editOrdeleteIcon.png')}
-                          />
-                    </View> */}
-                    
+
+                <View style={{flex: 1, backgroundColor:'red', marginVertical:40, }}>
+                  <TouchableOpacity onPress={() => onDelete(item.id)}>
+                    <Text style={{alignSelf: 'flex-end', justifyContent:'flex-start'}} ></Text>
+                  </TouchableOpacity>
+                </View>
+                 
               
 
               </View>  
 
-              {/* <Modal
-                transparent={true}
-                visible={true}
-              >
-                  <TouchableWithoutFeedback >
+              <TouchableWithoutFeedback onPress = {() => changeDoUndo(item.id,
+                 item.done, item.name, item.time, item.date.toString())}>
                     <View style={styles.doundo}>
-                      <Text>Done</Text>
+                      <Text>{item.done? 'Undo':'Done'}</Text>
                     </View>
-                  </TouchableWithoutFeedback>
-              </Modal>     */}
-
-              {doUndoButton()}
-
+                  </TouchableWithoutFeedback>    
     
-
               
             </View> 
             )
           }
-        keyExtractor={item => item.idx.toString()} />
+        keyExtractor={item => item.id.toString()} />
 
 
       </View>
@@ -193,8 +228,8 @@ const styles = StyleSheet.create({
       padding:20
     },
     icon:{
-      width: 50,
-      height: 90,
+      width: 40,
+      height: 80,
       resizeMode: 'contain'
     },
     dotedIcon:{
@@ -250,40 +285,5 @@ const styles = StyleSheet.create({
       elevation: 2
       
     }
-    // centered_view: {
-    //   flex: 1,
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    //   backgroundColor: '#00000099'
-    // },
-    // warning_modal: {
-    //   width: 320,
-    //   height: 600,
-    //   backgroundColor: '#ffffff',
-    //   borderWidth: 1,
-    //   borderColor: '#000',
-    //   borderRadius: 20,
-    // },
-    // warning_title: {
-    //   height: 50,
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    //   backgroundColor: '#ff0',
-    //   borderTopRightRadius: 20,
-    //   borderTopLeftRadius: 20,
-    // },
-    // warning_body: {
-    //   height: 500,
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    // },
-    // warning_button:{
-    //   flex:1,
-    //   backgroundColor:'#00ffff',
-    //   height:50,
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    //   borderBottomLeftRadius:20,
-    //   borderBottomRightRadius:20,
-    // }
+  
 })

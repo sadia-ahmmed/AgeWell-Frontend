@@ -20,7 +20,7 @@ export default function CreateRecord_medicineTracker(props) {
   const [name, setName]= useState('')
   const [time, setTime]= useState('')
   const today = new Date().toLocaleDateString('en-ZA')
-  console.log(today)
+  // console.log(today)
   const [startDate, setStartDate]= useState(today)
   const [endDate, setEndDate]= useState(today)
   const [openOnStartDate, setOpenOnStartDate] = useState(false)
@@ -62,6 +62,25 @@ export default function CreateRecord_medicineTracker(props) {
   // console.log(time)
 
 
+
+
+  function getDatesInRange(startDate, endDate) {
+    const date = new Date(startDate.getTime());
+  
+    const dates = [];
+  
+    while (date <= endDate) {
+      dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+  
+    return dates;
+  }
+
+
+
+
+
 // Add med information
 const addMedicine = async (e) => {
   e.preventDefault(e);
@@ -70,12 +89,26 @@ const addMedicine = async (e) => {
     return;
   }
   props.navigation.navigate('homePage')
-  await addDoc(collection(db, 'medicine-tracker-info'), {
-    name: name,
-    startDate : startDate,
-    endDate : endDate,
-    time : time,
-  });
+
+  // --------------------------------------------------------
+
+  const d1 = new Date(startDate.replaceAll("/","-"));
+    
+  const d2 = new Date(endDate.replaceAll("/","-"));
+
+  const dates = getDatesInRange(d1, d2)
+
+  for (j of dates){
+
+    await addDoc(collection(db, 'medicine-tracker-info-test'), {
+      name: name,
+      date : j.toLocaleDateString(),
+      time : time,
+      done: false
+    });
+
+  }
+
   setName('');
   setTime('');
 
@@ -89,8 +122,8 @@ const addMedicine = async (e) => {
     <View >
       <View style = {{margin: 30}}>
         
-      <View style={{flexDirection:'row',}}>
-        <Text style={{flex:1}}>Name :</Text>
+      <View style={{flexDirection:'row',alignItems:'center' }}>
+        <Text style={{flex:1, }}>Name :</Text>
         <TextInput
           editable
           multiline
@@ -104,7 +137,7 @@ const addMedicine = async (e) => {
 
 
 
-      <View style={{flexDirection:'row',}}>
+      <View style={{flexDirection:'row', marginTop:15,alignItems:'center' }}>
       <Text style={{flex:1}}>Start Date :</Text>
       <Pressable onPress={handleOnPressStartDate}
       style={styles.inputStyle}
@@ -150,7 +183,7 @@ const addMedicine = async (e) => {
 
 
       
-      <View style={{flexDirection:'row',}}>
+      <View style={{flexDirection:'row',marginTop:15,alignItems:'center' }}>
       <Text style={{flex:1}}>End Date :</Text>
       <Pressable onPress={handleOnPressEndDate}
       style={styles.inputStyle}
@@ -195,7 +228,7 @@ const addMedicine = async (e) => {
 
 
 
-      <View style={{flexDirection:'row'}}>
+      <View style={{flexDirection:'row',marginTop:15,alignItems:'center' }}>
         <Text style={{flex:1}}>Take your medicine at :</Text>
         <TextInput
           editable
@@ -227,7 +260,8 @@ const styles = StyleSheet.create({
     padding: 10, 
     backgroundColor:'white',
     flex:3,
-    marginTop: 10,
+    borderRadius:20
+    // marginTop: 10,
   },
   centeredView:{
     flex: 1,
