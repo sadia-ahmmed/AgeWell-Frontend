@@ -1,53 +1,44 @@
 import { Modal, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { AuthContext } from '../../providers/AuthProviders'
-import { Button, Input } from '@rneui/themed'
 import { IP_ADDRESS, IP_PORT } from '../../../configs'
-import DatePicker from 'react-native-modern-datepicker'
 import { Pressable } from 'react-native'
 import DropdownSelect from '../../components/Dropdown'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import CustomButton from '../../components/CustomButton'
+import DateTimePickerModal from '../../components/DateTimePickerModal'
 
 const BookingScreen = ({ route, navigation }) => {
-    const today = new Date().toLocaleDateString('en-ZA')
+    const today = new Date().toLocaleDateString("en-ZA")
 
     const nurse_details = route.params
 
     // start and end times dropdown
     const start_times = [
-        { label: "9 AM", value: 0 },
-        { label: "10 AM", value: 1 },
-        { label: "11 AM", value: 2 },
-        { label: "12 AM", value: 3 },
-        { label: "1 PM", value: 4 },
-        { label: "2 PM", value: 5 },
-        { label: "3 PM", value: 6 },
-        { label: "4 PM", value: 7 },
-        { label: "5 PM", value: 8 },
-        { label: "6 PM", value: 9 },
-        { label: "7 PM", value: 10 },
+        { label: "9 AM", value: 9 },
+        { label: "10 AM", value: 10 },
+        { label: "11 AM", value: 11 },
+        { label: "12 AM", value: 12 },
+        { label: "1 PM", value: 13 },
+        { label: "2 PM", value: 14 },
+        { label: "3 PM", value: 15 },
+        { label: "4 PM", value: 16 },
+        { label: "5 PM", value: 17 },
+        { label: "6 PM", value: 18 },
+        { label: "7 PM", value: 19 },
     ]
 
-    const end_times = [
-        { label: "9 AM", value: 0 },
-        { label: "10 AM", value: 1 },
-        { label: "11 AM", value: 2 },
-        { label: "12 AM", value: 3 },
-        { label: "1 PM", value: 4 },
-        { label: "2 PM", value: 5 },
-        { label: "3 PM", value: 6 },
-        { label: "4 PM", value: 7 },
-        { label: "5 PM", value: 8 },
-        { label: "6 PM", value: 9 },
-        { label: "7 PM", value: 10 },
-    ]
 
     // * start end times
     const [startTimesState, setStartTimeStates] = useState()
-    const [endTimesState, setEndTimeStates] = useState()
+    const [working_hours, setWorkingHours] = useState("0")
 
-    // * working hours and days
-    const [working_hours, setWorkingHours] = useState()
-    const [working_days, setWorkingDays] = useState()
+    // * price
+    const [price, setPrice] = useState(0)
+    const changePriceOnParams = (hours, days) => {
+        setPrice((hours * 500) + (days * 1500))
+    }
+
 
     // * start and end dates
     const [startDate, setStartDate] = useState(today)
@@ -56,6 +47,7 @@ const BookingScreen = ({ route, navigation }) => {
     // * toggle datepicker modal views 
     const [openOnStartDate, setOpenOnStartDate] = useState(false)
     const [openOnEndDate, setOpenOnEndDate] = useState(false)
+    const [openOnWorkingHours, setOpenOnWorkingHours] = useState(false)
 
 
     const handleOnPressStartDate = () => {
@@ -63,8 +55,10 @@ const BookingScreen = ({ route, navigation }) => {
     }
 
     const handleDateChangeStartDate = (propDate) => {
-        console.log(propDate)
         setStartDate(propDate)
+        const date = Date.parse(propDate.replaceAll("/", "-"))
+        const daysDiff = (Date.parse(endDate.replaceAll("/", "-")) - date) / (1000 * 60 * 60 * 24)
+        changePriceOnParams(working_hours, daysDiff)
     }
 
     const handleOnPressEndDate = () => {
@@ -73,22 +67,39 @@ const BookingScreen = ({ route, navigation }) => {
 
     const handleDateChangeEndDate = (propDate) => {
         setEndDate(propDate)
+        const date = Date.parse(propDate.replaceAll("/", "-"))
+        const daysDiff = (date - Date.parse(startDate.replaceAll("/", "-"))) / (1000 * 60 * 60 * 24)
+        changePriceOnParams(working_hours, daysDiff)
+    }
+
+    const handleOnPressWorkingHours = () => {
+        setOpenOnWorkingHours(!openOnWorkingHours)
+    }
+
+    const handleChangeWorkingHours = (propTime) => {
+        setWorkingHours(propTime)
+        const daysDiff = (Date.parse(endDate.replaceAll("/", "-")) - Date.parse(startDate.replaceAll("/", "-"))) / (1000 * 60 * 60 * 24)
+        changePriceOnParams(parseInt(working_hours), daysDiff)
     }
 
     const onBookButtonPress = (authCtx) => {
-        working_hours = endTimesState - startTimesState
-        working_days = endDate - startDate
-
+        const working_days = (Date.parse(endDate.replaceAll("/", "-")) - Date.parse(startDate.replaceAll("/", "-"))) / (1000 * 60 * 60 * 24)
 
         const appointmentBody = {
             booked_by: authCtx.userCache.uid,
+            start_date: new Date(startDate.replaceAll("/", "-")),
+            end_date: new Date(endDate.replaceAll("/", "-")),
             working_hours: working_hours,
             working_days: working_days,
+            working_hours: parseInt(working_hours),
+            cost: price
         }
+
+        console.log(appointmentBody)
 
         const body = JSON.stringify(appointmentBody)
 
-        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/nurse/book/${nurse_details.uid}`, {
+        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/book/${nurse_details.uid}`, {
             method: "POST",
             mode: "cors",
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authCtx.userCache.user_access_token}` },
@@ -97,33 +108,12 @@ const BookingScreen = ({ route, navigation }) => {
             .then(res => res.json())
             .then(result => {
                 alert("Success")
-                navigation.navigate("main-dashboard")
+                navigation.navigate("Pending")
             })
             .catch(error => {
                 alert("Error")
             })
     }
-
-
-    const DatePickerModal = ({ date, onDateChangeHandler, view, onDateViewHandler }) => {
-        return (
-            <Modal
-                animationType='slide'
-                transparent={true}
-                visible={view}
-            >
-                <View style={{ backgroundColor: 'white', }}>
-                    <DatePicker
-                        mode='calendar'
-                        selected={date}
-                        onDateChange={onDateChangeHandler}
-                    />
-                    <Button color="#46C1E2" title="Close" onPress={onDateViewHandler} />
-                </View>
-            </Modal>
-        )
-    }
-
 
     return (
         <AuthContext.Consumer>
@@ -135,27 +125,59 @@ const BookingScreen = ({ route, navigation }) => {
                             <Text style={styles.name_text}>{nurse_details.fullname}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
-                            <Text style={{ flex: 1 }}>Start Date :</Text>
+                            <Text style={{ flex: 1 }}>Start Date:</Text>
                             <Pressable onPress={handleOnPressStartDate}>
                                 <View pointerEvents="none">
-                                    <Input
+                                    <TextInput
                                         value={startDate}
+                                        onChangeText={(value) => {
+                                            setStartDate(startDate)
+                                        }}
+                                    />
+                                </View>
+                            </Pressable>
+                        </View>
+                        <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
+                            <Text style={{ flex: 1 }}>End Date:</Text>
+                            <Pressable onPress={handleOnPressEndDate}>
+                                <View pointerEvents="none">
+                                    <TextInput
+                                        value={endDate}
+                                    />
+                                </View>
+                            </Pressable>
+                        </View>
+
+                        <DateTimePickerModal type="calendar" state={startDate} onStateChangeHandler={handleDateChangeStartDate} view={openOnStartDate} onStateViewHandler={handleOnPressStartDate} />
+                        <DateTimePickerModal type="calendar" state={endDate} onStateChangeHandler={handleDateChangeEndDate} view={openOnEndDate} onStateViewHandler={handleOnPressEndDate} />
+
+                        <Text style={styles.divider} >{""}</Text>
+
+                        <DropdownSelect data={start_times} title="Start time" label="Starting hour" value={startTimesState} setValue={setStartTimeStates} />
+
+                        <Text style={styles.divider} >{""}</Text>
+
+                        <DateTimePickerModal type="time" state={working_hours} onStateChangeHandler={handleChangeWorkingHours} view={openOnWorkingHours} onStateViewHandler={handleOnPressWorkingHours} />
+                        <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
+                            <Text style={{ flex: 1 }}>Working hours:</Text>
+                            <Pressable onPress={handleOnPressWorkingHours}>
+                                <View pointerEvents="none">
+                                    <TextInput
+                                        value={working_hours}
                                     />
                                 </View>
                             </Pressable>
                         </View>
 
 
-                        {/* 
-                            // TODO: FINISH THE START END DATES AND BOOK LOGIC PROPERLY
-                        */}
-                        <DatePickerModal date={startDate} onDateHandler={handleDateChangeStartDate} view={openOnStartDate} onDateViewHandler={handleOnPressStartDate} />
-                        <DatePickerModal date={endDate} onDateHandler={handleDateChangeEndDate} view={openOnEndDate} onDateViewHandler={handleOnPressEndDate} />
+                        <Text style={styles.divider} >{""}</Text>
 
-                        <DropdownSelect data={start_times} label="Starting hour" value={startTimesState} setValue={setStartTimeStates} />
-                        <DropdownSelect data={end_times} label="Ending hour" value={endTimesState} setValue={setEndTimeStates} />
+                        <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 25 }}>
+                            <Text >{price >= 0 ? `Price: ${price} BDT` : "Invalid timeframe"}</Text>
+                            <Text style={styles.divider} >{""}</Text>
+                            <CustomButton title="Book Now" width={150} onPress={() => onBookButtonPress(authCtx)} />
+                        </View>
 
-                        <Button color="#46C1E2" title="Book now" onPress={() => onBookButtonPress(authCtx)} />
                     </View>
                 )
             }
@@ -168,7 +190,9 @@ export default BookingScreen
 const styles = StyleSheet.create({
     main_container: {
         flex: 1,
-        padding: 30
+        padding: 30,
+
+        backgroundColor: "white"
     },
     name_container: {
         marginBottom: 30
@@ -179,5 +203,8 @@ const styles = StyleSheet.create({
     name_text: {
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    divider: {
+        marginTop: 10
     }
 })

@@ -11,6 +11,7 @@ import BookingScreen from './src/screens/booking/BookingScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainScreen from './src/screens/dashboard/MainScreen';
 import { Icon } from '@rneui/themed';
+import PendingBookingList from './src/screens/booking/booker/PendingBookingList';
 
 
 const AuthStack = createStackNavigator()
@@ -37,14 +38,16 @@ const DashboardTabScreens = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "main-dashboard") {
+          if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline"
-          } else if (route.name === "booking-list") {
+          } else if (route.name === "Nurses") {
             iconName = focused ? "search" : "search-outline"
-          } else if (route.name === "calendar") {
+          } else if (route.name === "Calendar") {
             iconName = focused ? "calendar" : "calendar-outline"
           } else if (route.name === "chats") {
             iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline"
+          } else if (route.name === "Pending") {
+            iconName = focused ? "timer" : "timer-outline"
           }
 
 
@@ -54,9 +57,10 @@ const DashboardTabScreens = () => {
         tabBarInactiveTintColor: 'black'
       })}
     >
-      <DashboardTabs.Screen name='main-dashboard' component={MainScreen} options={{ headerShown: false }} />
-      <DashboardTabs.Screen name='booking-list' component={BookingList} options={{ headerShown: false }} />
-      <DashboardTabs.Screen name='calendar' component={BookingList} options={{ headerShown: false }} />
+      <DashboardTabs.Screen name='Home' component={MainScreen} options={{ headerShown: false }} />
+      <DashboardTabs.Screen name='Nurses' component={BookingList} options={{ headerShown: false }} />
+      <DashboardTabs.Screen name='Calendar' component={BookingList} options={{ headerShown: false }} />
+      <DashboardTabs.Screen name='Pending' component={PendingBookingList} options={{ headerShown: false }} />
       <DashboardTabs.Screen name='chats' component={BookingList} options={{ headerShown: false }} />
     </DashboardTabs.Navigator>
   )

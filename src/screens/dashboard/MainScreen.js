@@ -35,7 +35,9 @@ export default MainScreen
 
 const styles = StyleSheet.create({
     main_container: {
-        marginTop: 40,
-        padding: 30
+        paddingTop: 80,
+        padding: 30,
+        backgroundColor: "white",
+        flex: 1,
     }
 })

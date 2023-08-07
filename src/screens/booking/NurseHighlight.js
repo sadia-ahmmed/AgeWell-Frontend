@@ -37,7 +37,8 @@ export default NurseHighlight
 const styles = StyleSheet.create({
     container: {
         flex: 2,
-        padding: 30
+        padding: 30,
+        backgroundColor: "white"
     },
     container_center: {
         alignContent: 'center',

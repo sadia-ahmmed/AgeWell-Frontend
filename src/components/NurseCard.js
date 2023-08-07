@@ -5,30 +5,6 @@ import { CardDivider } from '@rneui/base/dist/Card/Card.Divider'
 import { prettyPrintNurseRatings, prettyPrintNurseSpecialities } from '../services/ui/uiService'
 
 const NurseCard = ({ nurse }) => {
-
-
-
-    // const prettyPrintNurseSpecialities = () => {
-    //     return nurse.specialities.map((item, i) => `${item}${i == nurse.specialities.length - 1 ? '' : ', '}`)
-    // }
-
-    // const prettyPrintNurseRatings = () => {
-    //     const ints = Math.floor(nurse.rating)
-    //     const decs = nurse.rating % 1
-    //     const stars = []
-
-    //     for (let i = 0; i < ints; ++i) {
-    //         stars.push(<Icon name='star' type='font-awesome' color='gold' />)
-    //     }
-
-    //     if (decs > 0.00) {
-    //         stars.push(<Icon name='star-half' type='font-awesome' color='gold' />)
-    //     }
-
-    //     return stars
-    // }
-
-
     return (
         <View style={styles.image_container}>
             <Image style={styles.image} source={require('../../assets/avatar.png')} />

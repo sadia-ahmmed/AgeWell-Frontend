@@ -4,25 +4,14 @@ import { useState } from 'react'
 import { Icon } from '@rneui/themed'
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown'
 
-export default function DropdownSelect({ data, value, setValue, label }) {
+export default function DropdownSelect({ title, data, value, setValue, label }) {
 
     const [isFocus, setIsFocus] = useState(false)
 
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text style={isFocus && { color: 'blue' }}>
-                    {label}
-                </Text>
-            )
-        }
-
-        return null
-    }
 
     return (
         <View>
-            {renderLabel()}
+
             <Dropdown
                 style={isFocus && { color: "blue" }}
                 data={data}
@@ -30,7 +19,7 @@ export default function DropdownSelect({ data, value, setValue, label }) {
                 value={value}
                 labelField="label"
                 valueField="value"
-                placeholder="Select time"
+                placeholder={title}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={item => {
