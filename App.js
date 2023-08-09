@@ -8,8 +8,10 @@ import SignUp from "./src/screens/auth/SignUp";
 import BookingList from "./src/screens/booking/BookingList";
 import NurseHighlight from "./src/screens/booking/NurseHighlight";
 import BookingScreen from "./src/screens/booking/BookingScreen";
-import JoinFamilyCircleModal from "./src/screens/dashboard/JoinFamilyCircleModal";
-import CreateFamilyCircleModal from "./src/screens/dashboard/CreateFamilyCircleModal";
+import JoinFamilyCircle from "./src/screens/dashboard/JoinFamilyCircle";
+import CreateFamilyCircle from "./src/screens/dashboard/CreateFamilyCircle";
+import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard";
+
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -58,13 +60,18 @@ const HomeStackScreens = ({ user }) => {
       />
       <HomeStack.Screen
         name="join-family-circle"
-        component={JoinFamilyCircleModal}
+        component={JoinFamilyCircle}
         options={{ headerTitle: "Join family circle", headerShown: true }}
       />
       <HomeStack.Screen
         name="create-family-circle"
-        component={CreateFamilyCircleModal}
+        component={CreateFamilyCircle}
         options={{ headerTitle: "Create family circle", headerShown: true }}
+      />
+      <HomeStack.Screen
+        name="family-circle-dashboard"
+        component={FamilyCircleDashBoard}
+        options={{ headerTitle: "Family circle dashboard", headerShown: true }}
       />
     </HomeStack.Navigator>
   );

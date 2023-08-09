@@ -5,14 +5,11 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfigs";
 import { SpeedDial } from "@rneui/themed";
-import JoinFamilyCircleModal from "./JoinFamilyCircleModal";
-import CreateFamilyCircleModal from "./CreateFamilyCircleModal";
+import JoinFamilyCircle from "./JoinFamilyCircle";
+import CreateFamilyCircle from "./CreateFamilyCircle";
 
 const Dummy = (props) => {
   const authCtx = useContext(AuthContext);
-
-  const [joinModalVisible, setJoinModalVisible] = useState(false);
-  const [createModalVisible, setCreateModalVisible] = useState(false);
 
   const onLogoutButtonPress = () => {
     invokeLogoutService(authCtx.userCache);
@@ -22,15 +19,7 @@ const Dummy = (props) => {
   };
 
   const [open, setOpen] = React.useState(false);
-
-  const handleJoin = (joinLink) => {
-    console.log("Joining with link:", joinLink);
-  };
-
-  const handleCreate = (familyCircleName) => {
-    console.log("Creating family circle:", familyCircleName);
-  };
-
+  
   return (
     <View style={{ padding: 30 }}>
       <Text>This is a test dashboard</Text>
@@ -55,24 +44,14 @@ const Dummy = (props) => {
           <SpeedDial.Action
             icon={{ name: "add", color: "#fff" }}
             title="Create Family Circle"
-            onPress={() => setCreateModalVisible(true)}
+            onPress={() => props.navigation.navigate("create-family-circle")}
           />
           <SpeedDial.Action
             icon={{ name: "create", color: "#fff" }}
             title="Join Family Circle"
-            onPress={() => setJoinModalVisible(true)}
+            onPress={() => props.navigation.navigate("join-family-circle")}
           />
         </SpeedDial>
-        <JoinFamilyCircleModal
-          visible={joinModalVisible}
-          onClose={() => setJoinModalVisible(false)}
-          onJoin={handleJoin}
-        />
-        <CreateFamilyCircleModal
-          visible={createModalVisible}
-          onClose={() => setCreateModalVisible(false)}
-          onCreate={handleCreate}
-        />
       </View>
     </View>
   );
