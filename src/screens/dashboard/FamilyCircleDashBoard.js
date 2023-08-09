@@ -19,8 +19,8 @@ const FamilyCircleDashBoard = (props) => {
 
   const Item = ({ title }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
       <Image style={styles.img} source={require("../../../public/man.png")} />
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 
@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
+    flexDirection: "row", // Arrange items horizontally
+    alignItems: "center", // Align items vertically within the row
     backgroundColor: "#f9c2ff",
     padding: 20,
     marginVertical: 8,
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    marginLeft: 10, // Add some spacing between image and title
   },
   img: {
     height: 50,
@@ -60,3 +63,4 @@ const styles = StyleSheet.create({
 });
 
 export default FamilyCircleDashBoard;
+
