@@ -1,11 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { AuthContext } from '../providers/AuthProviders'
 
 const PendingBookingCard = () => {
+
     return (
-        <View style={styles.container}>
-            <Text>PendingBookingCard</Text>
-        </View>
+        <AuthContext.Consumer>
+            {
+                (authCtx) => (
+                    <View style={styles.container}>
+                        {/* // TODO: COMPLETE NURSE PENDING LIST */}
+                        <Text></Text>
+                    </View>
+                )
+            }
+        </AuthContext.Consumer>
     )
 }
 
@@ -25,7 +34,7 @@ const styles = StyleSheet.create({
             height: 0,
         }
     },
-    nurse_name: {
+    appointment_title: {
         fontWeight: 'bold',
         fontSize: 20
     },

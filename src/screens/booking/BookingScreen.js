@@ -108,7 +108,7 @@ const BookingScreen = ({ route, navigation }) => {
             .then(res => res.json())
             .then(result => {
                 alert("Success")
-                navigation.navigate("Pending")
+                navigation.navigate("Appointment")
             })
             .catch(error => {
                 alert("Error")

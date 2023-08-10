@@ -25,6 +25,7 @@ const PendingBookingList = () => {
         })
             .then(res => res.json())
             .then(result => {
+                console.log(result)
                 setPendingList(result)
                 setLoading(false)
             })
@@ -40,7 +41,7 @@ const PendingBookingList = () => {
             <FlatList
                 data={pendingList}
                 renderItem={({ item }) => <TouchableOpacity onPress={() => props.navigation.navigate('nurse-highlight', item)}><Text>Text</Text></TouchableOpacity>}
-                keyExtractor={(item) => item.uid}
+                keyExtractor={(item) => item._id}
             />
         </View>
     )
@@ -49,7 +50,7 @@ const PendingBookingList = () => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    loading ? <Dialog.Loading /> : <Screen />
+                    loading ? <View><Dialog.Loading /></View> : <Screen />
                 )
             }
         </AuthContext.Consumer>

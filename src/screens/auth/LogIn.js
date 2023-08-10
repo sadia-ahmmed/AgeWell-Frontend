@@ -31,22 +31,15 @@ const LogIn = (props) => {
                 const user = userCredential.user
                 const user_access_token = user.stsTokenManager.accessToken
 
-                const userObject = {
-                    uid: user.uid,
-                    user_access_token
-                }
+                invokeLoginService(email, password, user_access_token, authCtx)
 
-                invokeLoginService(email, password, user_access_token)
-
-                authCtx.setUserCache(userObject)
-                authCtx.setLoggedIn(true)
                 setEmail("")
                 setPassword("")
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(errorMessage)
+                alert(errorMessage, errorCode)
             });
     }
 
@@ -159,7 +152,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        margin: 30
+        margin: 30,
+        marginTop: 100
     },
     image_container: {
         alignItems: 'center',

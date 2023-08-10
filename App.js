@@ -12,6 +12,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainScreen from './src/screens/dashboard/MainScreen';
 import { Icon } from '@rneui/themed';
 import PendingBookingList from './src/screens/booking/booker/PendingBookingList';
+import OngoingBookingScreen from './src/screens/booking/booker/OngoingBookingScreen';
 
 
 const AuthStack = createStackNavigator()
@@ -31,7 +32,7 @@ const AuthStackScreens = () => {
 
 
 
-const DashboardTabScreens = () => {
+const DashboardTabScreens = ({ user }) => {
   return (
     <DashboardTabs.Navigator
       screenOptions={({ route }) => ({
@@ -46,7 +47,9 @@ const DashboardTabScreens = () => {
             iconName = focused ? "calendar" : "calendar-outline"
           } else if (route.name === "chats") {
             iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline"
-          } else if (route.name === "Pending") {
+          } else if (!user.ongoingAppointment && route.name === "Pending") {
+            iconName = focused ? "timer" : "timer-outline"
+          } else if (user.ongoingAppointment && route.name === "Appointment") {
             iconName = focused ? "timer" : "timer-outline"
           }
 
@@ -54,13 +57,14 @@ const DashboardTabScreens = () => {
           return <Icon name={iconName} type='ionicon' color={color} />
         },
         tabBarActiveTintColor: "#46C1E2",
-        tabBarInactiveTintColor: 'black'
+        tabBarInactiveTintColor: 'grey'
       })}
     >
       <DashboardTabs.Screen name='Home' component={MainScreen} options={{ headerShown: false }} />
       <DashboardTabs.Screen name='Nurses' component={BookingList} options={{ headerShown: false }} />
       <DashboardTabs.Screen name='Calendar' component={BookingList} options={{ headerShown: false }} />
-      <DashboardTabs.Screen name='Pending' component={PendingBookingList} options={{ headerShown: false }} />
+      {!user.ongoingAppointment && <DashboardTabs.Screen name='Pending' component={PendingBookingList} options={{ headerShown: false }} />}
+      {user.ongoingAppointment && <DashboardTabs.Screen name='Appointment' component={OngoingBookingScreen} options={{ headerShown: false }} />}
       <DashboardTabs.Screen name='chats' component={BookingList} options={{ headerShown: false }} />
     </DashboardTabs.Navigator>
   )
