@@ -1,21 +1,24 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../../providers/AuthProviders'
 
 const OngoingBookingScreen = () => {
+
+    const authCtx = useContext(AuthContext)
+
     return (
-        <AuthContext.Consumer>
-            {
-                (authCtx) => (
-                    <View>
-                        <Text>OngoingBookingScreen</Text>
-                    </View>
-                )
-            }
-        </AuthContext.Consumer>
+        <View style={styles.container}>
+            <Text>APPOINTMENT</Text>
+        </View>
     )
 }
 
 export default OngoingBookingScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "white",
+        flex: 1,
+        padding: 18
+    }
+})

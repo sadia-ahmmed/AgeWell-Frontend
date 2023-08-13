@@ -5,7 +5,8 @@ const AuthContext = React.createContext()
 const AuthProvider = (props) => {
 
     const [isLoggedIn, setLoggedIn] = useState(false)
-    const [userCache, setUserCache] = useState([])
+    const [userCache, setUserCache] = useState({})
+    const [appointmentCache, setAppointmentCache] = useState({})
 
     return (
         <AuthContext.Provider
@@ -13,7 +14,9 @@ const AuthProvider = (props) => {
                 isLoggedIn,
                 setLoggedIn,
                 userCache,
-                setUserCache
+                setUserCache,
+                appointmentCache,
+                setAppointmentCache
             }}
         >
             {props.children}
