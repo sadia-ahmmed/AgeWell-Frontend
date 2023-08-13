@@ -6,7 +6,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
-import { Card, Input } from "@rneui/themed";
+import { Card, Input, Overlay} from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 
 const JoinFamilyCircle = ({ navigation }) => {
@@ -24,23 +24,24 @@ const JoinFamilyCircle = ({ navigation }) => {
               value={joinLink}
               onChangeText={setJoinLink}
             />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("family-circle-dashboard");
-              }}
-            >
-              <Text style={styles.buttonText}>Join</Text>
-            </TouchableOpacity>
-            <View style={styles.secondView}>
-              <Text> Don't have a circle? </Text>
+            <View style={styles.buttonContainer}>
+              <View style={styles.linkContainer}>
+                <Text>Don't have a circle? </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("create-family-circle")}
+                >
+                  <Text style={styles.link}>Create</Text>
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity
-                onPress={() => navigation.navigate("create-family-circle")}
+                style={styles.button}
+                onPress={() => {
+                  navigation.navigate("family-circle-dashboard");
+                }}
               >
-                <Text style={styles.link}>Create</Text>
+                <Text style={styles.buttonText}>Join</Text>
               </TouchableOpacity>
             </View>
-
           </Card>
         </SafeAreaView>
       )}
@@ -61,24 +62,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 10,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
   button: {
-    backgroundColor: "#1E6738",
+    backgroundColor: "#00bfff",
     padding: 10,
-    margin: 10,
     borderRadius: 10,
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
   },
-  secondView: {
+  linkContainer: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
   },
   link: {
-    color: "blue",
+    color: "#00bfff",
+    marginLeft: 5,
   },
 });
 

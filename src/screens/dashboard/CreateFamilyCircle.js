@@ -3,12 +3,12 @@ import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Button } from '
 import { Card, Input } from '@rneui/themed'
 import { AuthContext } from '../../providers/AuthProviders';
 
-const CreateFamilyCircle = ({navigation}) => {
+const CreateFamilyCircle = ({ navigation }) => {
 
   const [familyCircleName, setFamilyCircleName] = useState("");
 
   const handleCreate = () => {
-    
+    // Your logic for handling the creation
   }
 
   return (
@@ -16,24 +16,29 @@ const CreateFamilyCircle = ({navigation}) => {
       {
         (authCtx) => (
           <SafeAreaView style={styles.container}>
-          <Card style={styles.card}>
-            <Card.Title>Create Family Circle</Card.Title>
-            <Card.Divider />
-            <Input label="Enter Family Circle Name" value={familyCircleName} onChangeText={setFamilyCircleName} />
-            <Button title="Create" onPress={handleCreate} />
-            <View style={styles.secondView}>
-              <Text> Already have a circle? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate("join-family-circle")}>
-                <Text style={styles.link}>Join</Text>
-              </TouchableOpacity>
-            </View>
-          </Card>
-        </SafeAreaView>
+            <Card style={styles.card}>
+              <Card.Title>Create Family Circle</Card.Title>
+              <Card.Divider />
+              <Input label="Enter Family Circle Name" value={familyCircleName} onChangeText={setFamilyCircleName} />
+              <View style={styles.bottomRow}>
+                <View style={styles.joinTextContainer}>
+                  <Text>Already have a circle?</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate("join-family-circle")}>
+                    <Text style={styles.link}>Join</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity 
+                  style={styles.button}
+                  onPress={() => handleCreate()}
+                >
+                  <Text style={styles.buttonText}>Create</Text>
+                </TouchableOpacity>
+              </View>
+            </Card>
+          </SafeAreaView>
         )
       }
-
     </AuthContext.Consumer>
-
   );
 }
 
@@ -48,14 +53,29 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
-  secondView: {
+  bottomRow: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
   },
+  joinTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   link: {
-    color: "blue",
+    color: "#00bfff",
+    marginLeft: 5,
+  },
+  button: {
+    backgroundColor: "#00bfff",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
+    
   },
 });
 
