@@ -163,8 +163,9 @@ const DashboardTabScreens = () => {
               name="Verification"
               component={VerificationScreen}
               options={{
-                headerShown: false,
+                headerShown: true,
                 title: "Verify",
+                headerTitle: "Verify Your Account",
                 tabBarItemStyle: { marginBottom: 5 },
               }}
             />
