@@ -7,7 +7,7 @@ import { IP_ADDRESS, IP_PORT } from "../../../configs";
  * @param {String} token The json body of the user information
  * @returns {String} message of success/failure
  */
-const invokeLoginService = (email, password, token) => {
+const invokeLoginService = (email, password, token, authCtx) => {
     const body = JSON.stringify({ email, password, token })
 
     fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/login`, {
@@ -18,7 +18,11 @@ const invokeLoginService = (email, password, token) => {
     })
         .then(res => res.json())
         .then((result) => {
-            return true
+            authCtx.setUserCache({
+                ...result,
+                token
+            })
+            authCtx.setLoggedIn(true)
         }).catch((err) => {
             return false
         });

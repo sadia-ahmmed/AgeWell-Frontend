@@ -1,5 +1,5 @@
 import { Button, Icon, Input, Image, Text } from '@rneui/themed'
-import React from 'react'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../providers/AuthProviders'
 import { useState } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
@@ -8,12 +8,14 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider,
 import { auth, app } from '../../firebase/firebaseConfigs'
 import { Dialog } from '@rneui/themed'
 import { invokeLoginService } from '../../services/user/authService'
+import { IP_ADDRESS, IP_PORT } from '../../../configs'
 
 const LogIn = (props) => {
 
     // TODO: FIX IMAGE PATH
     // let image_path = LOGIN_IMAGE
 
+    const authCtx = useContext(AuthContext)
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -24,29 +26,42 @@ const LogIn = (props) => {
     const [passdialog_visible, setPassDialogVisible] = useState(false)
 
 
-    const onLoginButtonPress = (authCtx) => {
+    const onLoginButtonPress = () => {
         // TODO: create a fetch request to the backend
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
                 const user_access_token = user.stsTokenManager.accessToken
 
-                const userObject = {
-                    uid: user.uid,
-                    user_access_token
+                const body = {
+                    email, password, token: user_access_token
                 }
 
-                invokeLoginService(email, password, user_access_token)
+                const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/login`
+                const options = {
+                    headers: { 'Content-Type': 'application/json', },
+                    method: "POST",
+                    mode: 'cors',
+                    body: JSON.stringify(body),
+                }
 
-                authCtx.setUserCache(userObject)
-                authCtx.setLoggedIn(true)
-                setEmail("")
-                setPassword("")
+                fetch(url, options)
+                    .then(res => res.json())
+                    .then((result) => {
+                        // console.log(result)
+                        setEmail("")
+                        setPassword("")
+                        authCtx.setUserCache(result)
+                        authCtx.setLoggedIn(true)
+                    }).catch((err) => {
+                        alert(err.message)
+                    });
+
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(errorMessage)
+                alert(errorMessage, errorCode)
             });
     }
 
@@ -117,7 +132,7 @@ const LogIn = (props) => {
                         </View>
 
                         <View style={{ margin: 10 }}>
-                            <Button title="Log In" onPress={() => onLoginButtonPress(authCtx)} />
+                            <Button title="Log In" onPress={onLoginButtonPress} />
                         </View>
 
 
@@ -159,7 +174,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        margin: 30
+        margin: 30,
+        marginTop: 100
     },
     image_container: {
         alignItems: 'center',

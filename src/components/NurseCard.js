@@ -1,14 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { Card, Divider, Image } from '@rneui/themed'
+import { Card, Divider, Icon, Image } from '@rneui/themed'
+import { CardDivider } from '@rneui/base/dist/Card/Card.Divider'
+import { prettyPrintNurseRatings, prettyPrintNurseSpecialities } from '../services/ui/uiService'
 
 const NurseCard = ({ nurse }) => {
     return (
         <View style={styles.image_container}>
             <Image style={styles.image} source={require('../../assets/avatar.png')} />
             <Text>{"\n"}</Text>
-            <Text style={{ fontWeight: 'bold' }}>{nurse.fullname}</Text>
-            <Text>Rating: {nurse.rating}/5</Text>
+            <Text style={styles.nurse_name}>{nurse.fullname}</Text>
+            <CardDivider />
+            <Text>Specializes in {prettyPrintNurseSpecialities(nurse)}</Text>
+            <CardDivider />
+            <Text>{prettyPrintNurseRatings(nurse)}</Text>
         </View>
     )
 }
@@ -22,7 +27,7 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'center',
         backgroundColor: 'white',
-        padding: 40,
+        padding: 20,
         borderRadius: 10,
         shadowOffset: {
             width: 100,
@@ -32,5 +37,14 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100
+    },
+    nurse_name: {
+        fontWeight: 'bold',
+        fontSize: 20
+    },
+    rating_text: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 20
     }
 })

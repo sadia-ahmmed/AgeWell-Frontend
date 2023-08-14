@@ -17,7 +17,7 @@ const BookingList = (props) => {
     useEffect(() => {
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
 
-        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/nurse/get`, {
+        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get`, {
             method: "GET",
             mode: "cors",
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
@@ -38,7 +38,7 @@ const BookingList = (props) => {
         <View style={styles.page_container}>
             <FlatList
                 data={nurseList}
-                renderItem={({ item }) => <TouchableOpacity onPress={() => props.navigation.navigate('nurse-highlight', item)}><NurseCard nurse={item} /></TouchableOpacity>}
+                renderItem={({ item, index }) => <TouchableOpacity key={index} onPress={() => props.navigation.navigate('nurse-highlight', item)}><NurseCard nurse={item} /></TouchableOpacity>}
                 keyExtractor={(item) => item.uid}
             />
         </View>
@@ -49,7 +49,7 @@ const BookingList = (props) => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    loading ? <Dialog.Loading /> : <Screen />
+                    loading ? <View style={styles.container_loading}><Dialog.Loading /></View> : <Screen />
                 )
             }
         </AuthContext.Consumer>
@@ -63,6 +63,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        margin: 30
+        marginTop: 80
     },
+    container_loading: {
+        backgroundColor: "white",
+        paddingTop: 10,
+        padding: 30,
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center"
+    }
 })
