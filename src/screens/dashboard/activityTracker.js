@@ -51,7 +51,7 @@ const MainScreen = ({ navigation }) => {
                     <View style={styles.main_container}>
                         <Text>Main</Text>
                         
-                        <TouchableOpacity onPress={() => navigation.navigate('medicine-details')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('MedicineDetails')}>
                             <View>
                                 <Text>Upcoming Medicine</Text>
                                 <FlatList

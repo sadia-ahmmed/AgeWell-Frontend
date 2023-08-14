@@ -11,6 +11,7 @@ import MainScreen from './src/screens/dashboard/MainScreen';
 import { Icon } from '@rneui/themed';
 import PendingBookingList from './src/screens/booking/booker/PendingBookingList';
 import OngoingBookingScreen from './src/screens/booking/booker/OngoingBookingScreen';
+import MedicineDetails from './src/screens/dashboard/MedicineDetails';  // Adjust path as needed
 
 
 const AuthStack = createStackNavigator()
@@ -84,15 +85,15 @@ const DashboardTabScreens = () => {
 
 const HomeStackScreens = ({ user }) => {
   return (
-    <HomeStack.Navigator initialRouteName='dashboard'>
-      {/* SADIA OPEN THIS COMMENT AFTER YOURE DONE WITH ACCOUNT SELECTION */}
-      {/* <HomeStack.Screen name='account-selection' component={AccountSelection} /> */}
-      <HomeStack.Screen name='dashboard' component={DashboardTabScreens} options={{ headerShown: false, }} />
-      {/* <HomeStack.Screen name='booking-list' component={BookingList} options={{ headerShown: true, headerTitle: "All nurses" }} /> */}
-      <HomeStack.Screen name='nurse-highlight' component={NurseHighlight} options={{ headerTitle: "View nurse", headerShown: true }} />
-      <HomeStack.Screen name='nurse-booking' component={BookingScreen} options={{ headerTitle: "Book nurse", headerShown: true }} />
-    </HomeStack.Navigator>
-  )
+      <HomeStack.Navigator initialRouteName='dashboard'>
+          <HomeStack.Screen name='dashboard' component={DashboardTabScreens} options={{ headerShown: false }} />
+          <HomeStack.Screen name='booking-list' component={BookingList} options={{ headerShown: true, headerTitle: "All nurses" }} />
+          <HomeStack.Screen name='nurse-highlight' component={NurseHighlight} options={{ headerTitle: "View nurse", headerShown: true }} />
+          <HomeStack.Screen name='nurse-booking' component={BookingScreen} options={{ headerTitle: "Book nurse", headerShown: true }} />
+          <HomeStack.Screen name='medicine-details' component={MedicineDetails} options={{ headerTitle: "Medicine Details", headerShown: true }} />
+
+      </HomeStack.Navigator>
+  );
 }
 
 
