@@ -5,6 +5,7 @@ import { Button, Card, Input } from '@rneui/themed'
 import { invokeSignupService } from '../../services/user/authService'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../firebase/firebaseConfigs'
+import { IP_ADDRESS, IP_PORT } from '../../../configs'
 
 const SignUp = (props) => {
 
@@ -29,9 +30,33 @@ const SignUp = (props) => {
             .then((userCredential) => {
                 alert("Signed Up!")
                 props.navigation.navigate('login')
-                // userCredential.user.updateProfile({
-                //     displayName: fullname
-                // })
+
+                const body = {
+                    fullname,
+                    email,
+                    password,
+                    phone
+                }
+
+                const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/signup`
+                const options = {
+                    mode: "cors",
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+
+                // TODO: finish signup
+                fetch(url, options)
+                    .then(res => res.json())
+                    .then(data => {
+                        alert(data.message)
+                        props.navigation.navigate('login')
+                    })
+                    .catch(err => {
+                        alert(err.message)
+                    })
+
             })
             .catch((error) => {
                 const errorCode = error.code;
