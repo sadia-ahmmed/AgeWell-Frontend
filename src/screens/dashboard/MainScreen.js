@@ -50,10 +50,10 @@ const MainScreen = ({ navigation }) => {
                 (authCtx) => (
                     <View style={styles.main_container}>
                         <Text>Main</Text>
-                        
-                        <TouchableOpacity onPress={() => navigation.navigate('medicine-details')}>
-                            <View>
-                                <Text>Upcoming Medicine</Text>
+
+                        <TouchableOpacity onPress={() => navigation.navigate('medicine-details', { medicines: medicines })}>
+                            <View style={styles.medCon}>
+                                <Text style={styles.title} >Upcoming Medicine</Text>
                                 <FlatList
                                     data={medicines}
                                     keyExtractor={(item) => item.name}
@@ -66,7 +66,7 @@ const MainScreen = ({ navigation }) => {
                                 />
                             </View>
                         </TouchableOpacity>
-                        
+
                         <View style={{ margin: 10 }}>
                             <Button color='red' title='LOGOUT' onPress={onLogoutButtonPress} />
                         </View>
@@ -84,9 +84,15 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         flex: 1,
     },
+    medCon: {
+        backgroundColor: "#b3e5f5",
+        padding: 10,
+        borderRadius: 8,
+    },
     medicineContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        backgroundColor: '#22a2c9',
         alignItems: 'center',
         padding: 15,
         borderRadius: 10,
@@ -95,6 +101,11 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
+    },
+    title:{
+        fontSize: 25,
+        fontWeight: '500',
+        marginBottom: 10,
     },
     medicineName: {
         fontSize: 18,
