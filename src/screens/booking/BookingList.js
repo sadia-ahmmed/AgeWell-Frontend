@@ -17,7 +17,7 @@ const BookingList = (props) => {
     useEffect(() => {
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
 
-        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get`, {
+        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get-nurses`, {
             method: "GET",
             mode: "cors",
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },

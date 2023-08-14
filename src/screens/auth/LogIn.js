@@ -27,7 +27,10 @@ const LogIn = (props) => {
 
 
     const onLoginButtonPress = () => {
-        // TODO: create a fetch request to the backend
+
+        setEmail(email.trim())
+        setPassword(password.trim())
+
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
