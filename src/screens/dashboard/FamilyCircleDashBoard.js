@@ -14,14 +14,15 @@ import { AuthContext } from "../../providers/AuthProviders";
 
 const FamilyCircleDashBoard = (props) => {
   const data = [
-    { id: "1", title: "barbie putki", number: "Contact No: 123-456-7890" },
-    { id: "2", title: "barbie er bap nolan", number: "Contact No: 987-654-3210" },
-    { id: "3", title: "Sahid the boss", number: "why need number? sit on my lap" },
+    { id: "1", title: "barbie putki", number: "Contact No: 123-456-7890", image: require("../../../public/man.png") },
+    { id: "2", title: "barbie er bap nolan", number: "Contact No: 987-654-3210", image: require("../../../public/man.png") },
+    { id: "3", title: "Sahid the boss", number: "why need number? sit on my lap", image: require("../../../public/man.png") },
   ];
+  
 
   const [activeCard, setActiveCard] = useState(null);
 
-  const Item = ({ title, number }) => (
+  const Item = ({ title, number, image }) => (
     <TouchableHighlight
       activeOpacity={0.8}
       underlayColor="rgba(0, 0, 0, 0.1)"
@@ -32,7 +33,7 @@ const FamilyCircleDashBoard = (props) => {
       <Card style={[styles.card, activeCard === title && styles.activeCard]}>
         <View style={styles.item}>
           <View style={styles.avatarContainer}>
-            <Image style={styles.avatar} source={require("../../../public/man.png")} />
+            <Image style={styles.avatar} source={image} />
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{title}</Text>
@@ -49,7 +50,9 @@ const FamilyCircleDashBoard = (props) => {
         <SafeAreaView style={styles.container}>
           <FlatList
             data={data}
-            renderItem={({ item }) => <Item title={item.title} number={item.number} />}
+            renderItem={({ item }) => (
+              <Item title={item.title} number={item.number} image={item.image} />
+            )}
             keyExtractor={(item) => item.id}
           />
         </SafeAreaView>
@@ -70,10 +73,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   activeCard: {
-    backgroundColor: "#e1e0e0", 
+    backgroundColor: "#e1e0e0",
   },
   item: {
-    flexDirection: "row", 
+    flexDirection: "row",
     alignItems: "center",
   },
   avatarContainer: {
