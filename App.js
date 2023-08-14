@@ -1,9 +1,7 @@
-import { StyleSheet, SafeAreaView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthContext, AuthProvider } from './src/providers/AuthProviders';
 import { NavigationContainer } from '@react-navigation/native';
 import LogIn from './src/screens/auth/LogIn';
-import Dummy from './src/screens/dashboard/Dummy';
 import SignUp from './src/screens/auth/SignUp';
 import BookingList from './src/screens/booking/BookingList';
 import NurseHighlight from './src/screens/booking/NurseHighlight';
@@ -32,41 +30,54 @@ const AuthStackScreens = () => {
 
 
 
-const DashboardTabScreens = ({ user }) => {
+const DashboardTabScreens = () => {
   return (
-    <DashboardTabs.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+    <AuthContext.Consumer>
+      {
+        (authCtx) => (
+          <DashboardTabs.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                let iconType;
 
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline"
-          } else if (route.name === "Nurses") {
-            iconName = focused ? "search" : "search-outline"
-          } else if (route.name === "Calendar") {
-            iconName = focused ? "calendar" : "calendar-outline"
-          } else if (route.name === "chats") {
-            iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline"
-          } else if (!user.ongoingAppointment && route.name === "Pending") {
-            iconName = focused ? "timer" : "timer-outline"
-          } else if (user.ongoingAppointment && route.name === "Appointment") {
-            iconName = focused ? "timer" : "timer-outline"
-          }
+                if (route.name === "Home") {
+                  iconName = "home"
+                  iconType = "entypo"
+                } else if (route.name === "Nurses") {
+                  iconName = focused ? "search" : "search-outline"
+                  iconType = "ionicon"
+                } else if (route.name === "Calendar") {
+                  iconName = focused ? "calendar" : "calendar-outline"
+                  iconType = "ionicon"
+                } else if (route.name === "chats") {
+                  iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline"
+                  iconType = "ionicon"
+                } else if (!authCtx.userCache.ongoingAppointment && route.name === "Pending") {
+                  iconName = focused ? "timer" : "timer-outline"
+                  iconType = "ionicon"
+                } else if (authCtx.userCache.ongoingAppointment && route.name === "Appointment") {
+                  iconName = "user-md"
+                  iconType = "font-awesome"
+                }
 
+                return <Icon name={iconName} type={iconType} color={color} size={25} />
+              },
+              tabBarActiveTintColor: "#46C1E2",
+              tabBarInactiveTintColor: 'grey'
+            })}
+          >
+            <DashboardTabs.Screen name='Home' component={MainScreen} options={{ headerShown: true, title: `Home`, headerTitle: `Welcome ${authCtx.userCache.fullname.split()[0]}`, tabBarItemStyle: { marginBottom: 5 } }} />
+            {!authCtx.userCache.ongoingAppointment && <DashboardTabs.Screen name='Nurses' component={BookingList} options={{ headerShown: true, title: 'Search', headerTitle: "Nurse List", tabBarItemStyle: { marginBottom: 5 } }} />}
+            <DashboardTabs.Screen name='Calendar' component={BookingList} options={{ headerShown: false, tabBarItemStyle: { marginBottom: 5 } }} />
+            {!authCtx.userCache.ongoingAppointment && <DashboardTabs.Screen name='Pending' component={PendingBookingList} options={{ headerShown: true, title: 'Pending', headerTitle: "Pending Appointments", tabBarItemStyle: { marginBottom: 5 } }} />}
+            {authCtx.userCache.ongoingAppointment && <DashboardTabs.Screen name='Appointment' component={OngoingBookingScreen} options={{ headerShown: true, title: 'Appointment', headerTitle: "Current Appointment", tabBarItemStyle: { marginBottom: 5 } }} />}
+            <DashboardTabs.Screen name='chats' component={BookingList} options={{ headerShown: false, title: "Chats", tabBarItemStyle: { marginBottom: 5 } }} />
+          </DashboardTabs.Navigator>
+        )
+      }
+    </AuthContext.Consumer>
 
-          return <Icon name={iconName} type='ionicon' color={color} />
-        },
-        tabBarActiveTintColor: "#46C1E2",
-        tabBarInactiveTintColor: 'grey'
-      })}
-    >
-      <DashboardTabs.Screen name='Home' component={MainScreen} options={{ headerShown: false }} />
-      <DashboardTabs.Screen name='Nurses' component={BookingList} options={{ headerShown: false }} />
-      <DashboardTabs.Screen name='Calendar' component={BookingList} options={{ headerShown: false }} />
-      {!user.ongoingAppointment && <DashboardTabs.Screen name='Pending' component={PendingBookingList} options={{ headerShown: false }} />}
-      {user.ongoingAppointment && <DashboardTabs.Screen name='Appointment' component={OngoingBookingScreen} options={{ headerShown: false }} />}
-      <DashboardTabs.Screen name='chats' component={BookingList} options={{ headerShown: false }} />
-    </DashboardTabs.Navigator>
   )
 }
 

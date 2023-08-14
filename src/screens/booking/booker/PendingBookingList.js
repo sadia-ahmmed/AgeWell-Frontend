@@ -7,10 +7,13 @@ import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { useEffect } from 'react'
 import { auth } from '../../../firebase/firebaseConfigs'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
+import { useContext } from 'react'
+import PendingBookingCard from '../../../components/PendingBookingCard'
 
 
 const PendingBookingList = () => {
 
+    const authCtx = useContext(AuthContext)
     const [pendingList, setPendingList] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -18,20 +21,26 @@ const PendingBookingList = () => {
     useEffect(() => {
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
 
-        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/pending`, {
-            method: "GET",
-            mode: "cors",
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
-        })
-            .then(res => res.json())
-            .then(result => {
-                console.log(result)
-                setPendingList(result)
-                setLoading(false)
+        const httpPolling = setInterval(() => {
+
+            const type = authCtx.userCache.type
+
+            fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/pending/${type}`, {
+                method: "GET",
+                mode: "cors",
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
             })
-            .catch(error => {
-                alert('Error getting pending lists')
-            })
+                .then(res => res.json())
+                .then(result => {
+                    setPendingList(result)
+                    setLoading(false)
+                })
+                .catch(error => {
+                    alert('Error getting pending lists')
+                })
+        }, 5000)
+
+        return () => clearInterval(httpPolling)
 
     }, [])
 
@@ -40,8 +49,10 @@ const PendingBookingList = () => {
         <View style={styles.container}>
             <FlatList
                 data={pendingList}
-                renderItem={({ item }) => <TouchableOpacity onPress={() => props.navigation.navigate('nurse-highlight', item)}><Text>Text</Text></TouchableOpacity>}
-                keyExtractor={(item) => item._id}
+                renderItem={({ item, index }) =>
+                    <PendingBookingCard appointment={item.appointment_details} target_user={item.responseUser} key={index} />
+                }
+                keyExtractor={(item) => item.appointment_details._id}
             />
         </View>
     )
@@ -50,7 +61,7 @@ const PendingBookingList = () => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    loading ? <View><Dialog.Loading /></View> : <Screen />
+                    loading ? <View style={styles.container_loading}><Dialog.Loading /></View> : <Screen />
                 )
             }
         </AuthContext.Consumer>
@@ -62,8 +73,17 @@ export default PendingBookingList
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
-        paddingTop: 90,
+        paddingTop: 10,
         padding: 30,
         flex: 1,
+    },
+    container_loading: {
+        backgroundColor: "white",
+        paddingTop: 10,
+        padding: 30,
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center"
     }
 })

@@ -10,12 +10,12 @@ import { useState } from 'react'
 import { useContext } from 'react'
 import { IP_ADDRESS, IP_PORT } from '../../../configs'
 
-const MainScreen = () => {
+const MainScreen = ({ navigation }) => {
 
     const [user, setUser] = useState()
     const authCtx = useContext(AuthContext)
 
-    const onLogoutButtonPress = (authCtx) => {
+    const onLogoutButtonPress = () => {
         invokeLogoutService(authCtx.userCache)
         signOut(auth)
         authCtx.setUserCache([])
@@ -36,12 +36,12 @@ const MainScreen = () => {
                 .then(res => res.json())
                 .then(result => {
                     setUser(result)
-                    authCtx.setUserCache(user)
+                    authCtx.setUserCache(result)
                 })
                 .catch(error => {
                     alert('Error getting user details')
                 })
-        }, 1000)
+        }, 3000)
 
         return () => clearInterval(httpPolling)
 
@@ -55,7 +55,7 @@ const MainScreen = () => {
                     <View style={styles.main_container}>
                         <Text>Main</Text>
                         <View style={{ margin: 10 }}>
-                            <Button color='red' title='LOGOUT' onPress={() => onLogoutButtonPress(authCtx)} />
+                            <Button color='red' title='LOGOUT' onPress={onLogoutButtonPress} />
                         </View>
                     </View>
                 )
@@ -68,7 +68,7 @@ export default MainScreen
 
 const styles = StyleSheet.create({
     main_container: {
-        paddingTop: 80,
+        paddingTop: 10,
         padding: 30,
         backgroundColor: "white",
         flex: 1,
