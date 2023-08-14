@@ -14,12 +14,11 @@ import { AuthContext } from "../../providers/AuthProviders";
 
 const FamilyCircleDashBoard = (props) => {
   const data = [
-    { id: "1", title: "barbie putki", number: "Contact No: 123-456-7890", image: require("../../../public/man.png") },
-    { id: "2", title: "barbie er bap nolan", number: "Contact No: 987-654-3210", image: require("../../../public/man.png") },
-    { id: "3", title: "Sahid the boss", number: "why need number? sit on my lap", image: require("../../../public/man.png") },
+    { id: "1", title: "Sahid Hossain Mustakim", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
+    { id: "2", title: "S M Jishanul Islam", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
+    { id: "3", title: "Nur Islam Shourov", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
   ];
   
-
   const [activeCard, setActiveCard] = useState(null);
 
   const Item = ({ title, number, image }) => (
@@ -94,10 +93,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
   },
   number: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#888",
     marginTop: 5,
   },
