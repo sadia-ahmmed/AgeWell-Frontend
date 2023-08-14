@@ -47,13 +47,17 @@ const PendingBookingList = () => {
 
     let Screen = () => (
         <View style={styles.container}>
-            <FlatList
-                data={pendingList}
-                renderItem={({ item, index }) =>
-                    <PendingBookingCard appointment={item.appointment_details} target_user={item.responseUser} key={index} />
-                }
-                keyExtractor={(item) => item.appointment_details._id}
-            />
+            {
+                pendingList.length > 0 ?
+                    <FlatList
+                        data={pendingList}
+                        renderItem={({ item, index }) =>
+                            <PendingBookingCard appointment={item.appointment_details} target_user={item.responseUser} key={index} />
+                        }
+                        keyExtractor={(item) => item.appointment_details._id}
+                    /> : <Text>No pending appointments</Text>
+            }
+
         </View>
     )
 
