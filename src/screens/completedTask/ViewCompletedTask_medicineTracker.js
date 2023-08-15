@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,Pressable, Image, TouchableOpacity, Modal,FlatLi
 import {calenderIcon} from '../../images/calendarIcon.png'
 import React, { useState,useEffect } from 'react'
 import CreateRecord_medicineTracker from '../add_medicine/CreateRecord_medicineTracker'
-import { db } from '../../firebase'
+import { db } from '../../firebase/firebaseConfigs'
 import {
   query,
   collection,

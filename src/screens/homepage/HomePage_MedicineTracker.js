@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,Pressable, Image,  TouchableWithoutFeedback, Tou
 import {calenderIcon} from '../../images/calendarIcon.png'
 import React, { useState,useEffect } from 'react'
 import CreateRecord_medicineTracker from '../add_medicine/CreateRecord_medicineTracker'
-import { db } from '../../firebase'
+import { db } from '../../firebase/firebaseConfigs'
 import {
   query,
   collection,
@@ -100,6 +100,7 @@ export default function HomePage_MedicineTracker(props) {
 
 
   return (
+    
     <View style= {styles.homepageBackground}>
       <View style= {styles.headline}>
         <Text style= {{flex:4.5, fontSize: 25,fontWeight: 'bold',}}>Your Medicine Reminder</Text>

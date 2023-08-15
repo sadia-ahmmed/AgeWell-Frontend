@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Modal } from 'react-native'
 import DatePicker from 'react-native-modern-datepicker'
 import { getToday, getFormatedDate } from 'react-native-modern-datepicker'
-import { db } from '../../firebase'
+import { db } from '../../firebase/firebaseConfigs.js'
 import {
   query,
   collection,

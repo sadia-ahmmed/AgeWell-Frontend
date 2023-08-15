@@ -1,4 +1,0 @@
-IP_ADDRESS = "192.168.0.219"
-IP_PORT = "3000"
-
-export {IP_ADDRESS, IP_PORT}
