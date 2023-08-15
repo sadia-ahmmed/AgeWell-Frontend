@@ -56,43 +56,48 @@ const MainScreen = ({ navigation }) => {
           <View style={{ margin: 10 }}>
             <Button color="red" title="LOGOUT" onPress={onLogoutButtonPress} />
           </View>
-          <SpeedDial
-            color="#46C1E2"
-            isOpen={open}
-            icon={{ name: "people", color: "#fff" }}
-            openIcon={{ name: "close", color: "#fff" }}
-            onOpen={() => setOpen(true)}
-            onClose={() => setOpen(false)}
-          >
-            {
-              !authCtx.userCache.in_circle &&
-              <SpeedDial.Action
-                color="#46C1E2"
-                icon={{ name: "add", color: "#fff" }}
-                title="Create Family Circle"
-                onPress={() => navigation.navigate("create-family-circle")}
-              />
-            }
-            {
-              !authCtx.userCache.in_circle &&
-              <SpeedDial.Action
-                color="#46C1E2"
-                icon={{ name: "person-add", color: "#fff" }}
-                title="Join Family Circle"
-                onPress={() => navigation.navigate("join-family-circle")}
-              />
-            }
-            {
-              authCtx.userCache.in_circle &&
-              <SpeedDial.Action
-                color="#46C1E2"
-                icon={{ name: "create", color: "#fff" }}
-                title="My Circle"
-                onPress={() => navigation.navigate("family-circle-dashboard")}
-              />
-            }
+          {
+            authCtx.userCache.type === "user" &&
+            <SpeedDial
+              color="#46C1E2"
+              isOpen={open}
+              icon={{ name: "people", color: "#fff" }}
+              openIcon={{ name: "close", color: "#fff" }}
+              onOpen={() => setOpen(true)}
+              onClose={() => setOpen(false)}
+            >
+              {
+                !authCtx.userCache.in_circle &&
+                <SpeedDial.Action
+                  color="#46C1E2"
+                  icon={{ name: "add", color: "#fff" }}
+                  title="Create Family Circle"
+                  onPress={() => navigation.navigate("create-family-circle")}
+                />
+              }
+              {
+                !authCtx.userCache.in_circle &&
+                <SpeedDial.Action
+                  color="#46C1E2"
+                  icon={{ name: "person-add", color: "#fff" }}
+                  title="Join Family Circle"
+                  onPress={() => navigation.navigate("join-family-circle")}
+                />
+              }
+              {
+                authCtx.userCache.in_circle &&
+                <SpeedDial.Action
+                  color="#46C1E2"
+                  icon={{ name: "create", color: "#fff" }}
+                  title="My Circle"
+                  onPress={() => navigation.navigate("family-circle-dashboard")}
+                />
+              }
 
-          </SpeedDial>
+            </SpeedDial>
+
+          }
+
         </View>
       )}
     </AuthContext.Consumer>

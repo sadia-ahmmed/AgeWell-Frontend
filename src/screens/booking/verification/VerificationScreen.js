@@ -1,59 +1,97 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useState } from 'react'
-import { Button } from '@rneui/themed'
+import { Button, Image } from '@rneui/themed'
 import { AuthContext } from '../../../providers/AuthProviders'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import { CameraType, MediaTypeOptions, launchCameraAsync, launchImageLibraryAsync, requestCameraPermissionsAsync, requestMediaLibraryPermissionsAsync, useMediaLibraryPermissions } from 'expo-image-picker'
 
 const VerificationScreen = () => {
 
     const [fileData, setFileData] = useState()
-    const [fileUri, setFileUri] = useState()
+    const [fileUri, setFileUri] = useState("")
+
+    const [galleryStatus, requestGalleryPermission] = useMediaLibraryPermissions(false)
+
 
 
     const authCtx = useContext(AuthContext)
 
+    const pickImageFromGallery = async () => {
 
-    const launchNativeCamera = () => {
-        const camera_options = {
-            includeBase64: true,
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
+        const permission = await requestMediaLibraryPermissionsAsync()
+
+        if (permission.status === false) {
+            alert("You've refused permission")
+            return
         }
 
-        launchCamera(camera_options, (res) => {
-            const source = { uri: res.uri }
-            setFileData(res.assets[0].base64)
-            setFileUri(res.assets[0].uri)
-            console.log(fileData, fileUri)
+        const res = await launchImageLibraryAsync({
+            mediaTypes: MediaTypeOptions.All,
+            allowsEditing: true,
+            base64: true,
+            aspect: [4, 3],
+            quality: 1,
+            allowsMultipleSelection: true,
+            selectionLimit: 2
         })
-    }
 
-    const launchNativeGallery = () => {
-        const gallery_options = {
-            includeBase64: true,
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
+
+        if (!res.canceled) {
+            setFileData({
+                "img1": res.assets[0].base64,
+                "img2": res.assets[1].base64,
+            })
+            setFileUri({
+                "img1": res.assets[0].uri,
+                "img2": res.assets[1].uri,
+            })
+            console.log("Set")
         }
 
-        launchImageLibrary(gallery_options, (res) => {
-            const source = { uri: res.uri }
-            setFileData(res.assets[0].base64)
-            setFileUri(res.assets[0].uri)
-            console.log(fileData, fileUri)
-        })
     }
+
+
+
+    const openCamera = async () => {
+        const permission = await requestCameraPermissionsAsync()
+
+        if (permission.granted === false) {
+            alert("You've refused permission")
+            return
+        }
+
+        const res = await launchCameraAsync({
+            base64: true,
+            cameraType: CameraType.back,
+            quality: 1,
+        })
+
+        if (!res.canceled) {
+            setFileData({
+                "img1": res.assets[0].base64,
+                "img2": res.assets[1].base64,
+            })
+            setFileUri({
+                "img1": res.assets[0].uri,
+                "img2": res.assets[1].uri,
+            })
+            console.log("Set")
+        }
+    }
+
 
 
     return (
         <View style={styles.container}>
             <Text>Procedures:</Text>
             <Text>Please upload/capture pictures of your National ID (NID) from your gallery. The estimated approval time is 10 minutes.</Text>
-            <Button title="Open Camera" onPress={launchNativeCamera} />
-            <Button title="Open Gallery" onPress={launchNativeGallery} />
+            {
+                fileUri !== "" && <Image style={styles.img_preview} source={{ uri: fileUri["img1"] }} />
+            }
+            {
+                fileUri !== "" && <Image style={styles.img_preview} source={{ uri: fileUri["img2"] }} />
+            }
+            <Button title="Open Camera" onPress={openCamera} />
+            <Button title="Open Gallery" onPress={pickImageFromGallery} />
         </View>
     )
 }
@@ -68,4 +106,8 @@ const styles = StyleSheet.create({
         paddingRight: 18,
         marginTop: 0
     },
+    img_preview: {
+        width: 200,
+        height: 200
+    }
 })
