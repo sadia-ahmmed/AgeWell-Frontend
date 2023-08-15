@@ -17,6 +17,9 @@ import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import { auth } from "./src/firebase/firebaseConfigs";
 import Calendar from "./src/screens/booking/calendar/Calendar";
+import HomePage_MedicineTracker from "./src/screens/homepage/HomePage_MedicineTracker";
+import CreateRecord_medicineTracker from "./src/screens/add_medicine/CreateRecord_medicineTracker";
+import ViewCompletedTask_medicineTracker from "./src/screens/completedTask/ViewCompletedTask_medicineTracker"
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -214,6 +217,38 @@ const HomeStackScreens = ({ user }) => {
         component={FamilyCircleDashBoard}
         options={{ headerTitle: "Family circle dashboard", headerShown: true }}
       />
+      <HomeStack.Screen
+        name='homePage' 
+        component={HomePage_MedicineTracker} 
+        options={{ headerShown: false }} 
+      />
+
+       <HomeStack.Screen name='Add a new medicine'
+          options={{ title: 'Add a New Medicine',
+          headerTintColor: 'white',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#439be8',
+            //   justifyContent: 'center',
+            //   alignContent: 'center',
+
+           } }}
+        component={CreateRecord_medicineTracker} 
+      />
+      <HomeStack.Screen name='View All Completed Tasks' 
+        options={{ title: 'Completed Tasks',
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#439be8',
+              //   justifyContent: 'center',
+              //   alignContent: 'center',
+
+        } }}
+           
+      component={ViewCompletedTask_medicineTracker} />
+      
+
     </HomeStack.Navigator>
   );
 };
