@@ -56,6 +56,9 @@ const MainScreen = ({ navigation }) => {
           <View style={{ margin: 10 }}>
             <Button color="red" title="LOGOUT" onPress={onLogoutButtonPress} />
           </View>
+          <View style={{ margin: 10 }}>
+            <Button color="success" title="MEDICINE TRACKER" onPress={() => navigation.navigate("medicine-tracker")} />
+          </View>
           {
             authCtx.userCache.type === "user" &&
             <SpeedDial

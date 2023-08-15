@@ -218,13 +218,14 @@ const HomeStackScreens = ({ user }) => {
         options={{ headerTitle: "Family circle dashboard", headerShown: true }}
       />
       <HomeStack.Screen
-        name='homePage' 
-        component={HomePage_MedicineTracker} 
-        options={{ headerShown: false }} 
+        name='medicine-tracker'
+        component={HomePage_MedicineTracker}
+        options={{ headerShown: false }}
       />
 
-       <HomeStack.Screen name='Add a new medicine'
-          options={{ title: 'Add a New Medicine',
+      <HomeStack.Screen name='Add a new medicine'
+        options={{
+          title: 'Add a New Medicine',
           headerTintColor: 'white',
           headerTitleAlign: 'center',
           headerStyle: {
@@ -232,22 +233,25 @@ const HomeStackScreens = ({ user }) => {
             //   justifyContent: 'center',
             //   alignContent: 'center',
 
-           } }}
-        component={CreateRecord_medicineTracker} 
+          }
+        }}
+        component={CreateRecord_medicineTracker}
       />
-      <HomeStack.Screen name='View All Completed Tasks' 
-        options={{ title: 'Completed Tasks',
-        headerTintColor: 'white',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#439be8',
-              //   justifyContent: 'center',
-              //   alignContent: 'center',
+      <HomeStack.Screen name='View All Completed Tasks'
+        options={{
+          title: 'Completed Tasks',
+          headerTintColor: 'white',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#439be8',
+            //   justifyContent: 'center',
+            //   alignContent: 'center',
 
-        } }}
-           
-      component={ViewCompletedTask_medicineTracker} />
-      
+          }
+        }}
+
+        component={ViewCompletedTask_medicineTracker} />
+
 
     </HomeStack.Navigator>
   );
