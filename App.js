@@ -20,7 +20,8 @@ import Calendar from "./src/screens/booking/calendar/Calendar";
 import HomePage_MedicineTracker from "./src/screens/homepage/HomePage_MedicineTracker";
 import CreateRecord_medicineTracker from "./src/screens/add_medicine/CreateRecord_medicineTracker";
 import ViewCompletedTask_medicineTracker from "./src/screens/completedTask/ViewCompletedTask_medicineTracker"
-import AccountSelection from "./src/screens/AccountSelection";
+import AccountSelection from "./src/screens/onboarding/AccountSelection";
+import GenderSelection from "./src/screens/onboarding/GenderSelection";
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -190,7 +191,7 @@ const HomeStackScreens = () => {
         (authCtx) => (
           <HomeStack.Navigator initialRouteName="dashboard">
             {
-              authCtx.userCache.onboarding ? <HomeStack.Screen name='account-selection' component={AccountSelection} options={{ headerShown: false }} /> :
+              authCtx.userCache.onboarding ? <HomeStack.Screen name='account-selection' component={GenderSelection} options={{ headerShown: false }} /> :
                 <>
                   <HomeStack.Screen
                     name="dashboard"

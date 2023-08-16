@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { SafeAreaView, TouchableOpacity, StyleSheet } from "react-native";
 import { Button, Icon, Image, Text } from '@rneui/themed';
-import { IP_ADDRESS, IP_PORT } from "../../configs";
+import { IP_ADDRESS, IP_PORT } from "../../../configs";
 import { useContext } from "react";
-import { AuthContext } from "../providers/AuthProviders";
-import { auth } from "../firebase/firebaseConfigs";
+import { AuthContext } from "../../providers/AuthProviders";
+import { auth } from "../../firebase/firebaseConfigs";
 
 
 export default function AccountSelection() {
@@ -27,7 +27,7 @@ export default function AccountSelection() {
     const options = {
       mode: "cors",
       method: "POST",
-      header: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
       body: JSON.stringify(body)
     }
 
@@ -47,7 +47,7 @@ export default function AccountSelection() {
   return (
     <SafeAreaView style={styles.container}>
 
-      <Text style={styles.title_text}> Choose your Account type  </Text>
+      <Text style={styles.title_text}>Choose your Account type</Text>
 
       <SafeAreaView style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
 
@@ -59,7 +59,7 @@ export default function AccountSelection() {
           onPress={() => onPressBox("user")}
         >
           {/* <Icon name="elderly" type="material-icon" size={50} style={{padding:30}} />  */}
-          <Image source={require('../../public/elderly.png')}
+          <Image source={require('../../../public/elderly.png')}
             style={{ width: 95, height: 95, padding: 10, margin: 8 }} />
           <Text style={{ color: "darkslategrey", fontWeight: "bold" }}>Careseeker</Text>
         </TouchableOpacity>
@@ -70,7 +70,7 @@ export default function AccountSelection() {
           onPress={() => onPressBox("nurse")}
         >
           {/* <Icon name="user-nurse" type="font-awesome-5" size={50} style={{padding:30}} /> */}
-          <Image source={require('../../public/nurse.png')}
+          <Image source={require('../../../public/nurse.png')}
             style={{ width: 95, height: 95, padding: 10, margin: 8 }} />
           <Text style={{ color: "darkslategrey", fontWeight: "bold" }}>Caregiver</Text>
         </TouchableOpacity>
