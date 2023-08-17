@@ -9,7 +9,7 @@ import { Touchable } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import BloodGroupCard from '../../components/BloodGroupCard'
 
-const BloodGroupSelection = ({ navigation, setStep, setProgress, progressLength }) => {
+const BloodGroupSelection = ({ index, setStep, setProgress, progressLength }) => {
 
     const [blood_group, setBloodGroup] = useState("A+")
 
@@ -41,8 +41,8 @@ const BloodGroupSelection = ({ navigation, setStep, setProgress, progressLength 
             .then(res => res.json())
             .then(data => {
                 authCtx.setUserCache(data)
-                setStep(3)
-                setProgress(3 / progressLength)
+                setStep(index + 1)
+                setProgress((index + 1) / progressLength)
             })
             .catch(err => {
                 alert(err.message)

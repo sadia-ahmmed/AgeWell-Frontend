@@ -6,7 +6,7 @@ import { auth } from '../../firebase/firebaseConfigs';
 import { IP_ADDRESS, IP_PORT } from '../../../configs';
 import { AuthContext } from '../../providers/AuthProviders';
 
-const GenderSelection = ({ setStep, setProgress, progressLength }) => {
+const GenderSelection = ({ index, setStep, setProgress, progressLength }) => {
 
     const authCtx = useContext(AuthContext)
 
@@ -32,8 +32,8 @@ const GenderSelection = ({ setStep, setProgress, progressLength }) => {
             .then(res => res.json())
             .then(data => {
                 authCtx.setUserCache(data)
-                setStep(2)
-                setProgress(2 / progressLength)
+                setStep(index + 1)
+                setProgress((index + 1) / progressLength)
             })
             .catch(err => {
                 alert(err.message)

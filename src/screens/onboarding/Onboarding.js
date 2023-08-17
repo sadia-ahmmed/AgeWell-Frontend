@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { BackHandler, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import AccountSelection from './AccountSelection'
 import GenderSelection from './GenderSelection'
 import BloodGroupSelection from './BloodGroupSelection'
@@ -17,6 +17,18 @@ const Onboarding = () => {
 
     const [step, setStep] = useState(0)
     const [progress, setProgress] = useState(0)
+
+
+    useEffect(() => {
+        const handleBackButtonClick = () => {
+            if (step > 0) {
+                setStep(step - 1)
+            }
+        }
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+
+        return () => BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick)
+    }, []);
 
     const completeOnboarding = () => {
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
@@ -52,7 +64,7 @@ const Onboarding = () => {
         }
 
         const Component = onboardingSteps[step]
-        return <Component setStep={setStep} setProgress={setProgress} progressLength={progressLen} />
+        return <Component index={step} setStep={setStep} setProgress={setProgress} progressLength={progressLen} />
     }
 
     return (

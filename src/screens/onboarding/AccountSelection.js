@@ -7,7 +7,7 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
 
 
-export default function AccountSelection({ navigation, setStep, setProgress, progressLength }) {
+export default function AccountSelection({ index, navigation, setStep, setProgress, progressLength }) {
   const authCtx = useContext(AuthContext)
 
   const onPressBox = (type) => {
@@ -32,8 +32,8 @@ export default function AccountSelection({ navigation, setStep, setProgress, pro
       .then(res => res.json())
       .then(data => {
         authCtx.setUserCache(data)
-        setStep(1)
-        setProgress(1 / progressLength)
+        setStep(index + 1)
+        setProgress((index + 1) / progressLength)
       })
       .catch(err => {
         alert(err.message)
