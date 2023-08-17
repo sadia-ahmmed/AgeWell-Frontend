@@ -7,20 +7,16 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
 
 
-export default function AccountSelection() {
-  const [accountType, setAccountType] = useState("")
-
+export default function AccountSelection({ navigation, setStep, setProgress, progressLength }) {
   const authCtx = useContext(AuthContext)
 
   const onPressBox = (type) => {
 
-    setAccountType(type)
     const user_access_token = auth.currentUser.stsTokenManager.accessToken
-
 
     const body = {
       key: "type",
-      type: accountType
+      type
     }
 
     const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/set-account-detail`
@@ -36,6 +32,8 @@ export default function AccountSelection() {
       .then(res => res.json())
       .then(data => {
         authCtx.setUserCache(data)
+        setStep(1)
+        setProgress(1 / progressLength)
       })
       .catch(err => {
         alert(err.message)
@@ -45,7 +43,7 @@ export default function AccountSelection() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
 
       <Text style={styles.title_text}>Choose your Account type</Text>
 
@@ -61,7 +59,7 @@ export default function AccountSelection() {
           {/* <Icon name="elderly" type="material-icon" size={50} style={{padding:30}} />  */}
           <Image source={require('../../../public/elderly.png')}
             style={{ width: 95, height: 95, padding: 10, margin: 8 }} />
-          <Text style={{ color: "darkslategrey", fontWeight: "bold" }}>Careseeker</Text>
+          <Text style={{ color: "darkslategrey", fontWeight: "bold", textAlign: "center" }}>Careseeker</Text>
         </TouchableOpacity>
 
 
@@ -104,7 +102,8 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     marginBottom: 40,
     fontSize: 24,
-    color: "skyblue"
+    color: "skyblue",
+    textAlign: "center"
   }
 })
 

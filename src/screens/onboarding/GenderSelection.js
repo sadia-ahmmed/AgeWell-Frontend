@@ -6,17 +6,13 @@ import { auth } from '../../firebase/firebaseConfigs';
 import { IP_ADDRESS, IP_PORT } from '../../../configs';
 import { AuthContext } from '../../providers/AuthProviders';
 
-const GenderSelection = () => {
+const GenderSelection = ({ setStep, setProgress, progressLength }) => {
 
-    const [gender, setGender] = useState("")
     const authCtx = useContext(AuthContext)
 
-    const onPressBox = (type) => {
-
-        setGender(type)
+    const onPressBox = (gender) => {
 
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
-
 
         const body = {
             key: "gender",
@@ -36,6 +32,8 @@ const GenderSelection = () => {
             .then(res => res.json())
             .then(data => {
                 authCtx.setUserCache(data)
+                setStep(2)
+                setProgress(2 / progressLength)
             })
             .catch(err => {
                 alert(err.message)
@@ -47,7 +45,7 @@ const GenderSelection = () => {
 
 
     return (
-        <View style={styles.container}>
+        <View>
             <Text style={styles.title_text}>Choose your gender</Text>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                 <TouchableOpacity
@@ -99,6 +97,7 @@ const styles = StyleSheet.create({
         fontWeight: "900",
         marginBottom: 40,
         fontSize: 24,
-        color: "skyblue"
+        color: "skyblue",
+        textAlign: "center"
     }
 })
