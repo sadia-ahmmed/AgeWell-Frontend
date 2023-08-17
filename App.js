@@ -96,7 +96,7 @@ const DashboardTabScreens = () => {
           />
 
           {/* Main nurse list tab bar */}
-          {!authCtx.userCache.ongoingAppointment && (
+          {(!authCtx.userCache.ongoingAppointment || authCtx.userCache.type === "user") && (
             <DashboardTabs.Screen
               name="Nurses"
               component={BookingList}
