@@ -20,6 +20,7 @@ import Calendar from "./src/screens/booking/calendar/Calendar";
 import HomePage_MedicineTracker from "./src/screens/homepage/HomePage_MedicineTracker";
 import CreateRecord_medicineTracker from "./src/screens/add_medicine/CreateRecord_medicineTracker";
 import ViewCompletedTask_medicineTracker from "./src/screens/completedTask/ViewCompletedTask_medicineTracker"
+import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -221,6 +222,10 @@ const HomeStackScreens = ({ user }) => {
         component={HomePage_MedicineTracker} 
         options={{ headerShown: false }} 
       />
+      <HomeStack.Screen name='activityTracker'
+        component={ActivityTracker}
+        options={{ headerTitle: "Activity Tracker", headerShown: false }}
+      />
 
        <HomeStack.Screen name='Add a new medicine'
           options={{ title: 'Add a New Medicine',
@@ -246,7 +251,6 @@ const HomeStackScreens = ({ user }) => {
         } }}
            
       component={ViewCompletedTask_medicineTracker} />
-      
 
     </HomeStack.Navigator>
   );
