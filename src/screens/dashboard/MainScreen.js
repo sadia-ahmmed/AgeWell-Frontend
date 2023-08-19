@@ -4,12 +4,13 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
 import { signOut } from "firebase/auth";
 import { invokeLogoutService } from "../../services/user/authService";
-import { Button } from "@rneui/themed";
+import { Button, Card } from "@rneui/themed";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
 import { SpeedDial } from "@rneui/themed";
+import ActivityTracker from "./ActivityTracker";
 
 const MainScreen = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -56,6 +57,16 @@ const MainScreen = ({ navigation }) => {
           <View style={{ margin: 10 }}>
             <Button color="red" title="LOGOUT" onPress={onLogoutButtonPress} />
           </View>
+
+          <View style={{ margin: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Your CareGiver
+            </Text>
+            <Card.Divider />
+          </View>
+
+          <ActivityTracker navigation={navigation} />
+
           <SpeedDial
             color="#46C1E2"
             isOpen={open}

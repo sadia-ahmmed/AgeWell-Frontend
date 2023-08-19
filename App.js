@@ -17,6 +17,7 @@ import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import { auth } from "./src/firebase/firebaseConfigs";
 import Calendar from "./src/screens/booking/calendar/Calendar";
+import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -232,6 +233,10 @@ const HomeStackScreens = ({ user }) => {
         component={HomePage_MedicineTracker} 
         options={{ headerShown: false }} 
       />
+      <HomeStack.Screen name='activityTracker'
+        component={ActivityTracker}
+        options={{ headerTitle: "Activity Tracker", headerShown: false }}
+      />
 
        <HomeStack.Screen name='Add a new medicine'
           options={{ title: 'Add a New Medicine',
@@ -255,6 +260,9 @@ const HomeStackScreens = ({ user }) => {
               //   alignContent: 'center',
 
         } }}
+           
+      component={ViewCompletedTask_medicineTracker} />
+
             */}
       {/* component={ViewCompletedTask_medicineTracker} /> */}
     </HomeStack.Navigator>
