@@ -17,9 +17,6 @@ import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import { auth } from "./src/firebase/firebaseConfigs";
 import Calendar from "./src/screens/booking/calendar/Calendar";
-import HomePage_MedicineTracker from "./src/screens/homepage/HomePage_MedicineTracker";
-import CreateRecord_medicineTracker from "./src/screens/add_medicine/CreateRecord_medicineTracker";
-import ViewCompletedTask_medicineTracker from "./src/screens/completedTask/ViewCompletedTask_medicineTracker"
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -53,26 +50,37 @@ const DashboardTabScreens = () => {
               let iconType;
 
               if (route.name === "Home") {
-                iconName = "home"
-                iconType = "entypo"
+                iconName = "home";
+                iconType = "entypo";
               } else if (route.name === "Nurses") {
-                iconName = focused ? "search" : "search-outline"
-                iconType = "ionicon"
+                iconName = focused ? "search" : "search-outline";
+                iconType = "ionicon";
               } else if (route.name === "Calendar") {
-                iconName = focused ? "calendar" : "calendar-outline"
-                iconType = "ionicon"
+                iconName = focused ? "calendar" : "calendar-outline";
+                iconType = "ionicon";
               } else if (route.name === "Chats") {
-                iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline"
-                iconType = "ionicon"
-              } else if (!authCtx.userCache.ongoingAppointment && route.name === "Pending") {
-                iconName = focused ? "timer" : "timer-outline"
-                iconType = "ionicon"
-              } else if (authCtx.userCache.ongoingAppointment && route.name === "Appointment") {
-                iconName = "user-md"
-                iconType = "font-awesome"
-              } else if (!authCtx.userCache.is_verified && route.name === "Verification") {
-                iconName = focused ? "shield-alert" : "shield-alert-outline"
-                iconType = "material-community"
+                iconName = focused
+                  ? "chatbox-ellipses"
+                  : "chatbox-ellipses-outline";
+                iconType = "ionicon";
+              } else if (
+                !authCtx.userCache.ongoingAppointment &&
+                route.name === "Pending"
+              ) {
+                iconName = focused ? "timer" : "timer-outline";
+                iconType = "ionicon";
+              } else if (
+                authCtx.userCache.ongoingAppointment &&
+                route.name === "Appointment"
+              ) {
+                iconName = "user-md";
+                iconType = "font-awesome";
+              } else if (
+                !authCtx.userCache.is_verified &&
+                route.name === "Verification"
+              ) {
+                iconName = focused ? "shield-alert" : "shield-alert-outline";
+                iconType = "material-community";
               }
               return (
                 <Icon name={iconName} type={iconType} color={color} size={25} />
@@ -82,7 +90,6 @@ const DashboardTabScreens = () => {
             tabBarInactiveTintColor: "grey",
           })}
         >
-
           {/* Main screen tab bar */}
           <DashboardTabs.Screen
             name="Home"
@@ -114,7 +121,14 @@ const DashboardTabScreens = () => {
             name="Calendar"
             component={Calendar}
             options={{
-              headerShown: false,
+              headerShown: true,
+              headerTitle: "Medical Report Library",
+              headerTitleStyle: {
+                fontSize: 18,
+                textAlign: "center",
+                color: "#439BE8",
+              },
+
               tabBarItemStyle: { marginBottom: 5 },
             }}
           />
@@ -171,10 +185,7 @@ const DashboardTabScreens = () => {
                 tabBarItemStyle: { marginBottom: 5 },
               }}
             />
-          )
-
-          }
-
+          )}
         </DashboardTabs.Navigator>
       )}
     </AuthContext.Consumer>
@@ -216,7 +227,7 @@ const HomeStackScreens = ({ user }) => {
         component={FamilyCircleDashBoard}
         options={{ headerTitle: "Family circle dashboard", headerShown: true }}
       />
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name='homePage' 
         component={HomePage_MedicineTracker} 
         options={{ headerShown: false }} 
@@ -244,10 +255,8 @@ const HomeStackScreens = ({ user }) => {
               //   alignContent: 'center',
 
         } }}
-           
-      component={ViewCompletedTask_medicineTracker} />
-      
-
+            */}
+      {/* component={ViewCompletedTask_medicineTracker} /> */}
     </HomeStack.Navigator>
   );
 };
@@ -258,7 +267,11 @@ export default function App() {
       <AuthContext.Consumer>
         {(authCtx) => (
           <NavigationContainer>
-            {authCtx.isLoggedIn ? <HomeStackScreens user={authCtx.userCache} /> : <AuthStackScreens />}
+            {authCtx.isLoggedIn ? (
+              <HomeStackScreens user={authCtx.userCache} />
+            ) : (
+              <AuthStackScreens />
+            )}
           </NavigationContainer>
         )}
       </AuthContext.Consumer>
