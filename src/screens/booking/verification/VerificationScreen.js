@@ -13,6 +13,7 @@ const VerificationScreen = () => {
 
     const [fileData1, setFileData1] = useState()
     const [fileData2, setFileData2] = useState()
+    const [resumeData, setResumeData] = useState()
     const [openOverlay1, setOpenOverlay1] = useState(false)
     const [openOverlay2, setOpenOverlay2] = useState(false)
 
@@ -37,6 +38,15 @@ const VerificationScreen = () => {
                 name: fileData2.name,
             }
         )
+        if (authCtx.userCache.type === "nurse") {
+            data.append('files',
+                {
+                    type: `application/${resumeData.type}`,
+                    uri: resumeData.uri,
+                    name: resumeData.name,
+                }
+            )
+        }
 
         const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/verification-send/${auth.currentUser.uid}`
         const options = {
@@ -87,7 +97,7 @@ const VerificationScreen = () => {
                     name: filename
                 })
                 setOpenOverlay1(false)
-            } else {
+            } else if (key === "img2") {
                 const asset = res.assets[0]
                 const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
                 setFileData2({
@@ -95,6 +105,13 @@ const VerificationScreen = () => {
                     name: filename
                 })
                 setOpenOverlay2(false)
+            } else {
+                const asset = res.assets[0]
+                const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
+                setResumeData({
+                    ...asset,
+                    name: filename
+                })
             }
         }
 
@@ -200,6 +217,13 @@ const VerificationScreen = () => {
                         </AdaptiveView>
                         <ChoiceOverlay1 />
                         <ChoiceOverlay2 />
+                        {
+                            authCtx.userCache.type === "nurse" &&
+                            <AdaptiveView style={{ flexDirection: "row" }}>
+                                <Text>{resumeData.uri === "" ? "Compile and Upload Your Resume in a PDF" : resumeData.name}</Text>
+                                <Button radius={"md"} title="Select Resume" onPress={() => pickImageFromGallery("resume")} />
+                            </AdaptiveView>
+                        }
                         <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
                     </>
             }
