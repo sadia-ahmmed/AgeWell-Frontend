@@ -90,7 +90,6 @@ const Calendar = () => {
         .then((res) => res.json())
         .then((data) => alert(data.message))
         .catch((error) => alert(error.message));
-
       console.log(doc);
     } catch (err) {
       console.log(err);
