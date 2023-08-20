@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
 import { SpeedDial } from "@rneui/themed";
 import ActivityTracker from "./ActivityTracker";
+import AdaptiveView from "../../components/AdaptiveView";
 
 const MainScreen = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -44,7 +45,7 @@ const MainScreen = ({ navigation }) => {
         .catch((error) => {
           alert("Error getting user details");
         });
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(httpPolling);
   }, []);
@@ -52,7 +53,7 @@ const MainScreen = ({ navigation }) => {
   return (
     <AuthContext.Consumer>
       {(authCtx) => (
-        <View style={styles.main_container}>
+        <AdaptiveView style={styles.main_container}>
           <Text>Main</Text>
           <View style={{ margin: 10 }}>
             <Button color="red" title="LOGOUT" onPress={onLogoutButtonPress} />
@@ -100,7 +101,7 @@ const MainScreen = ({ navigation }) => {
               />
             )}
           </SpeedDial>
-        </View>
+        </AdaptiveView>
       )}
     </AuthContext.Consumer>
   );

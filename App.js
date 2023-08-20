@@ -15,9 +15,9 @@ import JoinFamilyCircle from "./src/screens/dashboard/JoinFamilyCircle";
 import CreateFamilyCircle from "./src/screens/dashboard/CreateFamilyCircle";
 import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard";
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
-import { auth } from "./src/firebase/firebaseConfigs";
 import Calendar from "./src/screens/booking/calendar/Calendar";
 import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
+import Onboarding from "./src/screens/onboarding/Onboarding";
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -104,7 +104,7 @@ const DashboardTabScreens = () => {
           />
 
           {/* Main nurse list tab bar */}
-          {!authCtx.userCache.ongoingAppointment && (
+          {(!authCtx.userCache.ongoingAppointment || authCtx.userCache.type === "user") && (
             <DashboardTabs.Screen
               name="Nurses"
               component={BookingList}
@@ -181,8 +181,9 @@ const DashboardTabScreens = () => {
               name="Verification"
               component={VerificationScreen}
               options={{
-                headerShown: false,
+                headerShown: true,
                 title: "Verify",
+                headerTitle: "Verify Your Account",
                 tabBarItemStyle: { marginBottom: 5 },
               }}
             />
@@ -193,79 +194,51 @@ const DashboardTabScreens = () => {
   );
 };
 
-const HomeStackScreens = ({ user }) => {
+const HomeStackScreens = () => {
   return (
-    <HomeStack.Navigator initialRouteName="dashboard">
-      {/* SADIA OPEN THIS COMMENT AFTER YOURE DONE WITH ACCOUNT SELECTION */}
-      {/* <HomeStack.Screen name='account-selection' component={AccountSelection} /> */}
-      <HomeStack.Screen
-        name="dashboard"
-        component={DashboardTabScreens}
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="nurse-highlight"
-        component={NurseHighlight}
-        options={{ headerTitle: "View nurse", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="nurse-booking"
-        component={BookingScreen}
-        options={{ headerTitle: "Book nurse", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="join-family-circle"
-        component={JoinFamilyCircle}
-        options={{ headerTitle: "Join family circle", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="create-family-circle"
-        component={CreateFamilyCircle}
-        options={{ headerTitle: "Create family circle", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="family-circle-dashboard"
-        component={FamilyCircleDashBoard}
-        options={{ headerTitle: "Family circle dashboard", headerShown: true }}
-      />
-      {/* <HomeStack.Screen
-        name='homePage' 
-        component={HomePage_MedicineTracker} 
-        options={{ headerShown: false }} 
-      />
-      <HomeStack.Screen name='activityTracker'
-        component={ActivityTracker}
-        options={{ headerTitle: "Activity Tracker", headerShown: false }}
-      />
-
-       <HomeStack.Screen name='Add a new medicine'
-          options={{ title: 'Add a New Medicine',
-          headerTintColor: 'white',
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: '#439be8',
-            //   justifyContent: 'center',
-            //   alignContent: 'center',
-
-           } }}
-        component={CreateRecord_medicineTracker} 
-      />
-      <HomeStack.Screen name='View All Completed Tasks' 
-        options={{ title: 'Completed Tasks',
-        headerTintColor: 'white',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#439be8',
-              //   justifyContent: 'center',
-              //   alignContent: 'center',
-
-        } }}
-           
-      component={ViewCompletedTask_medicineTracker} />
-
-            */}
-      {/* component={ViewCompletedTask_medicineTracker} /> */}
-    </HomeStack.Navigator>
+    <AuthContext.Consumer>
+      {
+        (authCtx) => (
+          <HomeStack.Navigator initialRouteName="dashboard">
+            {
+              authCtx.userCache.onboarding ? <HomeStack.Screen name='account-selection' component={Onboarding} options={{ headerShown: false }} /> :
+                <>
+                  <HomeStack.Screen
+                    name="dashboard"
+                    component={DashboardTabScreens}
+                    options={{ headerShown: false }}
+                  />
+                  <HomeStack.Screen
+                    name="nurse-highlight"
+                    component={NurseHighlight}
+                    options={{ headerTitle: "View nurse", headerShown: true }}
+                  />
+                  <HomeStack.Screen
+                    name="nurse-booking"
+                    component={BookingScreen}
+                    options={{ headerTitle: "Book nurse", headerShown: true }}
+                  />
+                  <HomeStack.Screen
+                    name="join-family-circle"
+                    component={JoinFamilyCircle}
+                    options={{ headerTitle: "Join family circle", headerShown: true }}
+                  />
+                  <HomeStack.Screen
+                    name="create-family-circle"
+                    component={CreateFamilyCircle}
+                    options={{ headerTitle: "Create family circle", headerShown: true }}
+                  />
+                  <HomeStack.Screen
+                    name="family-circle-dashboard"
+                    component={FamilyCircleDashBoard}
+                    options={{ headerTitle: "Family circle dashboard", headerShown: true }}
+                  />
+                </>
+            }
+          </HomeStack.Navigator>
+        )
+      }
+    </AuthContext.Consumer>
   );
 };
 

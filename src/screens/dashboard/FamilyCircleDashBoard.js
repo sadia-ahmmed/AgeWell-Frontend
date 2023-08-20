@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Card } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
+import AdaptiveView from "../../components/AdaptiveView";
 
 const FamilyCircleDashBoard = (props) => {
   const data = [
@@ -18,7 +19,7 @@ const FamilyCircleDashBoard = (props) => {
     { id: "2", title: "S M Jishanul Islam", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
     { id: "3", title: "Nur Islam Shourov", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
   ];
-  
+
   const [activeCard, setActiveCard] = useState(null);
 
   const Item = ({ title, number, image }) => (
@@ -46,7 +47,7 @@ const FamilyCircleDashBoard = (props) => {
   return (
     <AuthContext.Consumer>
       {(auth) => (
-        <SafeAreaView style={styles.container}>
+        <AdaptiveView style={styles.container}>
           <FlatList
             data={data}
             renderItem={({ item }) => (
@@ -54,7 +55,7 @@ const FamilyCircleDashBoard = (props) => {
             )}
             keyExtractor={(item) => item.id}
           />
-        </SafeAreaView>
+        </AdaptiveView>
       )}
     </AuthContext.Consumer>
   );

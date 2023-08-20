@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Pressable, FlatList, View } from "react-native";
+import { StyleSheet, Text, Pressable, FlatList, View, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Divider, SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,14 +11,19 @@ import AntIcon from "react-native-vector-icons/AntDesign";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage } from "@fortawesome/free-regular-svg-icons";
 import { FileImageOutlined } from "@ant-design/icons";
+import AdaptiveView from "../../../components/AdaptiveView";
 // "expo-file-system": "^15.4.3",
 
 const Calendar = () => {
   const [search, setSearch] = useState("");
   const [reportlist, setReportList] = useState([]);
+
+
   const updateSearch = (search) => {
     setSearch(search);
   };
+
+
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
     const httpPolling = setInterval(() => {
@@ -38,10 +43,12 @@ const Calendar = () => {
           setReportList(data);
         })
         .catch((error) => alert(error.message));
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(httpPolling);
   }, []);
+
+
   const selectDoc = async () => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
@@ -50,8 +57,22 @@ const Calendar = () => {
         type: ["application/pdf", "image/*"],
         multiple: false,
       });
+
+
       let data = new FormData();
-      data.append("file", doc);
+
+      if (Platform.OS === "ios" || Platform.OS === "macos") {
+        data.append("file", doc)
+      } else {
+        data.append("file", {
+          name: doc.name,
+          uri: doc.uri,
+          type: doc.mimeType === "image/jpeg" ? `image/${doc.type}` : `application/${doc.type}`,
+        });
+      }
+
+
+
       const uid = auth.currentUser.uid;
       const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/reports/upload/${uid}`;
       const options = {
@@ -59,6 +80,7 @@ const Calendar = () => {
         mode: "cors",
         headers: {
           "Content-Type": "multipart/form-data",
+          // "Content-Type": "application/json",
           Authorization: `Bearer ${user_access_token}`,
         },
         body: data,
@@ -101,7 +123,7 @@ const Calendar = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AdaptiveView style={styles.container}>
       <SearchBar
         placeholder="Search Reports"
         value={search}
@@ -144,7 +166,7 @@ const Calendar = () => {
         keyExtractor={(item) => item._id}
         renderItem={renderReportItem}
       />
-    </SafeAreaView>
+    </AdaptiveView>
   );
 };
 
