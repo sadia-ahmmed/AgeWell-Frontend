@@ -8,11 +8,13 @@ import { auth } from '../../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { Platform } from 'react-native'
 import AdaptiveView from '../../../components/AdaptiveView'
+import * as DocumentPicker from "expo-document-picker";
 
 const VerificationScreen = () => {
 
     const [fileData1, setFileData1] = useState()
     const [fileData2, setFileData2] = useState()
+    const [resumeData, setResumeData] = useState()
     const [openOverlay1, setOpenOverlay1] = useState(false)
     const [openOverlay2, setOpenOverlay2] = useState(false)
 
@@ -25,11 +27,29 @@ const VerificationScreen = () => {
         console.log(fileData1)
 
         const data = new FormData()
-        data.append('file', {
-            type: fileData1.type,
-            uri: Platform.OS === 'android' ? fileData1.uri : fileData1.uri.replace('file://', ''),
-            name: fileData1.fileName,
+        data.append('files', {
+            type: `image/${fileData1.type}`,
+            uri: fileData1.uri,
+            name: fileData1.name,
         })
+        data.append('files',
+            {
+                type: `image/${fileData2.type}`,
+                uri: fileData2.uri,
+                name: fileData2.name,
+            }
+        )
+        if (authCtx.userCache.type === "nurse") {
+            if (Platform.OS === "ios" || Platform.OS === "macos") {
+                data.append("files", resumeData)
+            } else {
+                data.append("files", {
+                    name: resumeData.name,
+                    uri: resumeData.uri,
+                    type: `application/${resumeData.type}`,
+                });
+            }
+        }
 
         const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/verification-send/${auth.currentUser.uid}`
         const options = {
@@ -52,9 +72,22 @@ const VerificationScreen = () => {
     }
 
 
+    const selectDoc = async () => {
+        try {
+            const doc = await DocumentPicker.getDocumentAsync({
+                type: ["application/pdf"],
+                multiple: false,
+            });
+            setResumeData(doc)
+        } catch (err) {
+            alert(err.message)
+        }
+    }
+
 
     const pickImageFromGallery = async (key) => {
 
+        console.log("enter")
         const permission = await requestMediaLibraryPermissionsAsync()
 
         if (permission.status === false) {
@@ -63,19 +96,30 @@ const VerificationScreen = () => {
         }
 
         const res = await launchImageLibraryAsync({
-            mediaTypes: MediaTypeOptions.All,
+            mediaTypes: MediaTypeOptions.Images,
             aspect: [4, 3],
             quality: 1,
-            selectionLimit: 1
+            selectionLimit: 1,
+
         })
 
 
         if (!res.canceled) {
             if (key === "img1") {
-                setFileData1(res.assets[0])
+                const asset = res.assets[0]
+                const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
+                setFileData1({
+                    ...asset,
+                    name: filename
+                })
                 setOpenOverlay1(false)
-            } else {
-                setFileData2(res.assets[0])
+            } else if (key === "img2") {
+                const asset = res.assets[0]
+                const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
+                setFileData2({
+                    ...asset,
+                    name: filename
+                })
                 setOpenOverlay2(false)
             }
         }
@@ -98,10 +142,20 @@ const VerificationScreen = () => {
 
         if (!res.canceled) {
             if (key === "img1") {
-                setFileData1(res.assets[0])
+                const asset = res.assets[0]
+                const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
+                setFileData1({
+                    ...asset,
+                    name: filename
+                })
                 setOpenOverlay1(false)
             } else {
-                setFileData2(res.assets[0])
+                const asset = res.assets[0]
+                const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
+                setFileData2({
+                    ...asset,
+                    name: filename
+                })
                 setOpenOverlay2(false)
             }
         }
@@ -146,27 +200,45 @@ const VerificationScreen = () => {
     )
 
 
+    const OngoingMessageScreen = () => (
+        <Text>Ongoing! Thanks for submitting</Text>
+    )
 
 
     return (
         <AdaptiveView style={styles.container}>
-            <Text>Procedures:</Text>
-            <Text>Please upload/capture pictures of your National ID (NID) from your gallery. The estimated approval time is 10 minutes.</Text>
-            <AdaptiveView style={{ flexDirection: "row" }}>
-                <TouchableOpacity style={styles.shadow_bg} onPress={() => setOpenOverlay1(true)}>
-                    {
-                        !fileData1 ? <Text style={styles.text_preview}>Upload front part</Text> : <Image style={styles.img_preview} source={{ uri: fileData1.uri }} />
-                    }
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setOpenOverlay2(true)}>
-                    {
-                        !fileData2 ? <Text style={styles.text_preview}>Upload back part</Text> : <Image style={styles.img_preview} source={{ uri: fileData2.uri }} />
-                    }
-                </TouchableOpacity>
-            </AdaptiveView>
-            <ChoiceOverlay1 />
-            <ChoiceOverlay2 />
-            <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
+            {
+                authCtx.userCache.verification_status === "ongoing" ? <OngoingMessageScreen /> :
+                    <>
+                        <Text>Procedures:</Text>
+                        <Text>Please upload/capture pictures of your National ID (NID) from your gallery. The estimated approval time is 10 minutes.</Text>
+                        <AdaptiveView style={{ flexDirection: "row" }}>
+                            <TouchableOpacity style={styles.shadow_bg} onPress={() => setOpenOverlay1(true)}>
+                                {
+                                    !fileData1 ? <Text style={styles.text_preview}>Upload front part</Text> : <Image style={styles.img_preview} source={{ uri: fileData1.uri }} />
+                                }
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setOpenOverlay2(true)}>
+                                {
+                                    !fileData2 ? <Text style={styles.text_preview}>Upload back part</Text> : <Image style={styles.img_preview} source={{ uri: fileData2.uri }} />
+                                }
+                            </TouchableOpacity>
+                        </AdaptiveView>
+                        <ChoiceOverlay1 />
+                        <ChoiceOverlay2 />
+                        {
+                            authCtx.userCache.type === "nurse" &&
+                            <AdaptiveView style={{ flexDirection: "row", justifyContent: "center", alignContent: "center", alignItems: "center", marginTop: 20 }}>
+                                <Text style={{ fontSize: 12, marginRight: 10, }}>{!resumeData ? "Upload Your Resume in a PDF" : resumeData.name}</Text>
+                                <Button type='clear' radius={"md"} title="Select Resume" onPress={selectDoc} />
+                            </AdaptiveView>
+                        }
+                        <View style={{ marginTop: 30 }}>
+                            <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
+                        </View>
+                    </>
+            }
+
         </AdaptiveView>
     )
 }
@@ -179,7 +251,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 18,
         paddingRight: 18,
-        marginTop: 0
+        paddingTop: 30
     },
     shadow_bg: {
         shadowColor: 'black',
