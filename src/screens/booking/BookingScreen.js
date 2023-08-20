@@ -7,6 +7,7 @@ import DropdownSelect from '../../components/Dropdown'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import CustomButton from '../../components/CustomButton'
 import DateTimePickerModal from '../../components/DateTimePickerModal'
+import AdaptiveView from '../../components/AdaptiveView'
 
 const BookingScreen = ({ route, navigation }) => {
     const today = new Date().toLocaleDateString("en-ZA")
@@ -119,7 +120,7 @@ const BookingScreen = ({ route, navigation }) => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    <View style={styles.main_container}>
+                    <AdaptiveView style={styles.main_container}>
                         <View style={styles.name_container}>
                             <Text style={styles.text_header}>Book appointment with:</Text>
                             <Text style={styles.name_text}>{nurse_details.fullname}</Text>
@@ -178,7 +179,7 @@ const BookingScreen = ({ route, navigation }) => {
                             <CustomButton title="Book Now" width={150} onPress={() => onBookButtonPress(authCtx)} />
                         </View>
 
-                    </View>
+                    </AdaptiveView>
                 )
             }
         </AuthContext.Consumer>

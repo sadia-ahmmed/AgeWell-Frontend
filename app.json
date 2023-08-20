@@ -14,6 +14,13 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to open the camera",
           "microphonePermission": false
         }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+          "microphonePermission": false
+        }
       ]
     ],
     "splash": {

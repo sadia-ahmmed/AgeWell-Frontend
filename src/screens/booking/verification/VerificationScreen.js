@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { auth } from '../../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { Platform } from 'react-native'
+import AdaptiveView from '../../../components/AdaptiveView'
 
 const VerificationScreen = () => {
 
@@ -115,7 +116,7 @@ const VerificationScreen = () => {
             }}
             onBackdropPress={() => setOpenOverlay1(false)}
         >
-            <View
+            <AdaptiveView
                 style={{
                     padding: 50
                 }}
@@ -123,7 +124,7 @@ const VerificationScreen = () => {
                 <Button title="Upload from camera" onPress={() => openCamera("img1")} />
                 <Divider />
                 <Button title="Upload from gallery" onPress={() => pickImageFromGallery("img1")} />
-            </View>
+            </AdaptiveView>
         </Overlay>
     )
 
@@ -132,7 +133,7 @@ const VerificationScreen = () => {
             isVisible={openOverlay2}
             onBackdropPress={() => setOpenOverlay2(false)}
         >
-            <View
+            <AdaptiveView
                 style={{
                     padding: 50
                 }}
@@ -140,7 +141,7 @@ const VerificationScreen = () => {
                 <Button title="Upload from camera" onPress={() => openCamera("img2")} />
                 <Divider />
                 <Button title="Upload from gallery" onPress={() => pickImageFromGallery("img2")} />
-            </View>
+            </AdaptiveView>
         </Overlay>
     )
 
@@ -148,10 +149,10 @@ const VerificationScreen = () => {
 
 
     return (
-        <View style={styles.container}>
+        <AdaptiveView style={styles.container}>
             <Text>Procedures:</Text>
             <Text>Please upload/capture pictures of your National ID (NID) from your gallery. The estimated approval time is 10 minutes.</Text>
-            <View style={{ flexDirection: "row" }}>
+            <AdaptiveView style={{ flexDirection: "row" }}>
                 <TouchableOpacity style={styles.shadow_bg} onPress={() => setOpenOverlay1(true)}>
                     {
                         !fileData1 ? <Text style={styles.text_preview}>Upload front part</Text> : <Image style={styles.img_preview} source={{ uri: fileData1.uri }} />
@@ -162,11 +163,11 @@ const VerificationScreen = () => {
                         !fileData2 ? <Text style={styles.text_preview}>Upload back part</Text> : <Image style={styles.img_preview} source={{ uri: fileData2.uri }} />
                     }
                 </TouchableOpacity>
-            </View>
+            </AdaptiveView>
             <ChoiceOverlay1 />
             <ChoiceOverlay2 />
             <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
-        </View>
+        </AdaptiveView>
     )
 }
 

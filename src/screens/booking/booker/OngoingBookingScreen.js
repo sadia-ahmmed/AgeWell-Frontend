@@ -4,6 +4,7 @@ import { AuthContext } from '../../../providers/AuthProviders'
 import { auth } from '../../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { Button, Dialog, Divider } from '@rneui/themed'
+import AdaptiveView from '../../../components/AdaptiveView'
 
 const OngoingBookingScreen = () => {
 
@@ -36,9 +37,9 @@ const OngoingBookingScreen = () => {
 
 
     const Loading = () => (
-        <View style={[styles.center]}>
+        <AdaptiveView style={[styles.center]}>
             <Dialog.Loading />
-        </View>
+        </AdaptiveView>
     )
 
 
@@ -55,9 +56,9 @@ const OngoingBookingScreen = () => {
 
 
     return (
-        <View style={styles.container}>
+        <AdaptiveView style={styles.container}>
             {isLoading ? <Loading /> : <Screen />}
-        </View>
+        </AdaptiveView>
     )
 }
 

@@ -8,6 +8,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import { IP_ADDRESS, IP_PORT } from '../../../configs'
 import { auth } from '../../firebase/firebaseConfigs'
 import NurseCard from '../../components/NurseCard'
+import AdaptiveView from '../../components/AdaptiveView'
 
 const BookingList = (props) => {
 
@@ -35,13 +36,13 @@ const BookingList = (props) => {
 
 
     let Screen = () => (
-        <View style={styles.page_container}>
+        <AdaptiveView style={styles.page_container}>
             <FlatList
                 data={nurseList}
                 renderItem={({ item, index }) => <TouchableOpacity key={index} onPress={() => props.navigation.navigate('nurse-highlight', item)}><NurseCard key={index} nurse={item} /></TouchableOpacity>}
                 keyExtractor={(item) => item.uid}
             />
-        </View>
+        </AdaptiveView>
     )
 
 
@@ -49,7 +50,7 @@ const BookingList = (props) => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    loading ? <View style={styles.container_loading}><Dialog.Loading /></View> : <Screen />
+                    loading ? <AdaptiveView style={styles.container_loading}><Dialog.Loading /></AdaptiveView> : <Screen />
                 )
             }
         </AuthContext.Consumer>

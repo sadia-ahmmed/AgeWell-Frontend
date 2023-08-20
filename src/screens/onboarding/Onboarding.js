@@ -8,6 +8,7 @@ import { IP_ADDRESS, IP_PORT } from '../../../configs'
 import { AuthContext } from '../../providers/AuthProviders'
 import { LinearProgress, Overlay } from "@rneui/themed";
 import OnboardingClosureScreen from './OnboardingClosureScreen'
+import AdaptiveView from '../../components/AdaptiveView'
 
 const Onboarding = () => {
 
@@ -68,7 +69,7 @@ const Onboarding = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <AdaptiveView style={styles.container}>
             <LinearProgress
                 value={progress}
                 variant="determinate"
@@ -78,7 +79,7 @@ const Onboarding = () => {
             />
             <Stepper />
             {step === onboardingSteps.length && <OnboardingClosureScreen />}
-        </View>
+        </AdaptiveView>
     )
 }
 

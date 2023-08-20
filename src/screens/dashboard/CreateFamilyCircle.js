@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Button } from 'react-native';
 import { Card, Input } from '@rneui/themed'
 import { AuthContext } from '../../providers/AuthProviders';
+import AdaptiveView from '../../components/AdaptiveView';
 
 const CreateFamilyCircle = ({ navigation }) => {
 
@@ -15,7 +16,7 @@ const CreateFamilyCircle = ({ navigation }) => {
     <AuthContext.Consumer>
       {
         (authCtx) => (
-          <SafeAreaView style={styles.container}>
+          <AdaptiveView style={styles.container}>
             <Card style={styles.card}>
               <Card.Title>Create Family Circle</Card.Title>
               <Card.Divider />
@@ -27,7 +28,7 @@ const CreateFamilyCircle = ({ navigation }) => {
                     <Text style={styles.link}>Join</Text>
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.button}
                   onPress={() => handleCreate()}
                 >
@@ -35,7 +36,7 @@ const CreateFamilyCircle = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </Card>
-          </SafeAreaView>
+          </AdaptiveView>
         )
       }
     </AuthContext.Consumer>
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    
+
   },
 });
 

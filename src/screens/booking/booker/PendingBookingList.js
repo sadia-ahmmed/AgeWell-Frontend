@@ -9,6 +9,7 @@ import { auth } from '../../../firebase/firebaseConfigs'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import { useContext } from 'react'
 import PendingBookingCard from '../../../components/PendingBookingCard'
+import AdaptiveView from '../../../components/AdaptiveView'
 
 
 const PendingBookingList = () => {
@@ -46,7 +47,7 @@ const PendingBookingList = () => {
 
 
     let Screen = () => (
-        <View style={styles.container}>
+        <AdaptiveView style={styles.container}>
             {
                 pendingList.length > 0 ?
                     <FlatList
@@ -58,14 +59,14 @@ const PendingBookingList = () => {
                     /> : <Text>No pending appointments</Text>
             }
 
-        </View>
+        </AdaptiveView>
     )
 
     return (
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    loading ? <View style={styles.container_loading}><Dialog.Loading /></View> : <Screen />
+                    loading ? <AdaptiveView style={styles.container_loading}><Dialog.Loading /></AdaptiveView> : <Screen />
                 )
             }
         </AuthContext.Consumer>
