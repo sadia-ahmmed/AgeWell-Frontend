@@ -8,6 +8,7 @@ import { auth } from '../../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { Platform } from 'react-native'
 import AdaptiveView from '../../../components/AdaptiveView'
+import * as DocumentPicker from "expo-document-picker";
 
 const VerificationScreen = () => {
 
@@ -39,13 +40,15 @@ const VerificationScreen = () => {
             }
         )
         if (authCtx.userCache.type === "nurse") {
-            data.append('files',
-                {
-                    type: `application/${resumeData.type}`,
-                    uri: resumeData.uri,
+            if (Platform.OS === "ios" || Platform.OS === "macos") {
+                data.append("files", resumeData)
+            } else {
+                data.append("files", {
                     name: resumeData.name,
-                }
-            )
+                    uri: resumeData.uri,
+                    type: `application/${resumeData.type}`,
+                });
+            }
         }
 
         const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/verification-send/${auth.currentUser.uid}`
@@ -69,9 +72,22 @@ const VerificationScreen = () => {
     }
 
 
+    const selectDoc = async () => {
+        try {
+            const doc = await DocumentPicker.getDocumentAsync({
+                type: ["application/pdf"],
+                multiple: false,
+            });
+            setResumeData(doc)
+        } catch (err) {
+            alert(err.message)
+        }
+    }
+
 
     const pickImageFromGallery = async (key) => {
 
+        console.log("enter")
         const permission = await requestMediaLibraryPermissionsAsync()
 
         if (permission.status === false) {
@@ -80,7 +96,7 @@ const VerificationScreen = () => {
         }
 
         const res = await launchImageLibraryAsync({
-            mediaTypes: MediaTypeOptions.All,
+            mediaTypes: MediaTypeOptions.Images,
             aspect: [4, 3],
             quality: 1,
             selectionLimit: 1,
@@ -105,13 +121,6 @@ const VerificationScreen = () => {
                     name: filename
                 })
                 setOpenOverlay2(false)
-            } else {
-                const asset = res.assets[0]
-                const filename = asset.uri.substring(asset.uri.lastIndexOf('/') + 1, asset.uri.length)
-                setResumeData({
-                    ...asset,
-                    name: filename
-                })
             }
         }
 
@@ -219,12 +228,14 @@ const VerificationScreen = () => {
                         <ChoiceOverlay2 />
                         {
                             authCtx.userCache.type === "nurse" &&
-                            <AdaptiveView style={{ flexDirection: "row" }}>
-                                <Text>{resumeData.uri === "" ? "Compile and Upload Your Resume in a PDF" : resumeData.name}</Text>
-                                <Button radius={"md"} title="Select Resume" onPress={() => pickImageFromGallery("resume")} />
+                            <AdaptiveView style={{ flexDirection: "row", justifyContent: "center", alignContent: "center", alignItems: "center", marginTop: 20 }}>
+                                <Text style={{ fontSize: 12, marginRight: 10, }}>{!resumeData ? "Upload Your Resume in a PDF" : resumeData.name}</Text>
+                                <Button type='clear' radius={"md"} title="Select Resume" onPress={selectDoc} />
                             </AdaptiveView>
                         }
-                        <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
+                        <View style={{ marginTop: 30 }}>
+                            <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
+                        </View>
                     </>
             }
 
@@ -240,7 +251,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 18,
         paddingRight: 18,
-        marginTop: 0
+        paddingTop: 30
     },
     shadow_bg: {
         shadowColor: 'black',
