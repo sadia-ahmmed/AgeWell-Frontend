@@ -38,7 +38,7 @@ const BookingList = (props) => {
         <View style={styles.page_container}>
             <FlatList
                 data={nurseList}
-                renderItem={({ item, index }) => <TouchableOpacity key={index} onPress={() => props.navigation.navigate('nurse-highlight', item)}><NurseCard nurse={item} /></TouchableOpacity>}
+                renderItem={({ item, index }) => <TouchableOpacity key={index} onPress={() => props.navigation.navigate('nurse-highlight', item)}><NurseCard key={index} nurse={item} /></TouchableOpacity>}
                 keyExtractor={(item) => item.uid}
             />
         </View>

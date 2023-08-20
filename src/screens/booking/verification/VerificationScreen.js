@@ -1,21 +1,58 @@
 import { StyleSheet, Text, Touchable, View } from 'react-native'
 import React, { useContext, useState } from 'react'
-import { Button, Image } from '@rneui/themed'
+import { Button, Divider, Image, Overlay } from '@rneui/themed'
 import { AuthContext } from '../../../providers/AuthProviders'
 import { CameraType, MediaTypeOptions, launchCameraAsync, launchImageLibraryAsync, requestCameraPermissionsAsync, requestMediaLibraryPermissionsAsync, useMediaLibraryPermissions } from 'expo-image-picker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { auth } from '../../../firebase/firebaseConfigs'
+import { IP_ADDRESS, IP_PORT } from '../../../../configs'
+import { Platform } from 'react-native'
 
 const VerificationScreen = () => {
 
     const [fileData1, setFileData1] = useState()
     const [fileData2, setFileData2] = useState()
-    const [fileUri1, setFileUri1] = useState("")
-    const [fileUri2, setFileUri2] = useState("")
+    const [openOverlay1, setOpenOverlay1] = useState(false)
+    const [openOverlay2, setOpenOverlay2] = useState(false)
 
-    const [galleryStatus, requestGalleryPermission] = useMediaLibraryPermissions(false)
     const authCtx = useContext(AuthContext)
 
-    const pickImageFromGallery = async () => {
+
+    const sendForVerification = () => {
+        const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+        console.log(fileData1)
+
+        const data = new FormData()
+        data.append('file', {
+            type: fileData1.type,
+            uri: Platform.OS === 'android' ? fileData1.uri : fileData1.uri.replace('file://', ''),
+            name: fileData1.fileName,
+        })
+
+        const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/verification-send/${auth.currentUser.uid}`
+        const options = {
+            mode: "cors",
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${user_access_token}`
+            },
+            body: data
+        }
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => alert(data.message))
+            .catch(err => {
+                console.log(err)
+                alert(err.message)
+            })
+    }
+
+
+
+    const pickImageFromGallery = async (key) => {
 
         const permission = await requestMediaLibraryPermissionsAsync()
 
@@ -26,29 +63,23 @@ const VerificationScreen = () => {
 
         const res = await launchImageLibraryAsync({
             mediaTypes: MediaTypeOptions.All,
-            allowsEditing: true,
-            base64: true,
             aspect: [4, 3],
             quality: 1,
-            allowsMultipleSelection: true,
-            selectionLimit: 2
+            selectionLimit: 1
         })
 
 
         if (!res.canceled) {
-            setFileData({
-                "img1": res.assets[0].base64,
-                "img2": res.assets[1].base64,
-            })
-            setFileUri({
-                "img1": res.assets[0].uri,
-                "img2": res.assets[1].uri,
-            })
-            console.log("Set", fileData["img1"])
+            if (key === "img1") {
+                setFileData1(res.assets[0])
+                setOpenOverlay1(false)
+            } else {
+                setFileData2(res.assets[0])
+                setOpenOverlay2(false)
+            }
         }
 
     }
-
 
 
     const openCamera = async (key) => {
@@ -60,19 +91,58 @@ const VerificationScreen = () => {
         }
 
         const res = await launchCameraAsync({
-            base64: true,
             cameraType: CameraType.back,
             quality: 1,
         })
 
         if (!res.canceled) {
             if (key === "img1") {
-                setFileUri1(res.assets[0].uri)
+                setFileData1(res.assets[0])
+                setOpenOverlay1(false)
             } else {
-                setFileUri2(res.assets[0].uri)
+                setFileData2(res.assets[0])
+                setOpenOverlay2(false)
             }
         }
     }
+
+
+    const ChoiceOverlay1 = () => (
+        <Overlay
+            isVisible={openOverlay1}
+            style={{
+                padding: 50
+            }}
+            onBackdropPress={() => setOpenOverlay1(false)}
+        >
+            <View
+                style={{
+                    padding: 50
+                }}
+            >
+                <Button title="Upload from camera" onPress={() => openCamera("img1")} />
+                <Divider />
+                <Button title="Upload from gallery" onPress={() => pickImageFromGallery("img1")} />
+            </View>
+        </Overlay>
+    )
+
+    const ChoiceOverlay2 = () => (
+        <Overlay
+            isVisible={openOverlay2}
+            onBackdropPress={() => setOpenOverlay2(false)}
+        >
+            <View
+                style={{
+                    padding: 50
+                }}
+            >
+                <Button title="Upload from camera" onPress={() => openCamera("img2")} />
+                <Divider />
+                <Button title="Upload from gallery" onPress={() => pickImageFromGallery("img2")} />
+            </View>
+        </Overlay>
+    )
 
 
 
@@ -82,18 +152,20 @@ const VerificationScreen = () => {
             <Text>Procedures:</Text>
             <Text>Please upload/capture pictures of your National ID (NID) from your gallery. The estimated approval time is 10 minutes.</Text>
             <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity style={styles.shadow_bg} onPress={() => openCamera("img1")} >
+                <TouchableOpacity style={styles.shadow_bg} onPress={() => setOpenOverlay1(true)}>
                     {
-                        fileUri1 === "" ? <Text style={styles.text_preview}>Upload front part</Text> : <Image style={styles.img_preview} source={{ uri: fileUri1 }} />
+                        !fileData1 ? <Text style={styles.text_preview}>Upload front part</Text> : <Image style={styles.img_preview} source={{ uri: fileData1.uri }} />
                     }
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => openCamera("img2")} >
+                <TouchableOpacity onPress={() => setOpenOverlay2(true)}>
                     {
-                        fileUri2 === "" ? <Text style={styles.text_preview}>Upload back part</Text> : <Image style={styles.img_preview} source={{ uri: fileUri2 }} />
+                        !fileData2 ? <Text style={styles.text_preview}>Upload back part</Text> : <Image style={styles.img_preview} source={{ uri: fileData2.uri }} />
                     }
                 </TouchableOpacity>
             </View>
-            <Button radius={"md"} title="Submit verification" onPress={() => alert("OK")} />
+            <ChoiceOverlay1 />
+            <ChoiceOverlay2 />
+            <Button radius={"md"} title="Submit verification" onPress={sendForVerification} />
         </View>
     )
 }
@@ -138,6 +210,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         borderWidth: 0.4,
         borderRadius: 10,
-        borderColor: "grey"
+        borderColor: "grey",
+        backgroundColor: "lightgrey"
     }
 })
