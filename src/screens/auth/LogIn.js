@@ -10,6 +10,7 @@ import { Dialog } from '@rneui/themed'
 import { invokeLoginService } from '../../services/user/authService'
 import { IP_ADDRESS, IP_PORT } from '../../../configs'
 
+
 const LogIn = (props) => {
 
     // TODO: FIX IMAGE PATH

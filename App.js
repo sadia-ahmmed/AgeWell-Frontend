@@ -1,3 +1,6 @@
+// import 'react-native-gesture-handler';
+// import { registerRootComponent } from 'expo';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext, AuthProvider } from "./src/providers/AuthProviders";
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,6 +22,7 @@ import Calendar from "./src/screens/booking/calendar/Calendar";
 import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
 import Onboarding from "./src/screens/onboarding/Onboarding";
 
+const Drawer = createDrawerNavigator();
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const DashboardTabs = createBottomTabNavigator();
@@ -44,7 +48,11 @@ const DashboardTabScreens = () => {
   return (
     <AuthContext.Consumer>
       {(authCtx) => (
+        <>
+        
         <DashboardTabs.Navigator
+
+
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
@@ -91,6 +99,12 @@ const DashboardTabScreens = () => {
             tabBarInactiveTintColor: "grey",
           })}
         >
+
+<Drawer.Navigator>
+          <Drawer.Screen name="Calendar" component={Calendar} />
+      
+        </Drawer.Navigator>
+          
           {/* Main screen tab bar */}
           <DashboardTabs.Screen
             name="Home"
@@ -189,6 +203,13 @@ const DashboardTabScreens = () => {
             />
           )}
         </DashboardTabs.Navigator>
+        </>
+
+
+
+
+
+
       )}
     </AuthContext.Consumer>
   );
