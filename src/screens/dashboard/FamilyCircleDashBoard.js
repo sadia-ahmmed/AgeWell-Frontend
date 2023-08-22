@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -12,15 +12,41 @@ import {
 import { Card } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 import AdaptiveView from "../../components/AdaptiveView";
+import { auth } from "../../firebase/firebaseConfigs";
+import { IP_ADDRESS, IP_PORT } from "../../../configs";
 
 const FamilyCircleDashBoard = (props) => {
-  const data = [
-    { id: "1", title: "Sahid Hossain Mustakim", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
-    { id: "2", title: "S M Jishanul Islam", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
-    { id: "3", title: "Nur Islam Shourov", number: "Contact No: +8801618888888", image: require("../../../public/man.png") },
-  ];
 
+  const [circleMembers, setCircleMembers] = useState([])
   const [activeCard, setActiveCard] = useState(null);
+  const authCtx = useContext(AuthContext)
+
+
+  useEffect(() => {
+    const circleId = authCtx.userCache.circleId
+    const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+    const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/circle/get-members/${circleId}`
+    const options = {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${user_access_token}`
+      }
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        setCircleMembers(data)
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
+  }, [])
+
+
 
   const Item = ({ title, number, image }) => (
     <TouchableHighlight
@@ -48,13 +74,18 @@ const FamilyCircleDashBoard = (props) => {
     <AuthContext.Consumer>
       {(auth) => (
         <AdaptiveView style={styles.container}>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <Item title={item.title} number={item.number} image={item.image} />
-            )}
-            keyExtractor={(item) => item.id}
-          />
+          {
+            circleMembers.length === 0 ?
+              <Text style={styles.text_holder}>No circle members.{"\n"}Add them by sending them the code ...</Text>
+              :
+              <FlatList
+                data={circleMembers}
+                renderItem={({ item }) => (
+                  <Item title={item.title} number={item.number} image={item.image} />
+                )}
+                keyExtractor={(item) => item.id}
+              />
+          }
         </AdaptiveView>
       )}
     </AuthContext.Consumer>
@@ -64,7 +95,14 @@ const FamilyCircleDashBoard = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    padding: 30,
+    backgroundColor: "white"
+  },
+  text_holder: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    textAlign: "center"
   },
   card: {
     marginVertical: 8,

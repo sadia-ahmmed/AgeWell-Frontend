@@ -3,6 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Button } from '
 import { Card, Input } from '@rneui/themed'
 import { AuthContext } from '../../providers/AuthProviders';
 import AdaptiveView from '../../components/AdaptiveView';
+import { auth } from '../../firebase/firebaseConfigs';
+import { IP_ADDRESS, IP_PORT } from '../../../configs';
 
 const CreateFamilyCircle = ({ navigation }) => {
 
@@ -10,6 +12,32 @@ const CreateFamilyCircle = ({ navigation }) => {
 
   const handleCreate = () => {
     // Your logic for handling the creation
+    const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+    const body = {
+      circle_name: familyCircleName
+    }
+    const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/circle/create`
+    const options = {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${user_access_token}`
+      },
+      body: JSON.stringify(body)
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message)
+        navigation.navigate("family-circle-dashboard")
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
   }
 
   return (
@@ -30,7 +58,7 @@ const CreateFamilyCircle = ({ navigation }) => {
                 </View>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => handleCreate()}
+                  onPress={handleCreate}
                 >
                   <Text style={styles.buttonText}>Create</Text>
                 </TouchableOpacity>
