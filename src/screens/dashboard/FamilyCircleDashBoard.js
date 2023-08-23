@@ -14,9 +14,12 @@ import { AuthContext } from "../../providers/AuthProviders";
 import AdaptiveView from "../../components/AdaptiveView";
 import { auth } from "../../firebase/firebaseConfigs";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
+import { Dialog } from "react-native-elements";
 
 const FamilyCircleDashBoard = (props) => {
 
+  const [loading, setLoading] = useState(true)
+  const [circleCode, setCircleCode] = useState([])
   const [circleMembers, setCircleMembers] = useState([])
   const [activeCard, setActiveCard] = useState(null);
   const authCtx = useContext(AuthContext)
@@ -38,7 +41,9 @@ const FamilyCircleDashBoard = (props) => {
     fetch(url, options)
       .then(res => res.json())
       .then(data => {
-        setCircleMembers(data)
+        setCircleMembers(data.members)
+        setCircleCode(data.circle_code)
+        setLoading(false)
       })
       .catch(err => {
         alert(err.message)
@@ -70,21 +75,34 @@ const FamilyCircleDashBoard = (props) => {
     </TouchableHighlight>
   );
 
+
+  const MainCircleDashScreen = () => (
+    <>
+      {
+        circleMembers.length === 0 ?
+          <>
+            <Text style={styles.text_holder}>No circle members? Add them by sending them the code</Text>
+            <Text style={[styles.text_holder, { fontSize: 22, fontWeight: "bold" }]}>{circleCode}</Text>
+          </>
+          :
+          <FlatList
+            data={circleMembers}
+            renderItem={({ item }) => (
+              <Item title={item.title} number={item.number} image={item.image} />
+            )}
+            keyExtractor={(item) => item.id}
+          />
+      }
+    </>
+  )
+
+
   return (
     <AuthContext.Consumer>
       {(auth) => (
         <AdaptiveView style={styles.container}>
           {
-            circleMembers.length === 0 ?
-              <Text style={styles.text_holder}>No circle members.{"\n"}Add them by sending them the code ...</Text>
-              :
-              <FlatList
-                data={circleMembers}
-                renderItem={({ item }) => (
-                  <Item title={item.title} number={item.number} image={item.image} />
-                )}
-                keyExtractor={(item) => item.id}
-              />
+            loading ? <Dialog.Loading /> : <MainCircleDashScreen />
           }
         </AdaptiveView>
       )}
