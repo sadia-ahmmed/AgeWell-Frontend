@@ -1,6 +1,6 @@
 import { StyleSheet, Text, Pressable, FlatList, View, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Divider, SearchBar } from "react-native-elements";
+import { Dialog, Divider, SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
@@ -16,6 +16,7 @@ import AdaptiveView from "../../../components/AdaptiveView";
 
 const Calendar = () => {
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const [reportlist, setReportList] = useState([]);
 
 
@@ -41,6 +42,7 @@ const Calendar = () => {
         .then((res) => res.json())
         .then((data) => {
           setReportList(data);
+          setLoading(false)
         })
         .catch((error) => alert(error.message));
     }, 5000);
@@ -122,6 +124,21 @@ const Calendar = () => {
     );
   };
 
+
+  const ViewReportList = () => (
+    <>
+      {
+        reportlist.length === 0 ? <Text>No reports added yet</Text> :
+          <FlatList
+            data={reportlist}
+            keyExtractor={(item) => item._id}
+            renderItem={renderReportItem}
+          />
+      }
+    </>
+  )
+
+
   return (
     <AdaptiveView style={styles.container}>
       <SearchBar
@@ -161,11 +178,9 @@ const Calendar = () => {
           />
         </View>
       </View>
-      <FlatList
-        data={reportlist}
-        keyExtractor={(item) => item._id}
-        renderItem={renderReportItem}
-      />
+      {
+        loading ? <Dialog.Loading /> : <ViewReportList />
+      }
     </AdaptiveView>
   );
 };

@@ -1,16 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../../providers/AuthProviders'
 import { auth } from '../../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { Button, Dialog, Divider } from '@rneui/themed'
 import AdaptiveView from '../../../components/AdaptiveView'
+import AdaptiveWebView from '../../../components/AdaptiveWebView'
+import { Linking } from 'react-native'
+import InAppBrowser from 'react-native-inappbrowser-reborn'
 
 const OngoingBookingScreen = () => {
 
     const authCtx = useContext(AuthContext)
     const [appointment, setAppointment] = useState()
     const [isLoading, setIsLoading] = useState(true)
+    const [paymentLink, setPaymentLink] = useState("-")
 
     useEffect(() => {
 
@@ -35,6 +39,31 @@ const OngoingBookingScreen = () => {
     }, [])
 
 
+    const showPaymentWindow = () => {
+        const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+        const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/payment/init`
+        const options = {
+            mode: "cors",
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${user_access_token}`
+            }
+        }
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                // Linking.openURL(data.url)
+                Linking.openURL(data.url)
+            })
+            .catch(err => {
+                alert(err)
+            })
+    }
+
+
+
 
     const Loading = () => (
         <AdaptiveView style={[styles.center]}>
@@ -49,8 +78,9 @@ const OngoingBookingScreen = () => {
             <Text style={styles.nurse_text}>{authCtx.userCache.type === "nurse" ? `${appointment.userDetails.fullname}` : `${appointment.nurseDetails.fullname}`}</Text>
             <Divider />
             <Text>Time left: {appointment.working_days} days and {appointment.working_hours} hours</Text>
-            <Text>Screen under maintenance</Text>
-            <Button title="Upload a report" onPress={() => console.log("Upload report under maintenance")} />
+            {/* <Text>Screen under maintenance</Text> */}
+            <Button title="Complete Appointment" onPress={showPaymentWindow} />
+
         </>
     )
 

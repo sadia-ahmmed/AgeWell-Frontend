@@ -16,7 +16,6 @@ import CreateFamilyCircle from "./src/screens/dashboard/CreateFamilyCircle";
 import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard";
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import Calendar from "./src/screens/booking/calendar/Calendar";
-import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
 import Onboarding from "./src/screens/onboarding/Onboarding";
 
 const AuthStack = createStackNavigator();
