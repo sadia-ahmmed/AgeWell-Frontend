@@ -6,8 +6,9 @@ import {
   SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
-import { Card, Input, Overlay} from "@rneui/themed";
+import { Card, Input, Overlay } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
+import AdaptiveView from "../../components/AdaptiveView";
 
 const JoinFamilyCircle = ({ navigation }) => {
   const [joinLink, setJoinLink] = useState("");
@@ -15,7 +16,7 @@ const JoinFamilyCircle = ({ navigation }) => {
   return (
     <AuthContext.Consumer>
       {(authCtx) => (
-        <SafeAreaView style={styles.container}>
+        <AdaptiveView style={styles.container}>
           <Card>
             <Card.Title style={styles.title}>Join Family Circle</Card.Title>
             <Card.Divider />
@@ -43,7 +44,7 @@ const JoinFamilyCircle = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </Card>
-        </SafeAreaView>
+        </AdaptiveView>
       )}
     </AuthContext.Consumer>
   );

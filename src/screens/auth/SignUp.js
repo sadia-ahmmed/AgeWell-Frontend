@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { AuthContext } from '../../providers/AuthProviders'
 import { Button, Card, Input } from '@rneui/themed'
 import { invokeSignupService } from '../../services/user/authService'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, deleteUser } from 'firebase/auth'
 import { auth } from '../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../configs'
 
@@ -12,6 +12,7 @@ const SignUp = (props) => {
     const [fullname, setFullName] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const [address, setAddress] = useState()
     const [phone, setPhone] = useState()
     const [retype_password, setRetypePassword] = useState()
 
@@ -23,11 +24,12 @@ const SignUp = (props) => {
             alert("Passwords do not match. Try again!")
         }
 
-        const user = { fullname, email, password, phone }
+        const user = { fullname, email, password, phone, address }
 
         invokeSignupService(user)
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                const user_uid = userCredential.user.uid
                 alert("Signed Up!")
                 props.navigation.navigate('login')
 
@@ -35,7 +37,9 @@ const SignUp = (props) => {
                     fullname,
                     email,
                     password,
-                    phone
+                    phone,
+                    uid: user_uid,
+                    address
                 }
 
                 const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/signup`
@@ -54,6 +58,7 @@ const SignUp = (props) => {
                         props.navigation.navigate('login')
                     })
                     .catch(err => {
+                        deleteUser(userCredential.user)
                         alert(err.message)
                     })
 
@@ -79,13 +84,16 @@ const SignUp = (props) => {
                             <Input label='Email' onChangeText={setEmail} />
                         </View>
                         <View style={{ flexDirection: "row", alignItems: 'stretch', width: 300, }}>
-                            <Input label='Phone' onChangeText={setPhone} />
-                        </View>
-                        <View style={{ flexDirection: "row", alignItems: 'stretch', width: 300, }}>
                             <Input label='Password' secureTextEntry={true} onChangeText={setPassword} />
                         </View>
                         <View style={{ flexDirection: "row", alignItems: 'stretch', width: 300, }}>
                             <Input label='Retype Password' secureTextEntry={true} onChangeText={setRetypePassword} />
+                        </View>
+                        <View style={{ flexDirection: "row", alignItems: 'stretch', width: 300, }}>
+                            <Input label='Phone' onChangeText={setPhone} />
+                        </View>
+                        <View style={{ flexDirection: "row", alignItems: 'stretch', width: 300, }}>
+                            <Input label='Address' onChangeText={setAddress} />
                         </View>
                         <Button title='Sign Up' onPress={onSignupButtonPress} />
                     </View>

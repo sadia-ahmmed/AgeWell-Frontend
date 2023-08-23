@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-export default function CustomButton({ title, width, onPress }) {
+export default function CustomButton({ title, width, onPress, marginTop = 0 }) {
     return (
         <View>
-            <TouchableOpacity style={[styles.btn_style, { width: width }]} onPress={onPress}>
+            <TouchableOpacity style={[styles.btn_style, { width: width }, { marginTop }]} onPress={onPress}>
                 <Text style={styles.btn_text_style}>{title}</Text>
             </TouchableOpacity>
         </View>
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         // width: 150, 
         padding: 10,
         alignItems: "center",
-        borderRadius: 10
+        borderRadius: 10,
     },
     btn_text_style: {
         fontSize: 16,

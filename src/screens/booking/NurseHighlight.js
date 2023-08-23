@@ -3,6 +3,7 @@ import React from 'react'
 import { AuthContext } from '../../providers/AuthProviders'
 import { Button, Image } from '@rneui/themed'
 import { prettyPrintNurseRatings, prettyPrintNurseSpecialities } from '../../services/ui/uiService'
+import AdaptiveView from '../../components/AdaptiveView'
 
 const NurseHighlight = ({ route, navigation }) => {
 
@@ -12,20 +13,20 @@ const NurseHighlight = ({ route, navigation }) => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    <View style={styles.container}>
-                        <View style={styles.container_center}>
+                    <AdaptiveView style={styles.container}>
+                        <AdaptiveView style={styles.container_center}>
                             <Image source={require('../../../assets/avatar.png')} style={{ width: 150, height: 150 }} />
-                        </View>
+                        </AdaptiveView>
                         <Text>{"\n"}</Text>
                         <Text style={styles.name_text}>{nurse_details.fullname}</Text>
                         <Text>{prettyPrintNurseRatings(nurse_details)}</Text>
                         <Text style={styles.specialities}>Specialities: {prettyPrintNurseSpecialities(nurse_details)}</Text>
                         <Text style={styles.subhead_text}>Biography</Text>
                         <Text style={styles.bio_text}>{nurse_details.biography}</Text>
-                        <View style={styles.submit_btn}>
+                        <AdaptiveView style={styles.submit_btn}>
                             <Button color="#46C1E2" title="Book an Appointment" onPress={() => navigation.navigate('nurse-booking', nurse_details)} />
-                        </View>
-                    </View>
+                        </AdaptiveView>
+                    </AdaptiveView>
                 )
             }
         </AuthContext.Consumer>

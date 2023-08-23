@@ -16,21 +16,32 @@ export default function DateTimePickerModal({ type, state, onStateChangeHandler,
                 // height: 300
             }}
         >
-            <View style={{ backgroundColor: 'white', }}>
-                <DatePicker
-                    mode={type}
-                    selected={state}
-                    onDateChange={(value) => {
-                        onStateChangeHandler(value)
-                        onStateViewHandler(false)
-                    }}
-                    onTimeChange={(value) => {
-                        onStateChangeHandler(value)
-                        onStateViewHandler(false)
-                    }}
-                />
-                <Button color="#46C1E2" title="Close" onPress={onStateViewHandler} />
-            </View>
+            {
+                type === "calendar" ?
+                    <View style={{ backgroundColor: 'white', }}>
+                        <DatePicker
+                            mode={type}
+                            selected={state}
+                            onDateChange={(value) => {
+                                onStateChangeHandler(value)
+                                onStateViewHandler(false)
+                            }}
+                        />
+                        <Button color="#46C1E2" title="Close" onPress={onStateViewHandler} />
+                    </View>
+                    : <View style={{ backgroundColor: 'white', }}>
+                        <DatePicker
+                            mode={type}
+                            selected={state}
+                            onTimeChange={(value) => {
+                                onStateChangeHandler(value)
+                                onStateViewHandler(false)
+                            }}
+                        />
+                        {/* <Button color="#46C1E2" title="Close" onPress={onStateViewHandler} /> */}
+                    </View>
+            }
+
         </Overlay>
     )
 }
