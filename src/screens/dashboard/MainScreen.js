@@ -111,7 +111,7 @@ export default MainScreen;
 const styles = StyleSheet.create({
   main_container: {
     paddingTop: 10,
-    padding: 30,
+    padding: 10,
     backgroundColor: "white",
     flex: 1,
   },

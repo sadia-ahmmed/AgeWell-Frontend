@@ -107,7 +107,7 @@ const Calendar = () => {
         value={search}
         lightTheme
         round
-        platform="ios"
+        platform="android"
         onChangeText={updateSearch}
         inputContainerStyle={{
           backgroundColor: "#F5FDFF",
