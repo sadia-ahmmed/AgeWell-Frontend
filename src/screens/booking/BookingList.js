@@ -1,78 +1,74 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { AuthContext } from '../../providers/AuthProviders'
-import { useState } from 'react'
-import { useEffect } from 'react'
-import { Card, Dialog } from '@rneui/themed'
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
-import { IP_ADDRESS, IP_PORT } from '../../../configs'
-import { auth } from '../../firebase/firebaseConfigs'
-import NurseCard from '../../components/NurseCard'
-import AdaptiveView from '../../components/AdaptiveView'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { AuthContext } from '../../providers/AuthProviders';
+import { Card, Dialog } from '@rneui/themed';
+import { IP_ADDRESS, IP_PORT } from '../../../configs';
+import { auth } from '../../firebase/firebaseConfigs';
+import NurseCard from '../../components/NurseCard';
+import AdaptiveView from '../../components/AdaptiveView';
 
 const BookingList = (props) => {
-
-    const [nurseList, setNurseList] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [nurseList, setNurseList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const user_access_token = auth.currentUser.stsTokenManager.accessToken
+        const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
         fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get-nurses`, {
-            method: "GET",
-            mode: "cors",
+            method: 'GET',
+            mode: 'cors',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
         })
             .then(res => res.json())
             .then(result => {
-                setNurseList(result)
-                setLoading(false)
+                setNurseList(result);
+                setLoading(false);
             })
             .catch(error => {
-                alert('Error getting nurses')
-            })
+                alert('Error getting nurses');
+            });
+    }, []);
 
-    }, [])
-
-
-    let Screen = () => (
-        <AdaptiveView style={styles.page_container}>
+    const Screen = () => (
+        <AdaptiveView style={styles.pageContainer}>
             <FlatList
                 data={nurseList}
-                renderItem={({ item, index }) => <TouchableOpacity key={index} onPress={() => props.navigation.navigate('nurse-highlight', item)}><NurseCard key={index} nurse={item} /></TouchableOpacity>}
-                keyExtractor={(item) => item.uid}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => props.navigation.navigate('nurse-highlight', item)}>
+                        <NurseCard nurse={item} />
+                    </TouchableOpacity>
+                )}
+                keyExtractor={item => item.uid}
             />
         </AdaptiveView>
-    )
-
+    );
 
     return (
         <AuthContext.Consumer>
-            {
-                (authCtx) => (
-                    loading ? <AdaptiveView style={styles.container_loading}><Dialog.Loading /></AdaptiveView> : <Screen />
+            {authCtx =>
+                loading ? (
+                    <AdaptiveView style={styles.containerLoading}>
+                        <Dialog.Loading />
+                    </AdaptiveView>
+                ) : (
+                    <Screen />
                 )
             }
         </AuthContext.Consumer>
-    )
-}
-
-export default BookingList
+    );
+};
 
 const styles = StyleSheet.create({
-    page_container: {
-        alignItems: 'center',
-        justifyContent: 'center',
+    pageContainer: {
         flex: 1,
-        marginTop: 80
+        marginTop: 20,
+        paddingHorizontal: 20,
     },
-    container_loading: {
-        backgroundColor: "white",
-        paddingTop: 10,
-        padding: 30,
+    containerLoading: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        alignContent: "center"
-    }
-})
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
+
+export default BookingList;

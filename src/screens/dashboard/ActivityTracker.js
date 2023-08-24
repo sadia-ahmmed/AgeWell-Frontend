@@ -13,7 +13,7 @@ const ActivityTracker = ({ navigation }) => {
       caregiverType: "Medical Caregiver",
       loggedInTime: "18/08/2023, 10:00 AM",
       rating: 5,
-      imageURL: "https://randomuser.me/api/portraits/men/32.jpg",
+      imageURL: require("../../../assets/favicon.png"),
     };
   };
 
@@ -80,9 +80,7 @@ const ActivityTracker = ({ navigation }) => {
       <View style={styles.caregiverContainer}>
         <Image
           style={styles.caregiverImage}
-          source={{
-            uri: imageURL,
-          }}
+          source={imageURL}
         />
         <View style={styles.caregiverInfo}>
           <Text style={styles.caregiverName}>
@@ -134,7 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
-    padding: 10,
   },
   content: {
     flex: 1,
