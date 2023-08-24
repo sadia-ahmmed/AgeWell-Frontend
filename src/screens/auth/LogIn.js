@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { useState } from "react";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
-import { LOGIN_IMAGE } from "../../../Images";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -135,6 +134,11 @@ const LogIn = (props) => {
 
           <View style={styles.bottomRow}>
             <Text style={styles.signupText}>Don't have an account?</Text>
+            {/* <TouchableOpacity
+              onPress={() => props.navigation.navigate("signup")}
+            >
+              <Text style={styles.signUpButton}>Sign up</Text>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => props.navigation.navigate("signup")}
             >
