@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   input: {
-    marginBottom: 15,
+    marginBottom: 5,
     fontFamily: "sans-serif",
   },
   forgetPassWordContainer: {
@@ -204,9 +204,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     fontFamily: "sans-serif",
-    textShadowColor: "rgba(0, 0, 0, 0.1)",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 5,
     marginRight: 15,
   },
   bottomRow: {
