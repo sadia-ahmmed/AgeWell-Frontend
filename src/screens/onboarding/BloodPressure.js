@@ -23,10 +23,10 @@ const BloodPressure = (props) => {
                   <Text style={styles.question}>Do you have {"\n"} Blood Pressure?</Text>
                 </View>
                 <View style={styles.buttonsContainer}>
-                  <TouchableOpacity style={styles.button} onPress= {() => props.navigation.navigate("signup")}>
+                  <TouchableOpacity style={styles.button} onPress= {() => props.navigation.navigate("dashboard")}>
                     <Text style={styles.buttonText}>Yes</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button} onPress= {() => props.navigation.navigate("signup")}>
+                  <TouchableOpacity style={styles.button} onPress= {() => props.navigation.navigate("dashboard")}>
                     <Text style={styles.buttonText}>No</Text>
                   </TouchableOpacity>
                 </View>
