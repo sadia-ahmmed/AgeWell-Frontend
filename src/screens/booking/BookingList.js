@@ -4,11 +4,13 @@ import { AuthContext } from '../../providers/AuthProviders'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { Card, Dialog, Input } from '@rneui/themed'
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
+import { FlatList, TouchableOpacity } from 'react-native'
 import { IP_ADDRESS, IP_PORT } from '../../../configs'
 import { auth } from '../../firebase/firebaseConfigs'
 import NurseCard from '../../components/NurseCard'
 import AdaptiveView from '../../components/AdaptiveView'
+import { SearchBar } from 'react-native-elements'
+import { Platform } from 'react-native'
 
 const BookingList = (props) => {
 
@@ -41,7 +43,7 @@ const BookingList = (props) => {
     }
 
 
-    const dynamicSearch = (query) => {
+    const dynamicStringSearch = (query) => {
         setSearchQuery(query)
         query = query.trim()
         if (query === "") {
@@ -57,7 +59,7 @@ const BookingList = (props) => {
 
 
     let Screen = () => (
-        <AdaptiveView style={styles.page_container}>
+        <>
             {
                 nurseList.length === 0 ? <Text>No nurses found</Text> :
                     (
@@ -78,7 +80,7 @@ const BookingList = (props) => {
                             )
                     )
             }
-        </AdaptiveView>
+        </>
     )
 
 
@@ -87,10 +89,33 @@ const BookingList = (props) => {
             {
                 (authCtx) => (
                     loading ? <AdaptiveView style={styles.container_loading}><Dialog.Loading /></AdaptiveView> :
-                        <>
-                            <Input style={styles.search_bar_style} label="Search" placeholder="ex: Health, Pediatrician" value={searchQuery} onChangeText={dynamicSearch} />
+                        <AdaptiveView styles={styles.page_container}>
+                            <SearchBar
+                                placeholder="ex: Health, Pediatrician"
+                                value={searchQuery}
+                                lightTheme
+                                round
+                                blurOnSubmit={false}
+                                platform={Platform.OS}
+                                onChangeText={dynamicStringSearch}
+                                inputContainerStyle={{
+                                    backgroundColor: "#F5FDFF",
+                                    borderColor: "#439BE8",
+                                    borderWidth: 0,
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                }}
+                                containerStyle={{
+                                    borderWidth: 0,
+                                    padding: 10,
+                                    margin: 0,
+                                    marginLeft: 0,
+                                    marginRight: 0,
+                                    marginBottom: 10
+                                }}
+                            />
                             <Screen />
-                        </>
+                        </AdaptiveView>
                 )
             }
         </AuthContext.Consumer>

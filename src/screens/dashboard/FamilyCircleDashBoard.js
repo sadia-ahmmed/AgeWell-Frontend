@@ -19,8 +19,9 @@ import { Dialog } from "react-native-elements";
 const FamilyCircleDashBoard = (props) => {
 
   const [loading, setLoading] = useState(true)
-  const [circleCode, setCircleCode] = useState([])
+  const [circleCode, setCircleCode] = useState()
   const [circleMembers, setCircleMembers] = useState([])
+
   const [activeCard, setActiveCard] = useState(null);
   const authCtx = useContext(AuthContext)
 
@@ -99,7 +100,7 @@ const FamilyCircleDashBoard = (props) => {
 
   return (
     <AuthContext.Consumer>
-      {(auth) => (
+      {(authCtx) => (
         <AdaptiveView style={styles.container}>
           {
             loading ? <Dialog.Loading /> : <MainCircleDashScreen />

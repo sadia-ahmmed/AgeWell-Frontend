@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         shadowOffset: {
             width: 100,
             height: 0,
-        }
+        },
+        margin: 10
     },
     image: {
         width: 100,

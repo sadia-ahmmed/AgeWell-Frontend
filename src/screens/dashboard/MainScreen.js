@@ -20,9 +20,9 @@ const MainScreen = ({ navigation }) => {
 
   const onLogoutButtonPress = () => {
     invokeLogoutService(authCtx.userCache);
-    signOut(auth);
     authCtx.setUserCache([]);
     authCtx.setLoggedIn(false);
+    signOut(auth);
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const MainScreen = ({ navigation }) => {
         .catch((error) => {
           alert("Error getting user details");
         });
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(httpPolling);
   }, []);

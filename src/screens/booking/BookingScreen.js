@@ -8,6 +8,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import CustomButton from '../../components/CustomButton'
 import DateTimePickerModal from '../../components/DateTimePickerModal'
 import AdaptiveView from '../../components/AdaptiveView'
+import { auth } from '../../firebase/firebaseConfigs'
 
 const BookingScreen = ({ route, navigation }) => {
     const today = new Date().toLocaleDateString("en-ZA")
@@ -103,13 +104,14 @@ const BookingScreen = ({ route, navigation }) => {
         fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/book/${nurse_details.uid}`, {
             method: "POST",
             mode: "cors",
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authCtx.userCache.user_access_token}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${auth.currentUser.stsTokenManager.accessToken}` },
             body: body
         })
             .then(res => res.json())
             .then(result => {
+                console.log(result)
                 alert("Success")
-                navigation.navigate("Appointment")
+                navigation.navigate("Home")
             })
             .catch(error => {
                 alert("Error")
