@@ -220,17 +220,17 @@ const HomeStackScreens = () => {
                   <HomeStack.Screen
                     name="join-family-circle"
                     component={JoinFamilyCircle}
-                    options={{ headerTitle: "Join a Circle", headerShown: true }}
+                    options={{ headerTitle: "Join a Circle", headerShown: false }}
                   />
                   <HomeStack.Screen
                     name="create-family-circle"
                     component={CreateFamilyCircle}
-                    options={{ headerTitle: "Create a Circle", headerShown: true }}
+                    options={{ headerTitle: "Create a Circle", headerShown: false }}
                   />
                   <HomeStack.Screen
                     name="family-circle-dashboard"
                     component={FamilyCircleDashBoard}
-                    options={{ headerTitle: "My Circle", headerShown: true }}
+                    options={{ headerTitle: "My Circle", headerShown: false }}
                   />
                 </>
             }
