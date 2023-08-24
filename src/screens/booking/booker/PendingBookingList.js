@@ -39,7 +39,7 @@ const PendingBookingList = () => {
                 .catch(error => {
                     alert('Error getting pending lists')
                 })
-        }, 5000)
+        }, 10000)
 
         return () => clearInterval(httpPolling)
 

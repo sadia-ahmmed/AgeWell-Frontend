@@ -45,7 +45,7 @@ const MainScreen = ({ navigation }) => {
         .catch((error) => {
           alert("Error getting user details");
         });
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(httpPolling);
   }, []);
