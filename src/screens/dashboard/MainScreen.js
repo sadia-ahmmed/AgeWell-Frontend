@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
@@ -61,12 +61,49 @@ const MainScreen = ({ navigation }) => {
 
           <View style={{ margin: 10 }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Your CareGiver
+              Your Health Logs
             </Text>
             <Card.Divider />
           </View>
 
-          <ActivityTracker navigation={navigation} />
+          <View style={styles.healthLogsContainer}>
+ 
+            <View style={styles.miniCard}>
+              <Image
+                source={require("../../../assets/scale.png")}
+                style={styles.cardImage}
+              />
+              <Text style={styles.cardName}>Weight</Text>
+              <Text style={styles.cardPoints}>65KG</Text>
+            </View>
+
+            <View style={styles.miniCard}>
+              <Image
+                source={require("../../../assets/diabetics.png")}
+                style={styles.cardImage}
+              />
+              <Text style={styles.cardName}>Diabetics</Text>
+              <Text style={styles.cardPoints}>4.3</Text>
+            </View>
+
+            <View style={styles.miniCard}>
+              <Image
+                source={require("../../../assets/blood-pressure.png")}
+                style={styles.cardImage}
+              />
+              <Text style={[styles.cardName]}>Blood Pressure</Text>
+              <Text style={styles.cardPoints}>126/78</Text>
+            </View>
+          </View>
+
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Your CareGiver
+            </Text>
+            <Card.Divider />
+          </View>
+            <ActivityTracker navigation={navigation}/>
+          {/* <ActivityTracker navigation={navigation} /> */}
 
           <SpeedDial
             color="#46C1E2"
@@ -107,13 +144,47 @@ const MainScreen = ({ navigation }) => {
   );
 };
 
-export default MainScreen;
-
 const styles = StyleSheet.create({
   main_container: {
     paddingTop: 10,
-    padding: 30,
+    padding: 10,
     backgroundColor: "white",
     flex: 1,
   },
+  
+  healthLogsContainer: {
+    marginTop: -10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  miniCard: {
+    backgroundColor: "#f2f2f2", 
+    borderRadius: 10,
+    padding: 10,
+    width: 100,
+    alignItems: "flex-start", 
+  },
+  cardInfo: {
+    alignItems: "center",
+  },
+  cardImage: {
+    width: 50,
+    height: 50,
+  },
+  cardName: {
+    marginTop: 5,
+    fontSize: 11,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  cardPoints: {
+    marginTop: 2,
+    fontSize: 10,
+    color: "#666",
+  },
 });
+
+export default MainScreen;
