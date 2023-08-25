@@ -18,11 +18,7 @@ import VerificationScreen from "./src/screens/booking/verification/VerificationS
 import Calendar from "./src/screens/booking/calendar/Calendar";
 import Onboarding from "./src/screens/onboarding/Onboarding";
 import ReviewScreen from "./src/screens/booking/booker/ReviewScreen";
-import CaringConnection from "./src/screens/onboarding/CaringConnection";
-import FindCareSeeker from "./src/screens/onboarding/FindCareSeeker";
-import SelfInfoPage from "./src/screens/onboarding/SelfInfoPage";
-import DiabetesPage from "./src/screens/onboarding/DiabetesPage";
-import BloodPressure from "./src/screens/onboarding/BloodPressure";
+import Package from "./src/screens/dashboard/Package";
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -120,8 +116,9 @@ const DashboardTabScreens = () => {
           />
 
           {/* Main nurse list tab bar */}
-          {
-            !authCtx.userCache.ongoingAppointment && authCtx.userCache.type === "user" && authCtx.userCache.ongoingAppointmentStatus !== "pending" && (
+          {!authCtx.userCache.ongoingAppointment &&
+            authCtx.userCache.type === "user" &&
+            authCtx.userCache.ongoingAppointmentStatus !== "pending" && (
               <DashboardTabs.Screen
                 name="Nurses"
                 component={BookingList}
@@ -157,23 +154,24 @@ const DashboardTabScreens = () => {
           />
 
           {/* Main pending bookings list tab bar */}
-          {!authCtx.userCache.ongoingAppointment && authCtx.userCache.ongoingAppointmentStatus !== "pending" &&
-            <DashboardTabs.Screen
-              name="Pending"
-              component={PendingBookingList}
-              options={{
-                headerShown: true,
-                title: "Pending",
-                headerTitle: "Pending Appointments",
-                tabBarItemStyle: { marginBottom: 5 },
-                headerTitleStyle: {
-                  fontSize: 18,
-                  textAlign: "center",
-                  color: "#439BE8",
-                },
-              }}
-            />
-          }
+          {!authCtx.userCache.ongoingAppointment &&
+            authCtx.userCache.ongoingAppointmentStatus !== "pending" && (
+              <DashboardTabs.Screen
+                name="Pending"
+                component={PendingBookingList}
+                options={{
+                  headerShown: true,
+                  title: "Pending",
+                  headerTitle: "Pending Appointments",
+                  tabBarItemStyle: { marginBottom: 5 },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+            )}
 
           {/* Main ongoing appointment tab bar */}
           {authCtx.userCache.ongoingAppointment && (
@@ -194,8 +192,7 @@ const DashboardTabScreens = () => {
             />
           )}
 
-          {
-            authCtx.userCache.ongoingAppointmentStatus === "pending" &&
+          {authCtx.userCache.ongoingAppointmentStatus === "pending" && (
             <DashboardTabs.Screen
               name="Closure"
               component={ReviewScreen}
@@ -211,7 +208,7 @@ const DashboardTabScreens = () => {
                 },
               }}
             />
-          }
+          )}
 
           {/* Main chats tab bar */}
           {authCtx.userCache.is_verified && (
@@ -268,31 +265,6 @@ const HomeStackScreens = () => {
             />
           ) : (
             <>
-              <HomeStack.Screen
-                name="caringconnection"
-                component={CaringConnection}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="findcareseeker"
-                component={FindCareSeeker}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="selfinfopage"
-                component={SelfInfoPage}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="diabetespage"
-                component={DiabetesPage}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="bloodpressure"
-                component={BloodPressure}
-                options={{ headerShown: false }}
-              />
               <HomeStack.Screen
                 name="dashboard"
                 component={DashboardTabScreens}
@@ -352,6 +324,11 @@ const HomeStackScreens = () => {
                     color: "#439BE8",
                   },
                 }}
+              />
+              <HomeStack.Screen
+                name="packages"
+                component={Package}
+                options={{ headerTitle: "Package", headerShown: false }}
               />
             </>
           )}
