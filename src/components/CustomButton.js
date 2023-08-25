@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     },
     btn_text_style: {
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color: "white"
     }
 })

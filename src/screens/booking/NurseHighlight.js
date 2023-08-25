@@ -6,67 +6,94 @@ import { prettyPrintNurseRatings, prettyPrintNurseSpecialities } from '../../ser
 import AdaptiveView from '../../components/AdaptiveView'
 
 const NurseHighlight = ({ route, navigation }) => {
-
-    const nurse_details = route.params
+    const nurse_details = route.params;
 
     return (
         <AuthContext.Consumer>
-            {
-                (authCtx) => (
-                    <AdaptiveView style={styles.container}>
-                        <AdaptiveView style={styles.container_center}>
-                            <Image source={require('../../../assets/avatar.png')} style={{ width: 150, height: 150 }} />
-                        </AdaptiveView>
-                        <Text>{"\n"}</Text>
-                        <Text style={styles.name_text}>{nurse_details.fullname}</Text>
-                        <Text>{prettyPrintNurseRatings(nurse_details)}</Text>
-                        <Text style={styles.specialities}>Specialities: {prettyPrintNurseSpecialities(nurse_details)}</Text>
-                        <Text style={styles.subhead_text}>Biography</Text>
-                        <Text style={styles.bio_text}>{nurse_details.biography}</Text>
-                        <AdaptiveView style={styles.submit_btn}>
-                            <Button color="#46C1E2" title="Book an Appointment" onPress={() => navigation.navigate('nurse-booking', nurse_details)} />
-                        </AdaptiveView>
-                    </AdaptiveView>
-                )
-            }
+            {(authCtx) => (
+                <AdaptiveView style={styles.container}>
+                    <View style={styles.avatarContainer}>
+                        <Image
+                            source={require('../../../assets/avatar.png')}
+                            style={styles.avatarImage}
+                        />
+                    </View>
+                    <Text style={styles.nameText}>{nurse_details.fullname}</Text>
+                    <Text style={styles.ratingsText}>
+                        {prettyPrintNurseRatings(nurse_details)}
+                    </Text>
+                    <Text style={styles.specialitiesText}>
+                        Specialities: {prettyPrintNurseSpecialities(nurse_details)}
+                    </Text>
+                    <Text style={styles.subheadText}>Biography</Text>
+                    <Text style={styles.bioText}>{nurse_details.biography}</Text>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            color="#46C1E2"
+                            title="Book an Appointment"
+                            onPress={() => navigation.navigate('nurse-booking', nurse_details)}
+                        />
+                    </View>
+                </AdaptiveView>
+            )}
         </AuthContext.Consumer>
-    )
-}
-
-export default NurseHighlight
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
-        flex: 2,
-        padding: 30,
-        backgroundColor: "white"
+        flex: 1,
+        padding: 20,
+        backgroundColor: "#F7F7F7",
     },
-    container_center: {
-        alignContent: 'center',
+    avatarContainer: {
         alignItems: 'center',
-        justifyContent: 'center'
+        marginBottom: 10,
     },
-    name_text: {
-        fontSize: 32,
+    avatarImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+        borderWidth: 2,
+        borderColor: "#46C1E2",
+    },
+    nameText: {
+        fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: 8,
+        color: "#333",
+        textAlign: "center",
     },
-    bio_text: {
-        fontSize: 12
+    ratingsText: {
+        fontSize: 16,
+        marginBottom: 8,
+        color: "#999",
+        textAlign: "center",
     },
-    specialities: {
+    specialitiesText: {
         fontWeight: 'bold',
-        marginTop: 10
+        fontSize: 16,
+        marginTop: 10,
+        color: "#666",
+        textAlign: "center",
     },
-    subhead_text: {
+    subheadText: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 5,
-        marginTop: 20
+        marginTop: 20,
+        color: "#333",
     },
-    submit_btn: {
-        position: 'absolute',
-        bottom: 50,
-        left: 90,
-    }
-})
+    bioText: {
+        fontSize: 14,
+        color: "#555",
+        marginBottom: 20,
+        lineHeight: 20,
+    },
+    buttonContainer: {
+        alignItems: 'center',
+        marginTop: 30,
+    },
+});
+
+export default NurseHighlight;

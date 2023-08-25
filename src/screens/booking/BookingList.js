@@ -28,14 +28,14 @@ const BookingList = (props) => {
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
 
         fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get-nurses`, {
-            method: "GET",
-            mode: "cors",
+            method: 'GET',
+            mode: 'cors',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` },
         })
             .then(res => res.json())
             .then(result => {
-                setNurseList(result)
-                setLoading(false)
+                setNurseList(result);
+                setLoading(false);
             })
             .catch(error => {
                 alert('Error getting nurses')
@@ -119,23 +119,16 @@ const BookingList = (props) => {
                 )
             }
         </AuthContext.Consumer>
-    )
-}
-
-export default BookingList
+    );
+};
 
 const styles = StyleSheet.create({
-    page_container: {
-        alignItems: 'center',
-        justifyContent: 'center',
+    pageContainer: {
         flex: 1,
         marginTop: 0,
         // backgroundColor: "white"
     },
-    container_loading: {
-        backgroundColor: "white",
-        paddingTop: 10,
-        padding: 30,
+    containerLoading: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -145,3 +138,5 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     }
 })
+
+export default BookingList;
