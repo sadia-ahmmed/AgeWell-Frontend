@@ -1,6 +1,6 @@
 // import 'react-native-gesture-handler';
 // import { registerRootComponent } from 'expo';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext, AuthProvider } from "./src/providers/AuthProviders";
 import { NavigationContainer } from "@react-navigation/native";
@@ -21,8 +21,10 @@ import VerificationScreen from "./src/screens/booking/verification/VerificationS
 import Calendar from "./src/screens/booking/calendar/Calendar";
 import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
 import Onboarding from "./src/screens/onboarding/Onboarding";
-
-const Drawer = createDrawerNavigator();
+import NurseProfileScreen from './src/screens/review and points/NurseProfileScreen_reviewAndPointSystem'
+import ViewAllReviews from './src/screens/review and points/ViewAllReviews'
+import AddReview from './src/screens/review and points/AddReview'
+import NurseReviewCard  from './src/screens/review and points/NurseReviewCard_reviewAndPointSystem'
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const DashboardTabs = createBottomTabNavigator();
@@ -100,22 +102,6 @@ const DashboardTabScreens = () => {
           })}
         >
 
-<Drawer.Navigator>
-          <Drawer.Screen name="Calendar" component={Calendar} />
-      
-        </Drawer.Navigator>
-          
-          {/* Main screen tab bar */}
-          <DashboardTabs.Screen
-            name="Home"
-            component={MainScreen}
-            options={{
-              headerShown: true,
-              title: `Home`,
-              headerTitle: `Welcome ${authCtx.userCache.fullname.split()[0]}`,
-              tabBarItemStyle: { marginBottom: 5 },
-            }}
-          />
 
           {/* Main nurse list tab bar */}
           {(!authCtx.userCache.ongoingAppointment || authCtx.userCache.type === "user") && (
@@ -254,6 +240,28 @@ const HomeStackScreens = () => {
                     component={FamilyCircleDashBoard}
                     options={{ headerTitle: "Family circle dashboard", headerShown: true }}
                   />
+                  <HomeStack.Screen name='nurseReviewCard' component={NurseReviewCard} />
+                  <HomeStack.Screen name='NurseProfile' component={NurseProfileScreen} 
+                    options={{ title: 'Nurse profile',
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerLeft: null,
+                    headerStyle: {
+                      backgroundColor: '#439be8',
+
+                    } }}
+                    />
+                  <HomeStack.Screen name='ViewAllReviews' component={ViewAllReviews}
+                    options={{ title: 'All ratings and reviews',
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerLeft: null,
+                    headerStyle: {
+                      backgroundColor: '#439be8',
+
+                    } }}
+                  
+                    />
                 </>
             }
           </HomeStack.Navigator>
