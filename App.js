@@ -17,6 +17,7 @@ import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import Calendar from "./src/screens/booking/calendar/Calendar";
 import Onboarding from "./src/screens/onboarding/Onboarding";
+import SettingsScreen from "./src/screens/settings/settings";
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -63,7 +64,11 @@ const DashboardTabScreens = () => {
                   ? "chatbox-ellipses"
                   : "chatbox-ellipses-outline";
                 iconType = "ionicon";
-              } else if (
+              } else if (route.name === "Settings") {
+   
+                iconName = focused ? "settings" : "settings-outline";
+                iconType = "ionicon";
+              }else if (
                 !authCtx.userCache.ongoingAppointment &&
                 route.name === "Pending"
               ) {
@@ -165,7 +170,7 @@ const DashboardTabScreens = () => {
           {authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Chats"
-              component={BookingList}
+              component={BookingList}  
               options={{
                 headerShown: false,
                 title: "Chats",
@@ -175,7 +180,7 @@ const DashboardTabScreens = () => {
           )}
 
           {/* Main user verification tab bar */}
-          {!authCtx.userCache.is_verified && (
+          {/* {!authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Verification"
               component={VerificationScreen}
@@ -186,7 +191,17 @@ const DashboardTabScreens = () => {
                 tabBarItemStyle: { marginBottom: 5 },
               }}
             />
-          )}
+          )} */}
+            <DashboardTabs.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerShown: true,
+                title: "Settings",
+                tabBarItemStyle: { marginBottom: 5 },
+              }}
+            />
+
         </DashboardTabs.Navigator>
       )}
     </AuthContext.Consumer>
@@ -232,6 +247,17 @@ const HomeStackScreens = () => {
                     component={FamilyCircleDashBoard}
                     options={{ headerTitle: "My Circle", headerShown: true }}
                   />
+                  <HomeStack.Screen
+                     name="Verification"
+                     component={VerificationScreen}
+                     options={{
+                       headerShown: true,
+                       title: "Verify",
+                       headerTitle: "Verify Your Account",
+                       tabBarItemStyle: { marginBottom: 5 },
+                     }}
+                  />
+                   
                 </>
             }
           </HomeStack.Navigator>

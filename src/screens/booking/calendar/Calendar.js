@@ -1,7 +1,7 @@
 import { StyleSheet, Text, Pressable, FlatList, View, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Dialog, Divider, SearchBar } from "react-native-elements";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
