@@ -97,31 +97,24 @@ const packages = [
 
 const HospitalPackageCard = ({ packageData }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardContainer}>
         <Card style={styles.card}>
           <View style={styles.imageContainer}>
             <Image source={packageData.image} style={styles.image} />
+            <View style={styles.imageTextContainer}>
+              <Text style={styles.imageText}>{packageData.packageName}</Text>
+              <Text style={styles.imageText}>{packageData.packagePrice}</Text>
+            </View>
           </View>
-          <View style={styles.detailsContainer}>
-            <View style={styles.infoContainer}>
-              <View style={styles.textContainer}>
-                <Text style={styles.title}>{packageData.packageName}</Text>
-              </View>
-              <View style={styles.priceContainer}>
-                <Text style={styles.price}>{packageData.packagePrice}</Text>
-              </View>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <Text style={styles.moreDetails}>More Details</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bookButton}>
-                <Text style={styles.bookButtonText}>Book</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.bookButton}>
+              <Text style={styles.bookButtonText}>Book</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text style={styles.moreDetails}>More Details</Text>
+            </TouchableOpacity>
           </View>
         </Card>
       </View>
@@ -172,7 +165,7 @@ const Package = () => {
       <Card.Divider />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.pageTitle}>Hospital Packages</Text>
-        <Card.Divider style={{backgroundColor: "#00bfff", height: 1}} />
+        <Card.Divider style={{ backgroundColor: "#00bfff", height: 1 }} />
         {packages.map((item) => (
           <HospitalPackageCard key={item.id} packageData={item} />
         ))}
@@ -192,7 +185,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "#ccc",
     borderWidth: 1,
-    alignItems: "center", // Center items vertically
+    alignItems: "center",
+    justifyContent: "space-between", // Distribute items along the row
   },
   cardContainer: {
     // flexDirection: "row",
@@ -206,21 +200,28 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: "cover",
-    marginRight: 10,
     borderRadius: 5,
   },
   detailsContainer: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   imageContainer: {
-    marginRight: 10,
-    width: 100,
-    height: 100,
-    borderRadius: 5,
-    overflow: "hidden",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  imageTextContainer: {
+    marginLeft: 10,
+    flex: 1,
+    justifyContent: "center",
+  },
+  imageText: {
+    fontSize: 16,
+    // fontWeight: "bold",
+    fontFamily: "serif",
+    color: "#000",
+    marginBottom: 5,
   },
   infoContainer: {
     flexDirection: "column",
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
   },
   priceContainer: {
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
   },
   textContainer: {
     flex: 1,
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 20,
   },
   title: {
     fontSize: 16,
@@ -253,23 +254,24 @@ const styles = StyleSheet.create({
   },
   moreDetails: {
     fontSize: 14,
+    fontWeight: "bold",
     color: "white",
     backgroundColor: "#00bfff",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 5,
-    alignSelf: "flex-end",
-    marginRight: 10,
+    marginLeft: 160,
   },
   bookButton: {
     backgroundColor: "#00bfff",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
     borderRadius: 5,
   },
   bookButtonText: {
     fontSize: 14,
     color: "white",
+    fontWeight: "bold",
   },
 
   modalContainer: {
