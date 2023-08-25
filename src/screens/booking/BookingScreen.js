@@ -130,8 +130,8 @@ const BookingScreen = ({ route, navigation }) => {
         (authCtx) => (
           <AdaptiveView style={styles.main_container}>
             <View style={styles.name_container}>
-              <Text style={styles.text_header}>Book appointment with:</Text>
-              <Text style={styles.name_text}>{nurse_details.fullname}</Text>
+              <Text style={styles.headerText}>Book appointment with:</Text>
+              <Text style={styles.nameText}>{nurse_details.fullname}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
               <Text style={{ flex: 1 }}>Start Date:</Text>
@@ -192,19 +192,26 @@ const BookingScreen = ({ route, navigation }) => {
       }
     </AuthContext.Consumer>
   )
-    .then((res) => res.json())
-    .then((result) => {
-      alert("Success");
-      navigation.navigate("Appointment");
-    })
-    .catch((error) => {
-      alert("Error");
-    });
 };
 
 export default BookingScreen;
 
 const styles = StyleSheet.create({
+  main_container: {
+    flex: 1,
+    padding: 30,
+    backgroundColor: "white",
+  },
+  name_container: {
+    marginBottom: 30
+  },
+  text_header: {
+    fontSize: 16,
+  },
+  name_text: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
   container: {
     flex: 1,
     padding: 30,

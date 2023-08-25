@@ -301,27 +301,57 @@ const HomeStackScreens = () => {
               <HomeStack.Screen
                 name="nurse-highlight"
                 component={NurseHighlight}
-                options={{ headerTitle: "View nurse", headerShown: true }}
+                options={{
+                  headerTitle: "View nurse", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
               <HomeStack.Screen
                 name="nurse-booking"
                 component={BookingScreen}
-                options={{ headerTitle: "Book nurse", headerShown: true }}
+                options={{
+                  headerTitle: "Book nurse", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
               <HomeStack.Screen
                 name="join-family-circle"
                 component={JoinFamilyCircle}
-                options={{ headerTitle: "Join a Circle", headerShown: false }}
+                options={{
+                  headerTitle: "Join a Circle", headerShown: false, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
               <HomeStack.Screen
                 name="create-family-circle"
                 component={CreateFamilyCircle}
-                options={{ headerTitle: "Create a Circle", headerShown: false }}
+                options={{
+                  headerTitle: "Create a Circle", headerShown: false, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
               <HomeStack.Screen
                 name="family-circle-dashboard"
                 component={FamilyCircleDashBoard}
-                options={{ headerTitle: "My Circle", headerShown: false }}
+                options={{
+                  headerTitle: "My Circle", headerShown: false, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
             </>
           )}

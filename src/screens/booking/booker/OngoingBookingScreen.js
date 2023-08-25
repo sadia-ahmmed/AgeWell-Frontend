@@ -81,6 +81,7 @@ const OngoingBookingScreen = ({ navigation }) => {
             <Text style={styles.nurse_text}>{authCtx.userCache.type === "nurse" ? `${appointment.userDetails.fullname}` : `${appointment.nurseDetails.fullname}`}</Text>
             <Divider />
             <Text>Time left: {appointment.working_days} days and {appointment.working_hours} hours</Text>
+            <Text>{appointment.cost} BDT</Text>
             {/* <Text>Screen under maintenance</Text> */}
             {authCtx.userCache.type === "nurse" && <Button title="Close Appointment" onPress={setAppointmentClosure} />}
         </>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { AuthContext } from '../../providers/AuthProviders'
 import { Button, Image } from '@rneui/themed'
@@ -11,29 +11,43 @@ const NurseHighlight = ({ route, navigation }) => {
     return (
         <AuthContext.Consumer>
             {(authCtx) => (
-                <AdaptiveView style={styles.container}>
-                    <View style={styles.avatarContainer}>
-                        <Image
-                            source={require('../../../assets/avatar.png')}
-                            style={styles.avatarImage}
-                        />
+                <AdaptiveView>
+                    <View>
+                        {
+                            !nurse_details.avatar &&
+                            <Image
+                                source={require('../../../assets/avatar.png')}
+                                style={[styles.avatarImage, { resizeMode: "cover" }]}
+                            />
+                        }
+                        {
+                            nurse_details.avatar &&
+                            <Image
+                                source={{ uri: `data:image/jpeg;base64,${nurse_details.avatar}` }}
+                                style={[styles.avatarImage, { resizeMode: "cover" }]}
+                            />
+                        }
                     </View>
-                    <Text style={styles.nameText}>{nurse_details.fullname}</Text>
-                    <Text style={styles.ratingsText}>
-                        {prettyPrintNurseRatings(nurse_details)}
-                    </Text>
-                    <Text style={styles.specialitiesText}>
-                        Specialities: {prettyPrintNurseSpecialities(nurse_details)}
-                    </Text>
-                    <Text style={styles.subheadText}>Biography</Text>
-                    <Text style={styles.bioText}>{nurse_details.biography}</Text>
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            color="#46C1E2"
-                            title="Book an Appointment"
-                            onPress={() => navigation.navigate('nurse-booking', nurse_details)}
-                        />
-                    </View>
+                    <ScrollView style={styles.container}>
+                        <Text style={styles.nameText}>{nurse_details.fullname}</Text>
+                        <Text style={styles.ratingsText}>
+                            {prettyPrintNurseRatings(nurse_details)}
+                        </Text>
+                        <Text style={styles.specialitiesText}>
+                            Specialities: {prettyPrintNurseSpecialities(nurse_details)}
+                        </Text>
+                        <Pressable>
+                            <Text style={styles.subheadText}>Biography</Text>
+                        </Pressable>
+                        <Text style={styles.bioText}>{nurse_details.biography}</Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color="#46C1E2"
+                                title="Book an Appointment"
+                                onPress={() => navigation.navigate('nurse-booking', nurse_details)}
+                            />
+                        </View>
+                    </ScrollView>
                 </AdaptiveView>
             )}
         </AuthContext.Consumer>
@@ -42,20 +56,21 @@ const NurseHighlight = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 20,
+        paddingTop: 30,
+        paddingBottom: 300,
+        paddingRight: 20,
+        paddingLeft: 20,
         backgroundColor: "#F7F7F7",
     },
     avatarContainer: {
         alignItems: 'center',
         marginBottom: 10,
+        backgroundColor: "lightgrey"
     },
     avatarImage: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
-        borderWidth: 2,
-        borderColor: "#46C1E2",
+        width: "100%",
+        height: 250,
+        aspectRatio: 1
     },
     nameText: {
         fontSize: 28,
@@ -72,7 +87,7 @@ const styles = StyleSheet.create({
     },
     specialitiesText: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 14,
         marginTop: 10,
         color: "#666",
         textAlign: "center",
