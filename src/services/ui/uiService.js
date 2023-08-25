@@ -14,7 +14,13 @@ const prettyPrintNurseRatings = (nurse) => {
     }
 
     if (decs > 0.00) {
-        stars.push(<Icon name='star-half' type='font-awesome' color='gold' />)
+        stars.push(<Icon name='star-half-o' type='font-awesome' color='gold' />)
+    }
+
+    if (stars.length < 5) {
+        for (let i = stars.length; i < 5; ++i) {
+            stars.push(<Icon name='star-o' type='font-awesome' color='gold' />)
+        }
     }
 
     return stars

@@ -88,9 +88,9 @@ const BookingList = (props) => {
         <AuthContext.Consumer>
             {
                 (authCtx) => (
-                    loading ? <AdaptiveView style={styles.container_loading}><Dialog.Loading /></AdaptiveView> :
-                        <AdaptiveView styles={styles.page_container}>
-                            <SearchBar
+                    loading ? <AdaptiveView style={styles.containerLoading}><Dialog.Loading /></AdaptiveView> :
+                        <AdaptiveView styles={styles.pageContainer}>
+                            {/* <SearchBar
                                 placeholder="ex: Health, Pediatrician"
                                 value={searchQuery}
                                 lightTheme
@@ -113,7 +113,7 @@ const BookingList = (props) => {
                                     marginRight: 0,
                                     marginBottom: 10
                                 }}
-                            />
+                            /> */}
                             <Screen />
                         </AdaptiveView>
                 )
