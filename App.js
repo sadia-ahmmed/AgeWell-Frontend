@@ -18,11 +18,6 @@ import VerificationScreen from "./src/screens/booking/verification/VerificationS
 import Calendar from "./src/screens/booking/calendar/Calendar";
 import Onboarding from "./src/screens/onboarding/Onboarding";
 import ReviewScreen from "./src/screens/booking/booker/ReviewScreen";
-import CaringConnection from "./src/screens/onboarding/CaringConnection";
-import FindCareSeeker from "./src/screens/onboarding/FindCareSeeker";
-import SelfInfoPage from "./src/screens/onboarding/SelfInfoPage";
-import DiabetesPage from "./src/screens/onboarding/DiabetesPage";
-import BloodPressure from "./src/screens/onboarding/BloodPressure";
 import Package from "./src/screens/dashboard/Package";
 
 const AuthStack = createStackNavigator();
@@ -270,31 +265,6 @@ const HomeStackScreens = () => {
             />
           ) : (
             <>
-              <HomeStack.Screen
-                name="caringconnection"
-                component={CaringConnection}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="findcareseeker"
-                component={FindCareSeeker}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="selfinfopage"
-                component={SelfInfoPage}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="diabetespage"
-                component={DiabetesPage}
-                options={{ headerShown: false }}
-              />
-              <HomeStack.Screen
-                name="bloodpressure"
-                component={BloodPressure}
-                options={{ headerShown: false }}
-              />
               <HomeStack.Screen
                 name="dashboard"
                 component={DashboardTabScreens}
