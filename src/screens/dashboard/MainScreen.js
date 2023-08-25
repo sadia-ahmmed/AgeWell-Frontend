@@ -20,9 +20,9 @@ const MainScreen = ({ navigation }) => {
 
   const onLogoutButtonPress = () => {
     invokeLogoutService(authCtx.userCache);
-    signOut(auth);
     authCtx.setUserCache([]);
     authCtx.setLoggedIn(false);
+    signOut(auth);
   };
 
   useEffect(() => {

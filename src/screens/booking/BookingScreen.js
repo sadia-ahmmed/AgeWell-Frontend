@@ -1,17 +1,14 @@
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Pressable,
-} from "react-native";
-import React, { useState } from "react";
-import { AuthContext } from "../../providers/AuthProviders";
-import DropdownSelect from "../../components/Dropdown";
-import CustomButton from "../../components/CustomButton";
-import DateTimePickerModal from "../../components/DateTimePickerModal";
-import AdaptiveView from "../../components/AdaptiveView";
+import { Modal, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { AuthContext } from '../../providers/AuthProviders'
+import { IP_ADDRESS, IP_PORT } from '../../../configs'
+import { Pressable } from 'react-native'
+import DropdownSelect from '../../components/Dropdown'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import CustomButton from '../../components/CustomButton'
+import DateTimePickerModal from '../../components/DateTimePickerModal'
+import AdaptiveView from '../../components/AdaptiveView'
+import { auth } from '../../firebase/firebaseConfigs'
 
 const BookingScreen = ({ route, navigation }) => {
   const today = new Date().toLocaleDateString("en-ZA");
@@ -110,163 +107,127 @@ const BookingScreen = ({ route, navigation }) => {
 
     const body = JSON.stringify(appointmentBody);
 
-    fetch(
-      `http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/book/${nurse_details.uid}`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authCtx.userCache.user_access_token}`,
-        },
-        body: body,
-      }
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        alert("Success");
-        navigation.navigate("Appointment");
+    fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/book/${nurse_details.uid}`, {
+      method: "POST",
+      mode: "cors",
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${auth.currentUser.stsTokenManager.accessToken}` },
+      body: body
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log(result)
+        alert("Success")
+        navigation.navigate("Home")
       })
-      .catch((error) => {
-        alert("Error");
-      });
-  };
+      .catch(error => {
+        alert("Error")
+      })
+  }
 
   return (
     <AuthContext.Consumer>
-      {(authCtx) => (
-        <AdaptiveView style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Book appointment with:</Text>
-            <Text style={styles.nurseName}>{nurse_details.fullname}</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 15,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ flex: 1 }}>Start Date:</Text>
-            <Pressable onPress={handleOnPressStartDate}>
-              <View pointerEvents="none">
-                <TextInput
-                  value={startDate}
-                  onChangeText={(value) => {
-                    setStartDate(startDate);
-                  }}
-                />
-              </View>
-            </Pressable>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 15,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ flex: 1 }}>End Date:</Text>
-            <Pressable onPress={handleOnPressEndDate}>
-              <View pointerEvents="none">
-                <TextInput value={endDate} />
-              </View>
-            </Pressable>
-          </View>
+      {
+        (authCtx) => (
+          <AdaptiveView style={styles.main_container}>
+            <View style={styles.name_container}>
+              <Text style={styles.text_header}>Book appointment with:</Text>
+              <Text style={styles.name_text}>{nurse_details.fullname}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
+              <Text style={{ flex: 1 }}>Start Date:</Text>
+              <Pressable onPress={handleOnPressStartDate}>
+                <View pointerEvents="none">
+                  <TextInput
+                    value={startDate}
+                    onChangeText={(value) => {
+                      setStartDate(startDate)
+                    }}
+                  />
+                </View>
+              </Pressable>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
+              <Text style={{ flex: 1 }}>End Date:</Text>
+              <Pressable onPress={handleOnPressEndDate}>
+                <View pointerEvents="none">
+                  <TextInput
+                    value={endDate}
+                  />
+                </View>
+              </Pressable>
+            </View>
 
-          <DateTimePickerModal
-            type="calendar"
-            state={startDate}
-            onStateChangeHandler={handleDateChangeStartDate}
-            view={openOnStartDate}
-            onStateViewHandler={handleOnPressStartDate}
-          />
-          <DateTimePickerModal
-            type="calendar"
-            state={endDate}
-            onStateChangeHandler={handleDateChangeEndDate}
-            view={openOnEndDate}
-            onStateViewHandler={handleOnPressEndDate}
-          />
+            <DateTimePickerModal type="calendar" state={startDate} onStateChangeHandler={handleDateChangeStartDate} view={openOnStartDate} onStateViewHandler={handleOnPressStartDate} />
+            <DateTimePickerModal type="calendar" state={endDate} onStateChangeHandler={handleDateChangeEndDate} view={openOnEndDate} onStateViewHandler={handleOnPressEndDate} />
 
-          <Text style={styles.divider}>{""}</Text>
+            <Text style={styles.divider} >{""}</Text>
 
-          <DropdownSelect
-            data={start_times}
-            title="Start time"
-            label="Starting hour"
-            value={startTimesState}
-            setValue={setStartTimeStates}
-          />
+            <DropdownSelect data={start_times} title="Start time" label="Starting hour" value={startTimesState} setValue={setStartTimeStates} />
 
-          <Text style={styles.divider}>{""}</Text>
+            <Text style={styles.divider} >{""}</Text>
 
-          <DateTimePickerModal
-            type="time"
-            state={working_hours}
-            onStateChangeHandler={handleChangeWorkingHours}
-            view={openOnWorkingHours}
-            onStateViewHandler={handleOnPressWorkingHours}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 15,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ flex: 1 }}>Working hours:</Text>
-            <Pressable onPress={handleOnPressWorkingHours}>
-              <View pointerEvents="none">
-                <TextInput value={working_hours} />
-              </View>
-            </Pressable>
-          </View>
+            <DateTimePickerModal type="time" state={working_hours} onStateChangeHandler={handleChangeWorkingHours} view={openOnWorkingHours} onStateViewHandler={handleOnPressWorkingHours} />
+            <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
+              <Text style={{ flex: 1 }}>Working hours:</Text>
+              <Pressable onPress={handleOnPressWorkingHours}>
+                <View pointerEvents="none">
+                  <TextInput
+                    value={working_hours}
+                  />
+                </View>
+              </Pressable>
+            </View>
 
-          <Text style={styles.divider}>{""}</Text>
 
-          <View style={styles.footer}>
-            <Text style={styles.price}>
-              {price >= 0 ? `Price: ${price} BDT` : "Invalid timeframe"}
-            </Text>
-            <CustomButton
-              title="Book Now"
-              width={150}
-              onPress={() => onBookButtonPress(authCtx)}
-            />
-          </View>
-        </AdaptiveView>
-      )}
+            <Text style={styles.divider} >{""}</Text>
+
+            <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 25 }}>
+              <Text >{price >= 0 ? `Price: ${price} BDT` : "Invalid timeframe"}</Text>
+              <Text style={styles.divider} >{""}</Text>
+              <CustomButton title="Book Now" width={150} onPress={() => onBookButtonPress(authCtx)} />
+            </View>
+
+          </AdaptiveView>
+        )
+      }
     </AuthContext.Consumer>
-  );
+  )
+    .then((res) => res.json())
+    .then((result) => {
+      alert("Success");
+      navigation.navigate("Appointment");
+    })
+    .catch((error) => {
+      alert("Error");
+    });
 };
 
 export default BookingScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 30,
-        backgroundColor: "white"
-    },
-    header: {
-        marginBottom: 30,
-    },
-    headerText: {
-        fontSize: 16,
-    },
-    nurseName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 5,
-    },
-    footer: {
-        marginTop: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    price: {
-        fontSize: 16,
-    },
+  container: {
+    flex: 1,
+    padding: 30,
+    backgroundColor: "white"
+  },
+  header: {
+    marginBottom: 30,
+  },
+  headerText: {
+    fontSize: 16,
+  },
+  nurseName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  footer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  price: {
+    fontSize: 16,
+  },
 })

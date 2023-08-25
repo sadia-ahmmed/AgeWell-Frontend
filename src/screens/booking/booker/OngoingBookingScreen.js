@@ -9,7 +9,7 @@ import AdaptiveWebView from '../../../components/AdaptiveWebView'
 import { Linking } from 'react-native'
 import InAppBrowser from 'react-native-inappbrowser-reborn'
 
-const OngoingBookingScreen = () => {
+const OngoingBookingScreen = ({ navigation }) => {
 
     const authCtx = useContext(AuthContext)
     const [appointment, setAppointment] = useState()
@@ -39,26 +39,29 @@ const OngoingBookingScreen = () => {
     }, [])
 
 
-    const showPaymentWindow = () => {
+
+
+
+    const setAppointmentClosure = () => {
         const user_access_token = auth.currentUser.stsTokenManager.accessToken
 
-        const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/payment/init`
+        const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/set-closure/${appointment._id}`
         const options = {
             mode: "cors",
-            method: "GET",
+            method: "POST",
             headers: {
-                "Authorization": `Bearer ${user_access_token}`
+                "Authorization": `Bearer ${user_access_token}`,
+                "Content-Type": "application/json"
             }
         }
 
         fetch(url, options)
             .then(res => res.json())
             .then(data => {
-                // Linking.openURL(data.url)
-                Linking.openURL(data.url)
+                navigation.navigate("Appointment")
             })
             .catch(err => {
-                alert(err)
+                alert(err.message)
             })
     }
 
@@ -79,8 +82,7 @@ const OngoingBookingScreen = () => {
             <Divider />
             <Text>Time left: {appointment.working_days} days and {appointment.working_hours} hours</Text>
             {/* <Text>Screen under maintenance</Text> */}
-            <Button title="Complete Appointment" onPress={showPaymentWindow} />
-
+            {authCtx.userCache.type === "nurse" && <Button title="Close Appointment" onPress={setAppointmentClosure} />}
         </>
     )
 

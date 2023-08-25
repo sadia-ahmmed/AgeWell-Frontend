@@ -17,6 +17,7 @@ import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import Calendar from "./src/screens/booking/calendar/Calendar";
 import Onboarding from "./src/screens/onboarding/Onboarding";
+import ReviewScreen from "./src/screens/booking/booker/ReviewScreen";
 import CaringConnection from "./src/screens/onboarding/CaringConnection";
 import FindCareSeeker from "./src/screens/onboarding/FindCareSeeker";
 import SelfInfoPage from "./src/screens/onboarding/SelfInfoPage";
@@ -86,6 +87,12 @@ const DashboardTabScreens = () => {
               ) {
                 iconName = focused ? "shield-alert" : "shield-alert-outline";
                 iconType = "material-community";
+              } else if (
+                !authCtx.userCache.is_verified &&
+                route.name === "Closure"
+              ) {
+                iconName = focused ? "star" : "star-o";
+                iconType = "font-awesome";
               }
               return (
                 <Icon name={iconName} type={iconType} color={color} size={25} />
@@ -102,25 +109,35 @@ const DashboardTabScreens = () => {
             options={{
               headerShown: true,
               title: `Home`,
-              headerTitle: `Welcome ${authCtx.userCache.fullname.split()[0]}`,
+              headerTitle: `Welcome ${authCtx.userCache.fullname}`,
               tabBarItemStyle: { marginBottom: 5 },
+              headerTitleStyle: {
+                fontSize: 18,
+                textAlign: "center",
+                color: "#439BE8",
+              },
             }}
           />
 
           {/* Main nurse list tab bar */}
-          {(!authCtx.userCache.ongoingAppointment ||
-            authCtx.userCache.type === "user") && (
-            <DashboardTabs.Screen
-              name="Nurses"
-              component={BookingList}
-              options={{
-                headerShown: true,
-                title: "Search",
-                headerTitle: "Nurse List",
-                tabBarItemStyle: { marginBottom: 5 },
-              }}
-            />
-          )}
+          {
+            !authCtx.userCache.ongoingAppointment && authCtx.userCache.type === "user" && authCtx.userCache.ongoingAppointmentStatus !== "pending" && (
+              <DashboardTabs.Screen
+                name="Nurses"
+                component={BookingList}
+                options={{
+                  headerShown: true,
+                  title: "Search",
+                  headerTitle: "Search for Caretakers",
+                  tabBarItemStyle: { marginBottom: 5 },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+            )}
 
           {/* Main calendar tab bar */}
           <DashboardTabs.Screen
@@ -140,7 +157,7 @@ const DashboardTabScreens = () => {
           />
 
           {/* Main pending bookings list tab bar */}
-          {!authCtx.userCache.ongoingAppointment && (
+          {!authCtx.userCache.ongoingAppointment && authCtx.userCache.ongoingAppointmentStatus !== "pending" &&
             <DashboardTabs.Screen
               name="Pending"
               component={PendingBookingList}
@@ -149,9 +166,14 @@ const DashboardTabScreens = () => {
                 title: "Pending",
                 headerTitle: "Pending Appointments",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
-          )}
+          }
 
           {/* Main ongoing appointment tab bar */}
           {authCtx.userCache.ongoingAppointment && (
@@ -163,9 +185,33 @@ const DashboardTabScreens = () => {
                 title: "Appointment",
                 headerTitle: "Current Appointment",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
           )}
+
+          {
+            authCtx.userCache.ongoingAppointmentStatus === "pending" &&
+            <DashboardTabs.Screen
+              name="Closure"
+              component={ReviewScreen}
+              options={{
+                headerShown: true,
+                title: "Review & Pay",
+                headerTitle: "Review Your Nurse",
+                tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
+              }}
+            />
+          }
 
           {/* Main chats tab bar */}
           {authCtx.userCache.is_verified && (
@@ -176,6 +222,11 @@ const DashboardTabScreens = () => {
                 headerShown: false,
                 title: "Chats",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
           )}
@@ -190,6 +241,11 @@ const DashboardTabScreens = () => {
                 title: "Verify",
                 headerTitle: "Verify Your Account",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
           )}

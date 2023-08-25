@@ -12,7 +12,7 @@ import PendingBookingCard from '../../../components/PendingBookingCard'
 import AdaptiveView from '../../../components/AdaptiveView'
 
 
-const PendingBookingList = () => {
+const PendingBookingList = ({ navigation }) => {
 
     const authCtx = useContext(AuthContext)
     const [pendingList, setPendingList] = useState([])
@@ -56,7 +56,19 @@ const PendingBookingList = () => {
                             <PendingBookingCard appointment={item.appointment_details} target_user={item.responseUser} key={index} />
                         }
                         keyExtractor={(item) => item.appointment_details._id}
-                    /> : <Text>No pending appointments</Text>
+                    /> :
+                    <>
+                        <Text style={{ textAlign: "center", justifyContent: "center", marginTop: 20, fontSize: 16 }}>No pending appointments</Text>
+                        {
+                            authCtx.userCache.type === "user" &&
+                            <Text
+                                onPress={() => navigation.navigate("Nurses")}
+                                style={{ textAlign: "center", justifyContent: "center", marginTop: 20, fontSize: 14, color: "#439BE8" }}
+                            >
+                                Create one now
+                            </Text>
+                        }
+                    </>
             }
 
         </AdaptiveView>
