@@ -19,12 +19,17 @@ import CreateFamilyCircle from "./src/screens/dashboard/CreateFamilyCircle";
 import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard";
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
 import Calendar from "./src/screens/booking/calendar/Calendar";
-import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
 import Onboarding from "./src/screens/onboarding/Onboarding";
+import CaringConnection from "./src/screens/onboarding/CaringConnection";
+import FindCareSeeker from "./src/screens/onboarding/FindCareSeeker";
+import SelfInfoPage from "./src/screens/onboarding/SelfInfoPage";
+import DiabetesPage from "./src/screens/onboarding/DiabetesPage";
+import BloodPressure from "./src/screens/onboarding/BloodPressure";
 import NurseProfileScreen from './src/screens/review and points/NurseProfileScreen_reviewAndPointSystem'
 import ViewAllReviews from './src/screens/review and points/ViewAllReviews'
 import AddReview from './src/screens/review and points/AddReview'
 import NurseReviewCard  from './src/screens/review and points/NurseReviewCard_reviewAndPointSystem'
+
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const DashboardTabs = createBottomTabNavigator();
@@ -104,7 +109,8 @@ const DashboardTabScreens = () => {
 
 
           {/* Main nurse list tab bar */}
-          {(!authCtx.userCache.ongoingAppointment || authCtx.userCache.type === "user") && (
+          {(!authCtx.userCache.ongoingAppointment ||
+            authCtx.userCache.type === "user") && (
             <DashboardTabs.Screen
               name="Nurses"
               component={BookingList}
@@ -204,44 +210,73 @@ const DashboardTabScreens = () => {
 const HomeStackScreens = () => {
   return (
     <AuthContext.Consumer>
-      {
-        (authCtx) => (
-          <HomeStack.Navigator initialRouteName="dashboard">
-            {
-              authCtx.userCache.onboarding ? <HomeStack.Screen name='account-selection' component={Onboarding} options={{ headerShown: false }} /> :
-                <>
-                  <HomeStack.Screen
-                    name="dashboard"
-                    component={DashboardTabScreens}
-                    options={{ headerShown: false }}
-                  />
-                  <HomeStack.Screen
-                    name="nurse-highlight"
-                    component={NurseHighlight}
-                    options={{ headerTitle: "View nurse", headerShown: true }}
-                  />
-                  <HomeStack.Screen
-                    name="nurse-booking"
-                    component={BookingScreen}
-                    options={{ headerTitle: "Book nurse", headerShown: true }}
-                  />
-                  <HomeStack.Screen
-                    name="join-family-circle"
-                    component={JoinFamilyCircle}
-                    options={{ headerTitle: "Join family circle", headerShown: true }}
-                  />
-                  <HomeStack.Screen
-                    name="create-family-circle"
-                    component={CreateFamilyCircle}
-                    options={{ headerTitle: "Create family circle", headerShown: true }}
-                  />
-                  <HomeStack.Screen
-                    name="family-circle-dashboard"
-                    component={FamilyCircleDashBoard}
-                    options={{ headerTitle: "Family circle dashboard", headerShown: true }}
-                  />
-                  <HomeStack.Screen name='nurseReviewCard' component={NurseReviewCard} />
-                  <HomeStack.Screen name='NurseProfile' component={NurseProfileScreen} 
+      {(authCtx) => (
+        <HomeStack.Navigator initialRouteName="dashboard">
+          {authCtx.userCache.onboarding ? (
+            <HomeStack.Screen
+              name="account-selection"
+              component={Onboarding}
+              options={{ headerShown: false }}
+            />
+          ) : (
+            <>
+              <HomeStack.Screen
+                name="caringconnection"
+                component={CaringConnection}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="findcareseeker"
+                component={FindCareSeeker}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="selfinfopage"
+                component={SelfInfoPage}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="diabetespage"
+                component={DiabetesPage}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="bloodpressure"
+                component={BloodPressure}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="dashboard"
+                component={DashboardTabScreens}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="nurse-highlight"
+                component={NurseHighlight}
+                options={{ headerTitle: "View nurse", headerShown: true }}
+              />
+              <HomeStack.Screen
+                name="nurse-booking"
+                component={BookingScreen}
+                options={{ headerTitle: "Book nurse", headerShown: true }}
+              />
+              <HomeStack.Screen
+                name="join-family-circle"
+                component={JoinFamilyCircle}
+                options={{ headerTitle: "Join a Circle", headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="create-family-circle"
+                component={CreateFamilyCircle}
+                options={{ headerTitle: "Create a Circle", headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="family-circle-dashboard"
+                component={FamilyCircleDashBoard}
+                options={{ headerTitle: "My Circle", headerShown: false }}
+              />
+               <HomeStack.Screen name='nurseReviewCard' component={NurseReviewCard} />
+                <HomeStack.Screen name='NurseProfile' component={NurseProfileScreen} 
                     options={{ title: 'Nurse profile',
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
@@ -262,11 +297,11 @@ const HomeStackScreens = () => {
                     } }}
                   
                     />
-                </>
-            }
-          </HomeStack.Navigator>
-        )
-      }
+            </>
+          )}
+        </HomeStack.Navigator>
+      )}
+
     </AuthContext.Consumer>
   );
 };

@@ -9,9 +9,41 @@ import React, { useState } from "react";
 import { Card, Input, Overlay } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 import AdaptiveView from "../../components/AdaptiveView";
+import { auth } from "../../firebase/firebaseConfigs";
+import { IP_ADDRESS, IP_PORT } from "../../../configs";
 
 const JoinFamilyCircle = ({ navigation }) => {
-  const [joinLink, setJoinLink] = useState("");
+  const [joinCode, setJoinCode] = useState("")
+
+  const joinCircle = () => {
+    const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+    const body = {
+      code: joinCode
+    }
+
+    const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/circle/join`
+    const options = {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${user_access_token}`,
+      },
+      body: JSON.stringify(body)
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        alert("Joined circle!")
+        navigation.navigate("family-circle-dashboard")
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
+  }
 
   return (
     <AuthContext.Consumer>
@@ -21,13 +53,13 @@ const JoinFamilyCircle = ({ navigation }) => {
             <Card.Title style={styles.title}>Join Family Circle</Card.Title>
             <Card.Divider />
             <Input
-              label="Enter Join Link"
-              value={joinLink}
-              onChangeText={setJoinLink}
+              label="Enter Circle Code"
+              value={joinCode}
+              onChangeText={setJoinCode}
             />
             <View style={styles.buttonContainer}>
               <View style={styles.linkContainer}>
-                <Text>Don't have a circle? </Text>
+                <Text>Don't have a circle?</Text>
                 <TouchableOpacity
                   onPress={() => navigation.navigate("create-family-circle")}
                 >
@@ -36,9 +68,7 @@ const JoinFamilyCircle = ({ navigation }) => {
               </View>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => {
-                  navigation.navigate("family-circle-dashboard");
-                }}
+                onPress={joinCircle}
               >
                 <Text style={styles.buttonText}>Join</Text>
               </TouchableOpacity>
