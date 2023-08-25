@@ -60,6 +60,10 @@ const MainScreen = ({ navigation }) => {
           </View>
 
           <View style={{ margin: 10 }}>
+            <Button title="Packages" onPress={() => navigation.navigate("packages")} />
+          </View>
+
+          <View style={{ margin: 10 }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
               Your Health Logs
             </Text>
