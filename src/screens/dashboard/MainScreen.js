@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
@@ -12,6 +12,7 @@ import { IP_ADDRESS, IP_PORT } from "../../../configs";
 import { SpeedDial } from "@rneui/themed";
 import ActivityTracker from "./ActivityTracker";
 import AdaptiveView from "../../components/AdaptiveView";
+import { ScrollView } from "react-native-gesture-handler";
 
 const MainScreen = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -21,23 +22,30 @@ const MainScreen = ({ navigation }) => {
  
 
   useEffect(() => {
-    const user_access_token = auth.currentUser.stsTokenManager.accessToken;
+    // const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
     const httpPolling = setInterval(() => {
-      fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/get`, {
+      let user_uid = auth.currentUser.uid
+
+      if (!user_uid) {
+        user_uid = authCtx.userCache.uid
+      }
+
+      fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/get/${user_uid}`, {
         method: "GET",
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user_access_token}`,
         },
       })
         .then((res) => res.json())
         .then((result) => {
           setUser(result);
+          console.log(result);
           authCtx.setUserCache(result);
         })
         .catch((error) => {
+          console.log(error)
           alert("Error getting user details");
         });
     }, 5000);
@@ -57,9 +65,53 @@ const MainScreen = ({ navigation }) => {
             </Text>
             <Card.Divider />
           </View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ margin: 10 }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Your Health Logs
+              </Text>
+              <Card.Divider />
+            </View>
 
-          <ActivityTracker navigation={navigation} />
+            <View style={styles.healthLogsContainer}>
 
+              <View style={styles.miniCard}>
+                <Image
+                  source={require("../../../assets/scale.png")}
+                  style={styles.cardImage}
+                />
+                <Text style={styles.cardName}>Weight</Text>
+                <Text style={styles.cardPoints}>65KG</Text>
+              </View>
+
+              <View style={styles.miniCard}>
+                <Image
+                  source={require("../../../assets/diabetics.png")}
+                  style={styles.cardImage}
+                />
+                <Text style={styles.cardName}>Diabetics</Text>
+                <Text style={styles.cardPoints}>4.3</Text>
+              </View>
+
+              <View style={styles.miniCard}>
+                <Image
+                  source={require("../../../assets/blood-pressure.png")}
+                  style={styles.cardImage}
+                />
+                <Text style={[styles.cardName]}>Blood Pressure</Text>
+                <Text style={styles.cardPoints}>126/78</Text>
+              </View>
+            </View>
+
+            <View style={{ marginTop: 10 }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Your CareGiver
+              </Text>
+              <Card.Divider />
+            </View>
+            <ActivityTracker navigation={navigation} />
+            {/* <ActivityTracker navigation={navigation} /> */}
+          </ScrollView>
           <SpeedDial
             color="#46C1E2"
             isOpen={open}
@@ -99,13 +151,47 @@ const MainScreen = ({ navigation }) => {
   );
 };
 
-export default MainScreen;
-
 const styles = StyleSheet.create({
   main_container: {
     paddingTop: 10,
-    padding: 30,
+    padding: 10,
     backgroundColor: "white",
     flex: 1,
   },
+
+  healthLogsContainer: {
+    marginTop: -10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  miniCard: {
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    padding: 10,
+    width: 100,
+    alignItems: "flex-start",
+  },
+  cardInfo: {
+    alignItems: "center",
+  },
+  cardImage: {
+    width: 50,
+    height: 50,
+  },
+  cardName: {
+    marginTop: 5,
+    fontSize: 11,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  cardPoints: {
+    marginTop: 2,
+    fontSize: 10,
+    color: "#666",
+  },
 });
+
+export default MainScreen;

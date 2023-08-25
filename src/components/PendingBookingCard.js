@@ -38,9 +38,17 @@ const PendingBookingCard = ({ appointment, target_user }) => {
 
 
     const UserButtonGroup = () => (
-        <Button type='outline' onPress={() => alert("User appointment")} hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}>
-            <Icon name='check' type='font-awesome' />
-        </Button>
+        <TouchableOpacity
+            onPress={() => setAppointmentStatus("rejected")}
+            hitSlop={{ top: 20, bottom: 20, left: 30, right: 30 }}
+            style={{
+                marginLeft: 90,
+                alignContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <Icon size={20} name='cross' type='entypo' color="red" raised />
+        </TouchableOpacity>
         // <CustomButton title="Cancel Appointment" width={150} onPress={() => alert("User appointment")} />
     )
 

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native'
 
 export default function CustomButton({ title, width, onPress, marginTop = 0 }) {
     return (
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     },
     btn_text_style: {
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color: "white"
     }
 })
