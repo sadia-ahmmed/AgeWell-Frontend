@@ -18,13 +18,6 @@ const MainScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
 
-  const onLogoutButtonPress = () => {
-    invokeLogoutService(authCtx.userCache);
-    signOut(auth);
-    authCtx.setUserCache([]);
-    authCtx.setLoggedIn(false);
-  };
-
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
@@ -54,10 +47,7 @@ const MainScreen = ({ navigation }) => {
     <AuthContext.Consumer>
       {(authCtx) => (
         <AdaptiveView style={styles.main_container}>
-          <Text>Main</Text>
-          <View style={{ margin: 10 }}>
-            <Button color="red" title="LOGOUT" onPress={onLogoutButtonPress} />
-          </View>
+          <Text>Hello {user}! </Text>     
 
           <View style={{ margin: 10 }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
