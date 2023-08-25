@@ -128,7 +128,7 @@ const Calendar = () => {
   const ViewReportList = () => (
     <>
       {
-        reportlist.length === 0 ? <Text>No reports added yet</Text> :
+        reportlist.length === 0 ? <Text style={{ textAlign: "center", marginTop: 30 }}>No reports added yet</Text> :
           <FlatList
             data={reportlist}
             keyExtractor={(item) => item._id}
@@ -146,7 +146,8 @@ const Calendar = () => {
         value={search}
         lightTheme
         round
-        platform="ios"
+        platform={Platform.OS}
+        blurOnSubmit={false}
         onChangeText={updateSearch}
         inputContainerStyle={{
           backgroundColor: "#F5FDFF",
