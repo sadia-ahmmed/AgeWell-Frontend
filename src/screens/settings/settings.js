@@ -10,12 +10,13 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { signOut } from "firebase/auth";
+import { EmailAuthProvider, GoogleAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup, signOut, updateEmail } from "firebase/auth";
 import AdaptiveView from "../../components/AdaptiveView";
 import { Image, Divider, Avatar, Button } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
 import { invokeLogoutService } from "../../services/user/authService";
+import { IP_ADDRESS, IP_PORT } from "../../../configs";
 
 const EditableRow = ({
   label,
@@ -68,7 +69,7 @@ const EditableBio = ({
   return (
     <View style={styles.rowContainer}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>Biography </Text>
+        <Text style={styles.label} adjustsFontSizeToFit>Biography</Text>
       </View>
       <View style={styles.editContainer}>
         {isEditing ? (
@@ -120,22 +121,29 @@ const EditableBio = ({
 };
 
 const SettingsScreen = ({ navigation }) => {
+
   const authCtx = useContext(AuthContext);
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("johndoe@gmail.com");
+  const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/set-account-detail`
+  const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+  const [name, setName] = useState(authCtx.userCache.fullname);
+  const [email, setEmail] = useState(authCtx.userCache.email);
   const [password, setPassword] = useState("");
+
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(authCtx.userCache.avatar);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [healthLogs, setHealthLogs] = useState([
     // Add more health logs as needed
   ]);
 
-  const [bio, setBio] = useState("Write your biography here");
+  const [bio, setBio] = useState(authCtx.userCache.biography);
   const [isEditingBio, setIsEditingBio] = useState(false);
+
+
   const handlePasswordChange = (newPassword) => {
     setPassword(newPassword);
   };
@@ -147,7 +155,9 @@ const SettingsScreen = ({ navigation }) => {
     authCtx.setLoggedIn(false);
   };
 
-  const handleProfilePictureChange = () => {};
+  const handleProfilePictureChange = () => {
+    alert("Darde e disco")
+  };
 
   const renderHealthLogItem = ({ item }) => (
     <View style={styles.healthLogItem}>
@@ -161,11 +171,78 @@ const SettingsScreen = ({ navigation }) => {
 
   const handleSaveName = () => {
     setIsEditingName(false);
-   
+
+    const body = {
+      key: "fullname",
+      fullname: name
+    }
+
+    const options = {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${user_access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        authCtx.setUserCache(data)
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
   };
+
+
   const handleSaveEmail = () => {
     setIsEditingEmail(false);
- 
+
+    const body = {
+      key: "email",
+      email: email
+    }
+
+    const options = {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${user_access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        console.log(atob(authCtx.userCache.secretKey))
+        reauthenticateWithCredential(
+          auth.currentUser,
+          EmailAuthProvider.credential(auth.currentUser.email, atob(authCtx.userCache.secretKey))
+        )
+          .then(() => {
+            updateEmail(auth.currentUser, email)
+              .then(() => {
+                authCtx.setUserCache(data)
+              })
+              .catch(err => {
+                alert(err)
+              })
+          })
+          .catch(err => {
+            alert(err)
+          })
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
   };
 
   const handleEditBio = () => {
@@ -173,8 +250,31 @@ const SettingsScreen = ({ navigation }) => {
   };
 
   const handleSaveBio = () => {
-    setIsEditingBio(false);
-   
+
+    const body = {
+      key: "biography",
+      biography: bio
+    }
+
+    const options = {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${user_access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        console.log("done")
+        authCtx.setUserCache(data)
+      })
+      .catch(err => {
+        alert(err.message)
+      })
   };
 
   return (
@@ -183,9 +283,9 @@ const SettingsScreen = ({ navigation }) => {
         <Avatar
           title="dp"
           onLongPress={handleProfilePictureChange}
-          size={64}
+          size={82}
           rounded
-          source={setProfilePicture}
+          source={{ uri: `data:image/jpeg;base64,${authCtx.userCache.avatar}` }}
           containerStyle={{ backgroundColor: "#6733b9" }}
         />
         <Text style={styles.nameTop}>{name}</Text>
@@ -193,9 +293,12 @@ const SettingsScreen = ({ navigation }) => {
         <Text style={styles.emailTop}>{email}</Text>
       </View>
 
-      <Pressable onPress={handleVerify} style={styles.button}>
-        <Text style={styles.buttonText}>Verify Account</Text>
-      </Pressable>
+      {
+        !authCtx.userCache.is_verified &&
+        <Pressable onPress={handleVerify} style={styles.button}>
+          <Text style={styles.buttonText}>Verify Account</Text>
+        </Pressable>
+      }
 
       <Text style={styles.editText}>Edit General Information </Text>
 
@@ -226,9 +329,11 @@ const SettingsScreen = ({ navigation }) => {
         onSave={(editedBio) => {
           setBio(editedBio);
           setIsEditingBio(false);
+          console.log(editedBio)
+          handleSaveBio()
         }}
-        isMultiline={true} 
-        numberOfLines={4} 
+        isMultiline={true}
+        numberOfLines={4}
       />
       <EditableRow
         label="Password"
@@ -242,7 +347,7 @@ const SettingsScreen = ({ navigation }) => {
       <Text style={styles.editText}>Edit Health Logs </Text>
 
       <Divider />
-      
+
       <FlatList
         data={healthLogs}
         renderItem={renderHealthLogItem}
@@ -263,9 +368,9 @@ const SettingsScreen = ({ navigation }) => {
           title="LOGOUT"
           onPress={onLogoutButtonPress}
         /> */}
-        <Pressable onPress={onLogoutButtonPress} style={[styles.button, {marginLeft:80, marginRight:80 , backgroundColor:"#A9A9A9"}]}>
-        <Text style={styles.buttonText}>LOGOUT</Text>
-      </Pressable>
+        <Pressable onPress={onLogoutButtonPress} style={[styles.button, { marginLeft: 80, marginRight: 80, backgroundColor: "#A9A9A9" }]}>
+          <Text style={styles.buttonText}>LOGOUT</Text>
+        </Pressable>
       </View>
     </AdaptiveView>
   );
@@ -347,7 +452,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "500",
     marginTop: 10,
     marginLeft: 8,
