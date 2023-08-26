@@ -19,7 +19,9 @@ import Calendar from "./src/screens/booking/calendar/Calendar";
 import Onboarding from "./src/screens/onboarding/Onboarding";
 import ReviewScreen from "./src/screens/booking/booker/ReviewScreen";
 import Package from "./src/screens/dashboard/Package";
-
+import SettingsScreen from "./src/screens/settings/settings";
+import HospitalPackageCard from "./src/components/HospitalPackageCard";
+import packages, { Packages } from "./src/screens/dashboard/packageList";
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const DashboardTabs = createBottomTabNavigator();
@@ -57,7 +59,7 @@ const DashboardTabScreens = () => {
               } else if (route.name === "Nurses") {
                 iconName = focused ? "search" : "search-outline";
                 iconType = "ionicon";
-              } else if (route.name === "Calendar") {
+              } else if (route.name === "Reports") {
                 iconName = focused ? "calendar" : "calendar-outline";
                 iconType = "ionicon";
               } else if (route.name === "Chats") {
@@ -65,7 +67,11 @@ const DashboardTabScreens = () => {
                   ? "chatbox-ellipses"
                   : "chatbox-ellipses-outline";
                 iconType = "ionicon";
-              } else if (
+              } else if (route.name === "Settings") {
+   
+                iconName = focused ? "settings" : "settings-outline";
+                iconType = "ionicon";
+              }else if (
                 !authCtx.userCache.ongoingAppointment &&
                 route.name === "Pending"
               ) {
@@ -138,7 +144,7 @@ const DashboardTabScreens = () => {
 
           {/* Main calendar tab bar */}
           <DashboardTabs.Screen
-            name="Calendar"
+            name="Reports"
             component={Calendar}
             options={{
               headerShown: true,
@@ -227,9 +233,19 @@ const DashboardTabScreens = () => {
               }}
             />
           )}
+          <DashboardTabs.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerShown: true,
+                title: "Settings",
+                tabBarItemStyle: { marginBottom: 5 },
+              }}
+            />
+
 
           {/* Main user verification tab bar */}
-          {!authCtx.userCache.is_verified && (
+          {/* {!authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Verification"
               component={VerificationScreen}
@@ -245,7 +261,7 @@ const DashboardTabScreens = () => {
                 },
               }}
             />
-          )}
+          )} */}
         </DashboardTabs.Navigator>
       )}
     </AuthContext.Consumer>
@@ -326,9 +342,29 @@ const HomeStackScreens = () => {
                 }}
               />
               <HomeStack.Screen
-                name="packages"
+                     name="Verification"
+                     component={VerificationScreen}
+                     options={{
+                       headerShown: true,
+                       title: "Verify",
+                       headerTitle: "Verify Your Account",
+                       tabBarItemStyle: { marginBottom: 5 },
+                     }}
+                  />
+              
+              <HomeStack.Screen
+                name="Package"
                 component={Package}
-                options={{ headerTitle: "Package", headerShown: false }}
+                options={{ headerTitle: "Package", headerShown: true, headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },}}
+              />
+               <HomeStack.Screen
+                name="HospitalPackageCard"
+                component={HospitalPackageCard}
+                options={{ headerTitle: "HospitalPackageCard", headerShown: false }}
               />
             </>
           )}
