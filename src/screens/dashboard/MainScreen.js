@@ -13,22 +13,29 @@ import { SpeedDial } from "@rneui/themed";
 import ActivityTracker from "./ActivityTracker";
 import AdaptiveView from "../../components/AdaptiveView";
 import { ScrollView } from "react-native-gesture-handler";
+import packages from "./packageList";
+import HospitalPackageCard from "../../components/HospitalPackageCard";
+import Package from "./Package";
+import Packages from "./packageList";
+import { Pressable } from "react-native";
 
 const MainScreen = ({ navigation }) => {
   const [user, setUser] = useState();
   const authCtx = useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
-
- 
-
+  const [displayedPackages, setDisplayedPackages] = useState(4);
+  const [showAllPackages, setShowAllPackages] = useState(false);
+  const toggleShowAllPackages = () => {
+    setShowAllPackages(true);
+  };
   useEffect(() => {
     // const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
     const httpPolling = setInterval(() => {
-      let user_uid = auth.currentUser.uid
+      let user_uid = auth.currentUser.uid;
 
       if (!user_uid) {
-        user_uid = authCtx.userCache.uid
+        user_uid = authCtx.userCache.uid;
       }
 
       fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/get/${user_uid}`, {
@@ -45,7 +52,7 @@ const MainScreen = ({ navigation }) => {
           authCtx.setUserCache(result);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           alert("Error getting user details");
         });
     }, 5000);
@@ -58,23 +65,16 @@ const MainScreen = ({ navigation }) => {
       {(authCtx) => (
         <AdaptiveView style={styles.main_container}>
           {/* <Text>Hello {use</Text> */}
-         
-          <View style={{ margin: 10 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Your CareGiver
-            </Text>
-            <Card.Divider />
-          </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ margin: 10 }}>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Your Health Logs
-              </Text>
-              <Card.Divider />
+          <ScrollView
+            style={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={{ margin: 11 }}>
+              <Text style={styles.headText}>Your Health Logs</Text>
+              {/* <Card.Divider /> */}
             </View>
 
             <View style={styles.healthLogsContainer}>
-
               <View style={styles.miniCard}>
                 <Image
                   source={require("../../../assets/scale.png")}
@@ -103,14 +103,37 @@ const MainScreen = ({ navigation }) => {
               </View>
             </View>
 
-            <View style={{ marginTop: 10 }}>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Your CareGiver
-              </Text>
-              <Card.Divider />
+            <View style={{ marginTop: 40, margin: 11, marginBottom: -10 }}>
+              <Text style={styles.headText}>Your CareGiver</Text>
+              {/* <Card.Divider /> */}
             </View>
             <ActivityTracker navigation={navigation} />
             {/* <ActivityTracker navigation={navigation} /> */}
+
+            <View style={{ margin: 11, marginTop: 40 }}>
+              <Text style={styles.headText}>Explore Health Packages</Text>
+              {showAllPackages ? (
+                <Pressable
+                  style={styles.showMoreButton}
+                  onPress={() => navigation.navigate("Package")}
+                >
+                  <Text style={styles.showMoreText}>Show More Packages</Text>
+                </Pressable>
+              ) : (
+                Packages.slice(0, 4).map((packageData) => (
+                  <HospitalPackageCard
+                    key={packageData.id}
+                    packageData={packageData}
+                  />
+                ))
+              )}
+              <Pressable
+                style={styles.showMoreButton}
+                onPress={() => navigation.navigate("Package")}
+              >
+                <Text style={styles.showMoreText}>Show More Packages</Text>
+              </Pressable>
+            </View>
           </ScrollView>
           <SpeedDial
             color="#46C1E2"
@@ -153,7 +176,7 @@ const MainScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   main_container: {
-    paddingTop: 10,
+    // paddingTop: 10,
     padding: 10,
     backgroundColor: "white",
     flex: 1,
@@ -168,7 +191,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   miniCard: {
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#EDEDED",
     borderRadius: 10,
     padding: 10,
     width: 100,
@@ -191,6 +214,29 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontSize: 10,
     color: "#666",
+  },
+  headText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#439BE8",
+    padding: 5,
+    marginTop: -20,
+    marginBottom: 8,
+  },
+  scrollContainer: {
+    marginTop: -30,
+  },
+  showMoreButton: {
+    backgroundColor: "#439BE8",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignSelf: "center",
+    marginTop: 10,
+  },
+  showMoreText: {
+    color: "white",
+    fontSize: 16,
   },
 });
 

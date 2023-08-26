@@ -242,12 +242,12 @@ const SettingsScreen = ({ navigation }) => {
       <Text style={styles.editText}>Edit Health Logs </Text>
 
       <Divider />
-{/*       
+      
       <FlatList
         data={healthLogs}
         renderItem={renderHealthLogItem}
         keyExtractor={(item) => item.id}
-      /> */}
+      />
 
       <View style={{ margin: 20 }}>
         {/* <Button
@@ -263,7 +263,7 @@ const SettingsScreen = ({ navigation }) => {
           title="LOGOUT"
           onPress={onLogoutButtonPress}
         /> */}
-        <Pressable onPress={onLogoutButtonPress} style={[styles.button, {marginLeft:65, marginRight:65 , backgroundColor:"#A9A9A9"}]}>
+        <Pressable onPress={onLogoutButtonPress} style={[styles.button, {marginLeft:80, marginRight:80 , backgroundColor:"#A9A9A9"}]}>
         <Text style={styles.buttonText}>LOGOUT</Text>
       </Pressable>
       </View>
