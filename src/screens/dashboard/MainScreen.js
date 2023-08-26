@@ -48,7 +48,7 @@ const MainScreen = ({ navigation }) => {
         .then((res) => res.json())
         .then((result) => {
           setUser(result);
-          console.log(result);
+          // console.log(result);
           authCtx.setUserCache(result);
         })
         .catch((error) => {
@@ -64,7 +64,6 @@ const MainScreen = ({ navigation }) => {
     <AuthContext.Consumer>
       {(authCtx) => (
         <AdaptiveView style={styles.main_container}>
-          {/* <Text>Hello {use</Text> */}
           <ScrollView
             style={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
@@ -135,39 +134,43 @@ const MainScreen = ({ navigation }) => {
               </Pressable>
             </View>
           </ScrollView>
-          <SpeedDial
-            color="#46C1E2"
-            isOpen={open}
-            icon={{ name: "people", color: "#fff" }}
-            openIcon={{ name: "close", color: "#fff" }}
-            onOpen={() => setOpen(true)}
-            onClose={() => setOpen(false)}
-          >
-            {!authCtx.userCache.in_circle && (
-              <SpeedDial.Action
-                color="#46C1E2"
-                icon={{ name: "add", color: "#fff" }}
-                title="Create Family Circle"
-                onPress={() => navigation.navigate("create-family-circle")}
-              />
-            )}
-            {!authCtx.userCache.in_circle && (
-              <SpeedDial.Action
-                color="#46C1E2"
-                icon={{ name: "person-add", color: "#fff" }}
-                title="Join Family Circle"
-                onPress={() => navigation.navigate("join-family-circle")}
-              />
-            )}
-            {authCtx.userCache.in_circle && (
-              <SpeedDial.Action
-                color="#46C1E2"
-                icon={{ name: "create", color: "#fff" }}
-                title="My Circle"
-                onPress={() => navigation.navigate("family-circle-dashboard")}
-              />
-            )}
-          </SpeedDial>
+          {
+
+            authCtx.userCache.type === "user" &&
+            <SpeedDial
+              color="#46C1E2"
+              isOpen={open}
+              icon={{ name: "people", color: "#fff" }}
+              openIcon={{ name: "close", color: "#fff" }}
+              onOpen={() => setOpen(true)}
+              onClose={() => setOpen(false)}
+            >
+              {!authCtx.userCache.in_circle && (
+                <SpeedDial.Action
+                  color="#46C1E2"
+                  icon={{ name: "add", color: "#fff" }}
+                  title="Create Family Circle"
+                  onPress={() => navigation.navigate("create-family-circle")}
+                />
+              )}
+              {!authCtx.userCache.in_circle && (
+                <SpeedDial.Action
+                  color="#46C1E2"
+                  icon={{ name: "person-add", color: "#fff" }}
+                  title="Join Family Circle"
+                  onPress={() => navigation.navigate("join-family-circle")}
+                />
+              )}
+              {authCtx.userCache.in_circle && (
+                <SpeedDial.Action
+                  color="#46C1E2"
+                  icon={{ name: "create", color: "#fff" }}
+                  title="My Circle"
+                  onPress={() => navigation.navigate("family-circle-dashboard")}
+                />
+              )}
+            </SpeedDial>
+          }
         </AdaptiveView>
       )}
     </AuthContext.Consumer>
