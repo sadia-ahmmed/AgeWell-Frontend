@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
     flex: 1,
+    marginBottom:-12,
   },
 
   healthLogsContainer: {
