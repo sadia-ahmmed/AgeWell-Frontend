@@ -5,11 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
-import { Icon, Image } from "@rneui/themed";
+import {  Image } from "@rneui/themed";
 import AntIcon from "react-native-vector-icons/AntDesign";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileImage } from "@fortawesome/free-regular-svg-icons";
-import { FileImageOutlined } from "@ant-design/icons";
 import AdaptiveView from "../../../components/AdaptiveView";
 // "expo-file-system": "^15.4.3",
 
@@ -17,13 +14,24 @@ const Calendar = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [reportlist, setReportList] = useState([]);
+  const [reportlistOnQuery, setReportListOnQuery] = useState([]);
 
-
-  const updateSearch = (search) => {
-    setSearch(search);
+  const dynamicStringSearch = (query) => {
+    setSearch(query); // Update the search query state
+  
+    query = query.trim().toLowerCase(); // Convert query to lowercase
+  
+    if (query === "") {
+      setReportListOnQuery([]); // Clear the filtered list
+      return;
+    }
+  
+    const queried_list = reportlist.filter((item) =>
+      item.file_name.toLowerCase().includes(query)
+    );
+  
+    setReportListOnQuery(queried_list);
   };
-
-
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
     const httpPolling = setInterval(() => {
@@ -71,9 +79,7 @@ const Calendar = () => {
           type: doc.mimeType === "image/jpeg" ? `image/${doc.type}` : `application/${doc.type}`,
         });
       }
-
-
-
+      
       const uid = auth.currentUser.uid;
       const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/reports/upload/${uid}`;
       const options = {
@@ -126,13 +132,20 @@ const Calendar = () => {
 
   const ViewReportList = () => (
     <>
+    
       {
         reportlist.length === 0 ? <Text style={{ textAlign: "center", marginTop: 30 }}>No reports added yet</Text> :
+          // <FlatList
+          //   data={reportlist}
+          //   keyExtractor={(item) => item._id}
+          //   renderItem={renderReportItem}
+          // />
+
           <FlatList
-            data={reportlist}
+            data={reportlistOnQuery.length > 0 ? reportlistOnQuery : reportlist}
             keyExtractor={(item) => item._id}
             renderItem={renderReportItem}
-          />
+/>
       }
     </>
   )
@@ -147,7 +160,7 @@ const Calendar = () => {
         round
         platform={Platform.OS}
         blurOnSubmit={false}
-        onChangeText={updateSearch}
+        onChangeText={dynamicStringSearch}
         inputContainerStyle={{
           backgroundColor: "#F5FDFF",
           borderColor: "#439BE8",
