@@ -158,7 +158,7 @@ const Calendar = () => {
         value={search}
         lightTheme
         round
-        platform={Platform.OS}
+        platform="ios"
         blurOnSubmit={false}
         onChangeText={dynamicStringSearch}
         inputContainerStyle={{

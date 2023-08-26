@@ -14,6 +14,7 @@ const SignUp = (props) => {
   const [address, setAddress] = useState();
   const [phone, setPhone] = useState();
   const [retype_password, setRetypePassword] = useState();
+  const [signUpBody, setSignUpBody] = useState()
 
   const onSignupButtonPress = () => {
     if (retype_password !== password) {
@@ -22,21 +23,17 @@ const SignUp = (props) => {
 
     const user = { fullname, email, password, phone, address };
 
-    invokeSignupService(user);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user_uid = userCredential.user.uid;
-        alert("Signed Up!");
-        props.navigation.navigate("login");
+        const uid = userCredential.user.uid
+        // console.log(uid)
+        // console.log(userCredential.user)
 
         const body = {
-          fullname,
-          email,
-          password,
-          phone,
-          uid: user_uid,
-          address,
+          ...user,
+          uid,
         };
+
 
         const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/signup`;
         const options = {
@@ -57,19 +54,21 @@ const SignUp = (props) => {
             deleteUser(userCredential.user);
             alert(err.message);
           });
+
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         alert(`Error ${errorCode}: ${errorMessage}`);
       });
+
   };
 
   return (
     <AuthContext.Consumer>
       {(authCtx) => (
         <View style={styles.page_container}>
-        
+
           <Text style={styles.headline}>Create your account</Text>
           <View style={styles.line}></View>
           <View
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
   page_container: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1, 
+    flex: 1,
     margin: 20,
   },
   bottomRow: {
@@ -169,18 +168,18 @@ const styles = StyleSheet.create({
     fontFamily: "sans-serif",
     marginLeft: 40,
   },
-    headline: {
+  headline: {
     fontSize: 30,
     fontWeight: "bold",
     fontFamily: "sans-serif",
     marginBottom: 20,
     color: "#00bfff",
-    },
-    line: {
+  },
+  line: {
     borderBottomColor: "#00bfff",
     opacity: 0.5,
     borderBottomWidth: 5,
     width: 300,
     marginBottom: 20,
-    },
+  },
 });

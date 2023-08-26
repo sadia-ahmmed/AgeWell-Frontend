@@ -22,6 +22,18 @@ import Package from "./src/screens/dashboard/Package";
 import SettingsScreen from "./src/screens/settings/settings";
 import HospitalPackageCard from "./src/components/HospitalPackageCard";
 import packages, { Packages } from "./src/screens/dashboard/packageList";
+import { decode, encode } from 'base-64'
+
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
+
+
+
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const DashboardTabs = createBottomTabNavigator();
@@ -68,10 +80,10 @@ const DashboardTabScreens = () => {
                   : "chatbox-ellipses-outline";
                 iconType = "ionicon";
               } else if (route.name === "Settings") {
-   
+
                 iconName = focused ? "settings" : "settings-outline";
                 iconType = "ionicon";
-              }else if (
+              } else if (
                 !authCtx.userCache.ongoingAppointment &&
                 route.name === "Pending"
               ) {
@@ -234,14 +246,19 @@ const DashboardTabScreens = () => {
             />
           )}
           <DashboardTabs.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{
-                headerShown: true,
-                title: "Settings",
-                tabBarItemStyle: { marginBottom: 5 },
-              }}
-            />
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              headerShown: true,
+              title: "Settings",
+              tabBarItemStyle: { marginBottom: 5, },
+              headerTitleStyle: {
+                fontSize: 18,
+                textAlign: "center",
+                color: "#439BE8",
+              },
+            }}
+          />
 
 
           {/* Main user verification tab bar */}
@@ -342,26 +359,28 @@ const HomeStackScreens = () => {
                 }}
               />
               <HomeStack.Screen
-                     name="Verification"
-                     component={VerificationScreen}
-                     options={{
-                       headerShown: true,
-                       title: "Verify",
-                       headerTitle: "Verify Your Account",
-                       tabBarItemStyle: { marginBottom: 5 },
-                     }}
-                  />
-              
+                name="Verification"
+                component={VerificationScreen}
+                options={{
+                  headerShown: true,
+                  title: "Verify",
+                  headerTitle: "Verify Your Account",
+                  tabBarItemStyle: { marginBottom: 5 },
+                }}
+              />
+
               <HomeStack.Screen
                 name="Package"
                 component={Package}
-                options={{ headerTitle: "Package", headerShown: true, headerTitleStyle: {
-                  fontSize: 18,
-                  textAlign: "center",
-                  color: "#439BE8",
-                },}}
+                options={{
+                  headerTitle: "Package", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
-               <HomeStack.Screen
+              <HomeStack.Screen
                 name="HospitalPackageCard"
                 component={HospitalPackageCard}
                 options={{ headerTitle: "HospitalPackageCard", headerShown: false }}
