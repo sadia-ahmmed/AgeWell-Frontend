@@ -132,7 +132,7 @@ const SettingsScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const [weight, setWeight] = useState(authCtx.userCache.weight);
-  const [diabetics, setDiabetics] = useState("4.3");
+  const [diabetes, setDiabetics] = useState(authCtx.userCache.diabetes ? authCtx.userCache.diabetes : "Enter");
   const [bloodPressure, setBloodPressure] = useState(authCtx.userCache.blood_pressure);
 
   const [isEditingWeight, setIsEditingWeight] = useState(false);
@@ -143,7 +143,7 @@ const SettingsScreen = ({ navigation }) => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
-  const [profilePicture, setProfilePicture] = useState(authCtx.userCache.avatar);
+  const [profilePicture, setProfilePicture] = useState(authCtx.userCache.avatar ? authCtx.userCache.avatar : "");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [healthLogs, setHealthLogs] = useState([
     // Add more health logs as needed
@@ -324,6 +324,30 @@ const SettingsScreen = ({ navigation }) => {
 
   const handleSaveDiabetics = () => {
     setIsEditingDiabetics(false);
+
+    const body = {
+      key: "diabetes",
+      diabetes
+    }
+
+    fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/set-account-detail`, {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${user_access_token}`
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(data => {
+        authCtx.setUserCache(data)
+        setDiabetics(diabetes)
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
   };
 
   const handleSaveBloodPressure = () => {
@@ -432,17 +456,14 @@ const SettingsScreen = ({ navigation }) => {
           onSave={handleSaveWeight}
         />
 
-        {
-          authCtx.userCache.diabetics === "yes" || authCtx.userCache.diabetics >= "0" &&
-          <EditableRow
-            label="Diabetics"
-            value={diabetics}
-            isEditing={isEditingDiabetics}
-            onChangeText={setDiabetics}
-            onEdit={() => setIsEditingDiabetics(true)}
-            onSave={handleSaveDiabetics}
-          />
-        }
+        <EditableRow
+          label="Diabetics"
+          value={diabetes}
+          isEditing={isEditingDiabetics}
+          onChangeText={setDiabetics}
+          onEdit={() => setIsEditingDiabetics(true)}
+          onSave={handleSaveDiabetics}
+        />
 
         <EditableRow
           label="Blood Pressure"
@@ -452,16 +473,6 @@ const SettingsScreen = ({ navigation }) => {
           onEdit={() => setIsEditingBloodPressure(true)}
           onSave={handleSaveBloodPressure}
         />
-
-
-
-
-
-        {/* <FlatList
-        data={healthLogs}
-        renderItem={renderHealthLogItem}
-        keyExtractor={(item) => item.id}
-      /> */}
 
         <View style={{ margin: 20 }}>
           <Pressable onPress={onLogoutButtonPress} style={[styles.button, { marginLeft: 80, marginRight: 80, backgroundColor: "#A9A9A9" }]}>
