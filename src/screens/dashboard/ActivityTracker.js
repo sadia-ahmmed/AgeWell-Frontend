@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-//import { Swipeable } from "react-native-gesture-handler";
 import {
   StyleSheet,
   Text,
@@ -28,11 +27,9 @@ const ActivityTracker = ({ navigation }) => {
   const [checkedIndexes, setCheckedIndexes] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [newActivityInput, setNewActivityInput] = useState("");
-
   const [activityTimes, setActivityTimes] = useState(
     new Array(activities.length).fill(null)
   );
-
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken
 
@@ -63,6 +60,9 @@ const ActivityTracker = ({ navigation }) => {
       caregiverName: caregiver.fullname ? caregiver.fullname : "Nurse Name",
       caregiverType: "Medical Caregiver",
       rating: caregiver.rating ? caregiver.rating : 5,
+      imageURL: require("../../../assets/favicon.png"),
+      loggedInTime: "18/08/2023, 10:00 AM",
+      rating: 5,
       imageURL: require("../../../assets/favicon.png"),
     };
   };
@@ -102,6 +102,16 @@ const ActivityTracker = ({ navigation }) => {
         return updatedTimes;
       });
     }
+    if (!checkedIndexes.includes(index)) {
+      const updatedIndexes = [...checkedIndexes, index];
+      setCheckedIndexes(updatedIndexes);
+      const currentTime = new Date();
+      setActivityTimes((prevTimes) => {
+        const updatedTimes = [...prevTimes];
+        updatedTimes[index] = currentTime;
+        return updatedTimes;
+      });
+    }
   };
 
   const ActivityCard = ({ label, checked, index }) => {
@@ -129,7 +139,14 @@ const ActivityTracker = ({ navigation }) => {
     return (
       <View style={styles.activityContainer}>
         <View style={styles.labelAndTimeContainer}>
+          <View style={styles.labelAndTimeContainer}>
           <Text style={styles.activityLabel}>{label}</Text>
+          <Text style={styles.timeText}>
+            {checkedIndexes.includes(index)
+              ? formatTime(activityTimes[index])
+              : "No Update"}
+          </Text>
+        </View>
           <Text style={styles.timeText}>
             {checkedIndexes.includes(index)
               ? formatTime(activityTimes[index])
@@ -199,9 +216,11 @@ const ActivityTracker = ({ navigation }) => {
                 </View>
               </Card.Title>
 
-              {/* <Card.Title style={styles.cardTitle}>
+              <Card.Divider />
+
+              <Card.Title style={styles.cardTitle}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.titleText}> Add Activities</Text>
+                  <Text style={styles.titleText}>Activities</Text>
                   <TouchableOpacity
                     style={styles.addButton}
                     onPress={toggleModal}
@@ -209,7 +228,7 @@ const ActivityTracker = ({ navigation }) => {
                     <AntIcon name="plus" size={20} color="#B8B8B8" />
                   </TouchableOpacity>
                 </View>
-              </Card.Title> */}
+              </Card.Title>
               <View>
                 <Modal
                   visible={isModalVisible}
@@ -403,6 +422,53 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 5,
     marginTop: -5,
+  },
+  labelAndTimeContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  newActivityInput: {
+    borderWidth: 1,
+    padding: 10,
+    margin: 10,
+    marginBottom: 20,
+    alignItems: "center",
+    borderColor: "#439BE8",
+    borderRadius: 10,
+    fontSize: 16,
+    textAlign: "center",
+  },
+  ardTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "stretch",
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 5,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  titleText: {
+    marginRight: 10,
+  },
+  addButton: {
+    marginLeft: 190,
+  },
+  image_styles: {
+    justifyContent: "center",
+    width: 200,
+    height: 180,
+    marginTop: 15,
+    alignSelf: "center",
+  },
+
+  buttonText: {
+    color: "white",
+    fontSize: 17,
   },
 });
 

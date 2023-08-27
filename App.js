@@ -15,9 +15,24 @@ import JoinFamilyCircle from "./src/screens/dashboard/JoinFamilyCircle";
 import CreateFamilyCircle from "./src/screens/dashboard/CreateFamilyCircle";
 import FamilyCircleDashBoard from "./src/screens/dashboard/FamilyCircleDashBoard";
 import VerificationScreen from "./src/screens/booking/verification/VerificationScreen";
-import { auth } from "./src/firebase/firebaseConfigs";
 import Calendar from "./src/screens/booking/calendar/Calendar";
-import ActivityTracker from "./src/screens/dashboard/ActivityTracker";
+import Onboarding from "./src/screens/onboarding/Onboarding";
+import ReviewScreen from "./src/screens/booking/booker/ReviewScreen";
+import Package from "./src/screens/dashboard/Package";
+import SettingsScreen from "./src/screens/settings/settings";
+import HospitalPackageCard from "./src/components/HospitalPackageCard";
+import packages, { Packages } from "./src/screens/dashboard/packageList";
+import { decode, encode } from 'base-64'
+
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
+
+
 
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -56,13 +71,17 @@ const DashboardTabScreens = () => {
               } else if (route.name === "Nurses") {
                 iconName = focused ? "search" : "search-outline";
                 iconType = "ionicon";
-              } else if (route.name === "Calendar") {
+              } else if (route.name === "Reports") {
                 iconName = focused ? "calendar" : "calendar-outline";
                 iconType = "ionicon";
               } else if (route.name === "Chats") {
                 iconName = focused
                   ? "chatbox-ellipses"
                   : "chatbox-ellipses-outline";
+                iconType = "ionicon";
+              } else if (route.name === "Settings") {
+
+                iconName = focused ? "settings" : "settings-outline";
                 iconType = "ionicon";
               } else if (
                 !authCtx.userCache.ongoingAppointment &&
@@ -82,6 +101,12 @@ const DashboardTabScreens = () => {
               ) {
                 iconName = focused ? "shield-alert" : "shield-alert-outline";
                 iconType = "material-community";
+              } else if (
+                !authCtx.userCache.is_verified &&
+                route.name === "Closure"
+              ) {
+                iconName = focused ? "star" : "star-o";
+                iconType = "font-awesome";
               }
               return (
                 <Icon name={iconName} type={iconType} color={color} size={25} />
@@ -98,28 +123,40 @@ const DashboardTabScreens = () => {
             options={{
               headerShown: true,
               title: `Home`,
-              headerTitle: `Welcome ${authCtx.userCache.fullname.split()[0]}`,
+              headerTitle: `Welcome ${authCtx.userCache.fullname}`,
               tabBarItemStyle: { marginBottom: 5 },
+              headerTitleStyle: {
+                fontSize: 18,
+                textAlign: "center",
+                color: "#439BE8",
+              },
             }}
           />
 
           {/* Main nurse list tab bar */}
-          {!authCtx.userCache.ongoingAppointment && (
-            <DashboardTabs.Screen
-              name="Nurses"
-              component={BookingList}
-              options={{
-                headerShown: true,
-                title: "Search",
-                headerTitle: "Nurse List",
-                tabBarItemStyle: { marginBottom: 5 },
-              }}
-            />
-          )}
+          {!authCtx.userCache.ongoingAppointment &&
+            authCtx.userCache.type === "user" &&
+            authCtx.userCache.ongoingAppointmentStatus !== "pending" && (
+              <DashboardTabs.Screen
+                name="Nurses"
+                component={BookingList}
+                options={{
+                  headerShown: true,
+                  title: "Search",
+                  headerTitle: "Search for Caretakers",
+                  tabBarItemStyle: { marginBottom: 5 },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+            )}
 
           {/* Main calendar tab bar */}
           <DashboardTabs.Screen
-            name="Calendar"
+            name="Reports"
             component={Calendar}
             options={{
               headerShown: true,
@@ -135,18 +172,24 @@ const DashboardTabScreens = () => {
           />
 
           {/* Main pending bookings list tab bar */}
-          {!authCtx.userCache.ongoingAppointment && (
-            <DashboardTabs.Screen
-              name="Pending"
-              component={PendingBookingList}
-              options={{
-                headerShown: true,
-                title: "Pending",
-                headerTitle: "Pending Appointments",
-                tabBarItemStyle: { marginBottom: 5 },
-              }}
-            />
-          )}
+          {!authCtx.userCache.ongoingAppointment &&
+            authCtx.userCache.ongoingAppointmentStatus !== "pending" && (
+              <DashboardTabs.Screen
+                name="Pending"
+                component={PendingBookingList}
+                options={{
+                  headerShown: true,
+                  title: "Pending",
+                  headerTitle: "Pending Appointments",
+                  tabBarItemStyle: { marginBottom: 5 },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+            )}
 
           {/* Main ongoing appointment tab bar */}
           {authCtx.userCache.ongoingAppointment && (
@@ -158,6 +201,29 @@ const DashboardTabScreens = () => {
                 title: "Appointment",
                 headerTitle: "Current Appointment",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
+              }}
+            />
+          )}
+
+          {authCtx.userCache.ongoingAppointmentStatus === "pending" && (
+            <DashboardTabs.Screen
+              name="Closure"
+              component={ReviewScreen}
+              options={{
+                headerShown: true,
+                title: "Review & Pay",
+                headerTitle: "Review Your Nurse",
+                tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
           )}
@@ -171,101 +237,159 @@ const DashboardTabScreens = () => {
                 headerShown: false,
                 title: "Chats",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
           )}
+          <DashboardTabs.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              headerShown: true,
+              title: "Settings",
+              tabBarItemStyle: { marginBottom: 5, },
+              headerTitleStyle: {
+                fontSize: 18,
+                textAlign: "center",
+                color: "#439BE8",
+              },
+            }}
+          />
+
 
           {/* Main user verification tab bar */}
-          {!authCtx.userCache.is_verified && (
+          {/* {!authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Verification"
               component={VerificationScreen}
               options={{
-                headerShown: false,
+                headerShown: true,
                 title: "Verify",
+                headerTitle: "Verify Your Account",
                 tabBarItemStyle: { marginBottom: 5 },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  textAlign: "center",
+                  color: "#439BE8",
+                },
               }}
             />
-          )}
+          )} */}
         </DashboardTabs.Navigator>
       )}
     </AuthContext.Consumer>
   );
 };
 
-const HomeStackScreens = ({ user }) => {
+const HomeStackScreens = () => {
   return (
-    <HomeStack.Navigator initialRouteName="dashboard">
-      {/* SADIA OPEN THIS COMMENT AFTER YOURE DONE WITH ACCOUNT SELECTION */}
-      {/* <HomeStack.Screen name='account-selection' component={AccountSelection} /> */}
-      <HomeStack.Screen
-        name="dashboard"
-        component={DashboardTabScreens}
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="nurse-highlight"
-        component={NurseHighlight}
-        options={{ headerTitle: "View nurse", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="nurse-booking"
-        component={BookingScreen}
-        options={{ headerTitle: "Book nurse", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="join-family-circle"
-        component={JoinFamilyCircle}
-        options={{ headerTitle: "Join family circle", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="create-family-circle"
-        component={CreateFamilyCircle}
-        options={{ headerTitle: "Create family circle", headerShown: true }}
-      />
-      <HomeStack.Screen
-        name="family-circle-dashboard"
-        component={FamilyCircleDashBoard}
-        options={{ headerTitle: "Family circle dashboard", headerShown: true }}
-      />
-      {/* <HomeStack.Screen
-        name='homePage' 
-        component={HomePage_MedicineTracker} 
-        options={{ headerShown: false }} 
-      />
-      <HomeStack.Screen name='activityTracker'
-        component={ActivityTracker}
-        options={{ headerTitle: "Activity Tracker", headerShown: false }}
-      />
+    <AuthContext.Consumer>
+      {(authCtx) => (
+        <HomeStack.Navigator initialRouteName="dashboard">
+          {authCtx.userCache.onboarding ? (
+            <HomeStack.Screen
+              name="account-selection"
+              component={Onboarding}
+              options={{ headerShown: false }}
+            />
+          ) : (
+            <>
+              <HomeStack.Screen
+                name="dashboard"
+                component={DashboardTabScreens}
+                options={{ headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="nurse-highlight"
+                component={NurseHighlight}
+                options={{
+                  headerTitle: "View nurse", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+              <HomeStack.Screen
+                name="nurse-booking"
+                component={BookingScreen}
+                options={{
+                  headerTitle: "Book nurse", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+              <HomeStack.Screen
+                name="join-family-circle"
+                component={JoinFamilyCircle}
+                options={{
+                  headerTitle: "Join a Circle", headerShown: false, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+              <HomeStack.Screen
+                name="create-family-circle"
+                component={CreateFamilyCircle}
+                options={{
+                  headerTitle: "Create a Circle", headerShown: false, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+              <HomeStack.Screen
+                name="family-circle-dashboard"
+                component={FamilyCircleDashBoard}
+                options={{
+                  headerTitle: "My Circle", headerShown: false, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+              <HomeStack.Screen
+                name="Verification"
+                component={VerificationScreen}
+                options={{
+                  headerShown: true,
+                  title: "Verify",
+                  headerTitle: "Verify Your Account",
+                  tabBarItemStyle: { marginBottom: 5 },
+                }}
+              />
 
-       <HomeStack.Screen name='Add a new medicine'
-          options={{ title: 'Add a New Medicine',
-          headerTintColor: 'white',
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: '#439be8',
-            //   justifyContent: 'center',
-            //   alignContent: 'center',
-
-           } }}
-        component={CreateRecord_medicineTracker} 
-      />
-      <HomeStack.Screen name='View All Completed Tasks' 
-        options={{ title: 'Completed Tasks',
-        headerTintColor: 'white',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#439be8',
-              //   justifyContent: 'center',
-              //   alignContent: 'center',
-
-        } }}
-           
-      component={ViewCompletedTask_medicineTracker} />
-
-            */}
-      {/* component={ViewCompletedTask_medicineTracker} /> */}
-    </HomeStack.Navigator>
+              <HomeStack.Screen
+                name="Package"
+                component={Package}
+                options={{
+                  headerTitle: "Package", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
+              />
+              <HomeStack.Screen
+                name="HospitalPackageCard"
+                component={HospitalPackageCard}
+                options={{ headerTitle: "HospitalPackageCard", headerShown: false }}
+              />
+            </>
+          )}
+        </HomeStack.Navigator>
+      )}
+    </AuthContext.Consumer>
   );
 };
 

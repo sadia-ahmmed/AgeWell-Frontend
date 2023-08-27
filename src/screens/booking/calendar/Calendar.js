@@ -1,24 +1,29 @@
-import { StyleSheet, Text, Pressable, FlatList, View } from "react-native";
+import { StyleSheet, Text, Pressable, FlatList, View, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Divider, SearchBar } from "react-native-elements";
+import { Dialog, Divider, SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
-import IonIcon from "react-native-vector-icons/Ionicons";
 import { Icon, Image } from "@rneui/themed";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage } from "@fortawesome/free-regular-svg-icons";
 import { FileImageOutlined } from "@ant-design/icons";
+import AdaptiveView from "../../../components/AdaptiveView";
 // "expo-file-system": "^15.4.3",
 
 const Calendar = () => {
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const [reportlist, setReportList] = useState([]);
+
+
   const updateSearch = (search) => {
     setSearch(search);
   };
+
+
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
     const httpPolling = setInterval(() => {
@@ -36,12 +41,15 @@ const Calendar = () => {
         .then((res) => res.json())
         .then((data) => {
           setReportList(data);
+          setLoading(false)
         })
         .catch((error) => alert(error.message));
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(httpPolling);
   }, []);
+
+
   const selectDoc = async () => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
@@ -50,8 +58,22 @@ const Calendar = () => {
         type: ["application/pdf", "image/*"],
         multiple: false,
       });
+
+
       let data = new FormData();
-      data.append("file", doc);
+
+      if (Platform.OS === "ios" || Platform.OS === "macos") {
+        data.append("file", doc)
+      } else {
+        data.append("file", {
+          name: doc.name,
+          uri: doc.uri,
+          type: doc.mimeType === "image/jpeg" ? `image/${doc.type}` : `application/${doc.type}`,
+        });
+      }
+
+
+
       const uid = auth.currentUser.uid;
       const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/reports/upload/${uid}`;
       const options = {
@@ -59,6 +81,7 @@ const Calendar = () => {
         mode: "cors",
         headers: {
           "Content-Type": "multipart/form-data",
+          // "Content-Type": "application/json",
           Authorization: `Bearer ${user_access_token}`,
         },
         body: data,
@@ -100,14 +123,30 @@ const Calendar = () => {
     );
   };
 
+
+  const ViewReportList = () => (
+    <>
+      {
+        reportlist.length === 0 ? <Text style={{ textAlign: "center", marginTop: 30 }}>No reports added yet</Text> :
+          <FlatList
+            data={reportlist}
+            keyExtractor={(item) => item._id}
+            renderItem={renderReportItem}
+          />
+      }
+    </>
+  )
+
+
   return (
-    <SafeAreaView style={styles.container}>
+    <AdaptiveView style={styles.container}>
       <SearchBar
         placeholder="Search Reports"
         value={search}
         lightTheme
         round
-        platform="android"
+        platform="ios"
+        blurOnSubmit={false}
         onChangeText={updateSearch}
         inputContainerStyle={{
           backgroundColor: "#F5FDFF",
@@ -139,12 +178,10 @@ const Calendar = () => {
           />
         </View>
       </View>
-      <FlatList
-        data={reportlist}
-        keyExtractor={(item) => item._id}
-        renderItem={renderReportItem}
-      />
-    </SafeAreaView>
+      {
+        loading ? <Dialog.Loading /> : <ViewReportList />
+      }
+    </AdaptiveView>
   );
 };
 

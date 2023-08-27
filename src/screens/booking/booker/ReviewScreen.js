@@ -29,16 +29,12 @@ const ReviewScreen = () => {
             }
         }
 
-        console.log(url)
-
         fetch(url, options)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 Linking.openURL(data.url)
             })
             .catch(err => {
-                console.log(err)
                 alert(err)
             })
     }

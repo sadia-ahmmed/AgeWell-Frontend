@@ -38,19 +38,27 @@ const PendingBookingCard = ({ appointment, target_user }) => {
 
 
     const UserButtonGroup = () => (
-        <Button type='outline' onPress={() => alert("User appointment")} hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}>
-            <Icon name='check' type='font-awesome' />
-        </Button>
+        <TouchableOpacity
+            onPress={() => setAppointmentStatus("rejected")}
+            hitSlop={{ top: 20, bottom: 20, left: 30, right: 30 }}
+            style={{
+                marginLeft: 90,
+                alignContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <Icon size={20} name='cross' type='entypo' color="red" raised />
+        </TouchableOpacity>
         // <CustomButton title="Cancel Appointment" width={150} onPress={() => alert("User appointment")} />
     )
 
     const NurseButtonGroup = () => (
-        <View style={{ flexDirection: "row", marginLeft: 45, justifyContent: "center", alignContent: "center" }}>
-            <TouchableOpacity style={{ marginRight: 2 }} onPress={() => setAppointmentStatus("approved")} hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}>
+        <View style={{ flexDirection: "row", marginLeft: 50, justifyContent: "center", alignContent: "center" }}>
+            <TouchableOpacity style={{ marginRight: 2 }} onPress={() => setAppointmentStatus("approved")} hitSlop={{ top: 20, bottom: 20, left: 30, right: 30 }}>
                 <Icon size={17} name='check' type='font-awesome' color="green" raised />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setAppointmentStatus("rejected")} hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}>
+            <TouchableOpacity onPress={() => setAppointmentStatus("rejected")} hitSlop={{ top: 20, bottom: 20, left: 30, right: 30 }}>
                 <Icon size={17} name='cross' type='entypo' color="red" raised />
             </TouchableOpacity>
         </View>
@@ -60,7 +68,7 @@ const PendingBookingCard = ({ appointment, target_user }) => {
         <View style={[styles.container, styles.shadowProp]}>
             {/* // TODO: COMPLETE NURSE PENDING LIST */}
             <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity onPress={() => alert("user infor")} hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} >
+                <TouchableOpacity onPress={() => alert("user infor")} hitSlop={{ top: 20, bottom: 20, left: 30, right: 30 }} >
                     <Text>{target_user.fullname}</Text>
                     <Text style={{ color: "grey", fontSize: 12 }}>{appointment.working_days} days, {appointment.working_hours} hours</Text>
                 </TouchableOpacity>

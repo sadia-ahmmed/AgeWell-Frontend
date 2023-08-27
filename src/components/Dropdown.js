@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Icon } from '@rneui/themed'
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown'
 
-export default function DropdownSelect({ title, data, value, setValue, label }) {
+export default function DropdownSelect({ title, data, value, setValue, label, iconName = "time-outline", iconType = "ionicon", iconColor = "blue" }) {
 
     const [isFocus, setIsFocus] = useState(false)
 
@@ -27,7 +27,7 @@ export default function DropdownSelect({ title, data, value, setValue, label }) 
                     setIsFocus(false)
                 }}
                 renderLeftIcon={() => (
-                    <Icon name='time-outline' type='ionicon' style={isFocus && { color: "blue" }} />
+                    <Icon name={iconName} type={iconType} style={isFocus && { color: iconColor }} />
                 )}
             />
         </View>
