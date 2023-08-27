@@ -24,7 +24,7 @@ import HospitalPackageCard from "./src/components/HospitalPackageCard";
 import packages, { Packages } from "./src/screens/dashboard/packageList";
 import { decode, encode } from 'base-64'
 import HealthConcerns from "./src/screens/onboarding/HealthConcerns";
-
+import ActivityList from "./src/screens/ActivityList";
 if (!global.btoa) {
   global.btoa = encode;
 }
@@ -353,7 +353,7 @@ const HomeStackScreens = () => {
                 name="family-circle-dashboard"
                 component={FamilyCircleDashBoard}
                 options={{
-                  headerTitle: "My Circle", headerShown: false, headerTitleStyle: {
+                  headerTitle: "My Circle", headerShown: true, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
                     color: "#439BE8",
@@ -386,6 +386,17 @@ const HomeStackScreens = () => {
                 name="HospitalPackageCard"
                 component={HospitalPackageCard}
                 options={{ headerTitle: "HospitalPackageCard", headerShown: false }}
+              />
+              <HomeStack.Screen
+                name="ActivityList"
+                component={ActivityList}
+                options={{
+                  headerTitle: "All Activities", headerShown: true, headerTitleStyle: {
+                    fontSize: 18,
+                    textAlign: "center",
+                    color: "#439BE8",
+                  },
+                }}
               />
             </>
           )}

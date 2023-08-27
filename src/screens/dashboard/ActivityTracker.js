@@ -29,10 +29,12 @@ const ActivityTracker = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [newActivityInput, setNewActivityInput] = useState("");
 
+  const [completedActivities, setCompletedActivities] = useState([]);
+
+
   const [activityTimes, setActivityTimes] = useState(
     new Array(activities.length).fill(null)
   );
-
 
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
@@ -95,18 +97,39 @@ const ActivityTracker = ({ navigation }) => {
     setActivities(initialActivities);
   }, []);
 
+  
+
   const toggleTrackerItem = (index) => {
     if (!checkedIndexes.includes(index)) {
-      const updatedIndexes = [...checkedIndexes, index];
-      setCheckedIndexes(updatedIndexes);
+      // const updatedIndexes = [...checkedIndexes, index];
+      // setCheckedIndexes(updatedIndexes);
       const currentTime = new Date();
       setActivityTimes((prevTimes) => {
         const updatedTimes = [...prevTimes];
         updatedTimes[index] = currentTime;
         return updatedTimes;
       });
-    }
+
+      setCompletedActivities((prevCompletedActivities) => {
+        const updatedCompletedActivities = [...prevCompletedActivities];
+        updatedCompletedActivities.push({
+          label: activities[index].label,
+          time: currentTime.getHours() + ":" + currentTime.getMinutes(),
+        });
+        return updatedCompletedActivities;
+      });
+
+
+      setActivities((prevActivities) => {
+        const updatedActivities = prevActivities.filter((_, i) => i !== index);
+        return updatedActivities;
+      });
+
+    } 
+    
   };
+
+
 
   const ActivityCard = ({ label, checked, index }) => {
     const [showTime, setShowTime] = useState(checked);
@@ -185,11 +208,16 @@ const ActivityTracker = ({ navigation }) => {
       {(authCtx) => (
         <SafeAreaView style={styles.container}>
           <View style={styles.content}>
-            {authCtx.userCache.ongoingAppointment && authCtx.userCache.type === "user" && caregiver && (
-              <><Text style={styles.headText}>Your CareGiver</Text><Card style={styles.card}>
-                <CaregiverCard {...caregiver} />
-              </Card></>
-            )}
+            {authCtx.userCache.ongoingAppointment &&
+              authCtx.userCache.type === "user" &&
+              caregiver && (
+                <>
+                  <Text style={styles.headText}>Your CareGiver</Text>
+                  <Card style={styles.card}>
+                    <CaregiverCard {...caregiver} />
+                  </Card>
+                </>
+              )}
             <Text style={styles.headText}> My Activities</Text>
             <Card style={styles.card}>
               <Card.Title style={styles.cardTitle}>
@@ -252,13 +280,22 @@ const ActivityTracker = ({ navigation }) => {
                 />
               ))}
               <Card.Divider />
-              <TouchableOpacity
-                style={styles.add}
-                onPress={toggleModal}
-              >
-                <Text style={styles.addText}>Add Activities</Text>
-              </TouchableOpacity>
 
+              <View style={styles.buttonlist}>
+                <TouchableOpacity
+                  style={styles.add}
+                  onPress={() =>
+                    navigation.navigate("ActivityList", {
+                      completedActivities, 
+                    })
+                  }
+                >
+                  <Text style={styles.addText}>All Activity</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.add2} onPress={toggleModal}>
+                  <Text style={styles.addText}>Add Activity</Text>
+                </TouchableOpacity>
+              </View>
             </Card>
           </View>
         </SafeAreaView>
@@ -304,7 +341,7 @@ const styles = StyleSheet.create({
     width: width - 10,
     height: 15,
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: 0,
   },
   caregiverContainer: {
     flexDirection: "row",
@@ -361,7 +398,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     width: 100,
-
   },
   ardTitle: {
     flexDirection: "row",
@@ -385,11 +421,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
     elevation: 3,
     backgroundColor: "#439BE8",
     fontWeight: "bold",
+    position: "relative",
+    marginRight: 50,
+  },
+  add2: {
+    justifyContent: "center",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    elevation: 3,
+    backgroundColor: "#439BE8",
+    fontWeight: "bold",
+    position: "relative",
+    marginLeft: 50,
   },
   addText: {
     color: "white",
@@ -465,6 +515,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 17,
+  },
+  buttonlist: {
+    flex: 1,
+    flexDirection: "row",
+    alignContent: "space-between",
   },
 });
 

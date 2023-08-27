@@ -9,7 +9,7 @@ import {
   Image,
   TouchableHighlight,
 } from "react-native";
-import { Card } from "@rneui/themed";
+import { Card, Avatar } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 import AdaptiveView from "../../components/AdaptiveView";
 import { auth } from "../../firebase/firebaseConfigs";
@@ -65,7 +65,14 @@ const FamilyCircleDashBoard = (props) => {
       <Card style={[styles.card, activeCard === title && styles.activeCard]}>
         <View style={styles.item}>
           <View style={styles.avatarContainer}>
-            <Image style={styles.avatar} source={image} />
+              {/* /add avatar */}
+              <Avatar
+          title="dp"
+          size={70}
+          rounded
+          marginRight={10}
+          source={require("../../images/queen.png")}
+        />
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{title}</Text>
@@ -103,7 +110,7 @@ const FamilyCircleDashBoard = (props) => {
       {(authCtx) => (
         <AdaptiveView style={styles.container}>
           {
-            loading ? <Dialog.Loading /> : <MainCircleDashScreen />
+            loading ? < Dialog.Loading /> : <MainCircleDashScreen />
           }
         </AdaptiveView>
       )}
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     borderRadius: 20,
     padding: 10,
   },
