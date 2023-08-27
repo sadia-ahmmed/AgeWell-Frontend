@@ -130,6 +130,14 @@ const SettingsScreen = ({ navigation }) => {
   const [email, setEmail] = useState(authCtx.userCache.email);
   const [password, setPassword] = useState("");
 
+  const [weight, setWeight] = useState("65KG");
+  const [diabetics, setDiabetics] = useState("4.3");
+  const [bloodPressure, setBloodPressure] = useState("126/78");
+
+  const [isEditingWeight, setIsEditingWeight] = useState(false);
+  const [isEditingDiabetics, setIsEditingDiabetics] = useState(false);
+  const [isEditingBloodPressure, setIsEditingBloodPressure] = useState(false);
+
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -277,6 +285,20 @@ const SettingsScreen = ({ navigation }) => {
       })
   };
 
+  const handleSaveWeight = () => {
+    setIsEditingWeight(false);
+  };
+
+  const handleSaveDiabetics = () => {
+    setIsEditingDiabetics(false);
+  };
+
+  const handleSaveBloodPressure = () => {
+    setIsEditingBloodPressure(false);
+  };
+    
+
+
   return (
     <AdaptiveView style={styles.container}>
       <View style={styles.avatarContainer}>
@@ -341,11 +363,44 @@ const SettingsScreen = ({ navigation }) => {
 
       <Divider />
 
-      <FlatList
+            {/*  Weight,Diabetics,Blood Pressure*/}
+
+      <EditableRow
+        label="Weight"
+        value="65KG"
+        isEditing={false}
+        onChangeText={setWeight}
+        onEdit={() => setIsEditingWeight(true)}
+        onSave={handleSaveWeight}
+      />
+
+      <EditableRow
+        label="Diabetics"
+        value="4.3"
+        isEditing={false}
+        onChangeText={setDiabetics}
+        onEdit={() => setIsEditingDiabetics(true)}
+        onSave={handleSaveDiabetics}
+      />
+
+      <EditableRow
+        label="Blood Pressure"
+        value="126/78"
+        isEditing={false}
+        onChangeText={setBloodPressure}
+        onEdit={() => setIsEditingBloodPressure(true)}
+        onSave={handleSaveBloodPressure}
+      />
+
+
+
+
+
+      {/* <FlatList
         data={healthLogs}
         renderItem={renderHealthLogItem}
         keyExtractor={(item) => item.id}
-      />
+      /> */}
 
       <View style={{ margin: 20 }}>
         {/* <Button
