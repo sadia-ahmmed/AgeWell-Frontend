@@ -13,8 +13,9 @@ import AdaptiveView from "../../../components/AdaptiveView";
 const Calendar = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-   
-
+  const [reportlist, setReportList] = useState([]);
+  const [reportlistOnQuery, setReportListOnQuery] = useState([]);
+ 
   const dynamicStringSearch = (query) => {
     setSearch(query); // Update the search query state
   

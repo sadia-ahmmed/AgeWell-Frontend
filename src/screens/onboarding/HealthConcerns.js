@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "#439BE8",
     width: 100,
+
   },
   buttonText: {
     color: "white",

@@ -68,7 +68,8 @@ const MainScreen = ({ navigation }) => {
             style={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
           >
-            <View style={{ margin: 11 }}>
+            <Card.Divider/>
+            <View style={{ marginTop: 40 }}>
               <Text style={styles.headText}>Your Health Logs</Text>
               {/* <Card.Divider /> */}
             </View>
@@ -102,10 +103,6 @@ const MainScreen = ({ navigation }) => {
               </View>
             </View>
 
-            <View style={{ marginTop: 40, margin: 11, marginBottom: -10 }}>
-              <Text style={styles.headText}>Your CareGiver</Text>
-              {/* <Card.Divider /> */}
-            </View>
             <ActivityTracker navigation={navigation} />
             {/* <ActivityTracker navigation={navigation} /> */}
 
@@ -187,7 +184,7 @@ const styles = StyleSheet.create({
   },
 
   healthLogsContainer: {
-    marginTop: -10,
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignContent: "center",
@@ -220,8 +217,8 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   headText: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: "bold",
     color: "#439BE8",
     padding: 5,
     marginTop: -20,
