@@ -130,9 +130,9 @@ const SettingsScreen = ({ navigation }) => {
   const [email, setEmail] = useState(authCtx.userCache.email);
   const [password, setPassword] = useState("");
 
-  const [weight, setWeight] = useState("65KG");
+  const [weight, setWeight] = useState(authCtx.userCache.weight);
   const [diabetics, setDiabetics] = useState("4.3");
-  const [bloodPressure, setBloodPressure] = useState("126/78");
+  const [bloodPressure, setBloodPressure] = useState(authCtx.userCache.blood_pressure);
 
   const [isEditingWeight, setIsEditingWeight] = useState(false);
   const [isEditingDiabetics, setIsEditingDiabetics] = useState(false);
@@ -287,6 +287,38 @@ const SettingsScreen = ({ navigation }) => {
 
   const handleSaveWeight = () => {
     setIsEditingWeight(false);
+
+    let editedWeight = weight
+    if (!editedWeight.includes("KG")) {
+      editedWeight = `${editedWeight} KG`
+    }
+    editedWeight = editedWeight.trim()
+
+    const user_id = authCtx.userCache._id
+    const body = {
+      key: "weight",
+      weight: editedWeight
+    }
+
+    fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/set-account-detail`, {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${user_access_token}`
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(data => {
+        authCtx.setUserCache(data)
+        setWeight(editedWeight)
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
+
   };
 
   const handleSaveDiabetics = () => {
@@ -295,131 +327,147 @@ const SettingsScreen = ({ navigation }) => {
 
   const handleSaveBloodPressure = () => {
     setIsEditingBloodPressure(false);
+
+    const body = {
+      key: "blood_pressure",
+      blood_pressure: bloodPressure
+    }
+
+    fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/set-account-detail`, {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${user_access_token}`
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(data => {
+        authCtx.setUserCache(data)
+        setBloodPressure(bloodPressure)
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
   };
-    
+
 
 
   return (
     <AdaptiveView style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Avatar
-          title="dp"
-          onLongPress={handleProfilePictureChange}
-          size={82}
-          rounded
-          source={{ uri: `data:image/jpeg;base64,${authCtx.userCache.avatar}` }}
-          containerStyle={{ backgroundColor: "#6733b9" }}
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        <View style={styles.avatarContainer}>
+          <Avatar
+            title="dp"
+            onLongPress={handleProfilePictureChange}
+            size={82}
+            rounded
+            source={{ uri: `data:image/jpeg;base64,${authCtx.userCache.avatar}` }}
+            containerStyle={{ backgroundColor: "#6733b9" }}
+          />
+          <Text style={styles.nameTop}>{name}</Text>
+          {/* {authCtx.userCache.is_verified && <Text>Verified</Text>} */}
+          <Text style={styles.emailTop}>{email}</Text>
+        </View>
+
+        {
+          !authCtx.userCache.is_verified &&
+          <Pressable onPress={handleVerify} style={styles.button}>
+            <Text style={styles.buttonText}>Verify Account</Text>
+          </Pressable>
+        }
+
+        <Text style={styles.editText}>Edit General Information </Text>
+
+        <Divider />
+
+        <EditableRow
+          label="Name"
+          value={name}
+          isEditing={isEditingName}
+          onChangeText={setName}
+          onEdit={() => setIsEditingName(true)}
+          onSave={handleSaveName}
         />
-        <Text style={styles.nameTop}>{name}</Text>
-        {/* {authCtx.userCache.is_verified && <Text>Verified</Text>} */}
-        <Text style={styles.emailTop}>{email}</Text>
-      </View>
+        <EditableRow
+          label="Email"
+          value={email}
+          isEditing={isEditingEmail}
+          onChangeText={setEmail}
+          onEdit={() => setIsEditingEmail(true)}
+          onSave={handleSaveEmail}
+        />
 
-      {
-        !authCtx.userCache.is_verified &&
-        <Pressable onPress={handleVerify} style={styles.button}>
-          <Text style={styles.buttonText}>Verify Account</Text>
-        </Pressable>
-      }
+        <EditableBio
+          value={bio}
+          isEditing={isEditingBio}
+          onChangeText={setBio}
+          onEdit={() => setIsEditingBio(true)}
+          onSave={(editedBio) => {
+            setBio(editedBio);
+            setIsEditingBio(false);
+            console.log(editedBio)
+            handleSaveBio()
+          }}
+          isMultiline={true}
+          numberOfLines={4}
+        />
 
-      <Text style={styles.editText}>Edit General Information </Text>
 
-      <Divider />
+        <Text style={styles.editText}>Edit Health Logs </Text>
 
-      <EditableRow
-        label="Name"
-        value={name}
-        isEditing={isEditingName}
-        onChangeText={setName}
-        onEdit={() => setIsEditingName(true)}
-        onSave={handleSaveName}
-      />
-      <EditableRow
-        label="Email"
-        value={email}
-        isEditing={isEditingEmail}
-        onChangeText={setEmail}
-        onEdit={() => setIsEditingEmail(true)}
-        onSave={handleSaveEmail}
-      />
+        <Divider />
 
-      <EditableBio
-        value={bio}
-        isEditing={isEditingBio}
-        onChangeText={setBio}
-        onEdit={() => setIsEditingBio(true)}
-        onSave={(editedBio) => {
-          setBio(editedBio);
-          setIsEditingBio(false);
-          console.log(editedBio)
-          handleSaveBio()
-        }}
-        isMultiline={true}
-        numberOfLines={4}
-      />
-      
+        {/*  Weight,Diabetics,Blood Pressure*/}
 
-      <Text style={styles.editText}>Edit Health Logs </Text>
+        <EditableRow
+          label="Weight"
+          value={`${weight}`}
+          isEditing={isEditingWeight}
+          onChangeText={setWeight}
+          onEdit={() => setIsEditingWeight(true)}
+          onSave={handleSaveWeight}
+        />
 
-      <Divider />
+        {
+          authCtx.userCache.diabetics === "yes" || authCtx.userCache.diabetics >= "0" &&
+          <EditableRow
+            label="Diabetics"
+            value={diabetics}
+            isEditing={isEditingDiabetics}
+            onChangeText={setDiabetics}
+            onEdit={() => setIsEditingDiabetics(true)}
+            onSave={handleSaveDiabetics}
+          />
+        }
 
-            {/*  Weight,Diabetics,Blood Pressure*/}
-
-      <EditableRow
-        label="Weight"
-        value="65KG"
-        isEditing={false}
-        onChangeText={setWeight}
-        onEdit={() => setIsEditingWeight(true)}
-        onSave={handleSaveWeight}
-      />
-
-      <EditableRow
-        label="Diabetics"
-        value="4.3"
-        isEditing={false}
-        onChangeText={setDiabetics}
-        onEdit={() => setIsEditingDiabetics(true)}
-        onSave={handleSaveDiabetics}
-      />
-
-      <EditableRow
-        label="Blood Pressure"
-        value="126/78"
-        isEditing={false}
-        onChangeText={setBloodPressure}
-        onEdit={() => setIsEditingBloodPressure(true)}
-        onSave={handleSaveBloodPressure}
-      />
+        <EditableRow
+          label="Blood Pressure"
+          value={bloodPressure}
+          isEditing={isEditingBloodPressure}
+          onChangeText={setBloodPressure}
+          onEdit={() => setIsEditingBloodPressure(true)}
+          onSave={handleSaveBloodPressure}
+        />
 
 
 
 
 
-      {/* <FlatList
+        {/* <FlatList
         data={healthLogs}
         renderItem={renderHealthLogItem}
         keyExtractor={(item) => item.id}
       /> */}
 
-      <View style={{ margin: 20 }}>
-        {/* <Button
-          color="red"
-          style={{
-            marginTop: 10,
-            borderRadius: 20,
-            elevation: 3,
-            backgroundColor: "#439BE8",
-            marginLeft: 10,
-            marginRight: 10,
-          }}
-          title="LOGOUT"
-          onPress={onLogoutButtonPress}
-        /> */}
-        <Pressable onPress={onLogoutButtonPress} style={[styles.button, { marginLeft: 80, marginRight: 80, backgroundColor: "#A9A9A9" }]}>
-          <Text style={styles.buttonText}>LOGOUT</Text>
-        </Pressable>
-      </View>
+        <View style={{ margin: 20 }}>
+          <Pressable onPress={onLogoutButtonPress} style={[styles.button, { marginLeft: 80, marginRight: 80, backgroundColor: "#A9A9A9" }]}>
+            <Text style={styles.buttonText}>LOGOUT</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </AdaptiveView>
   );
 };

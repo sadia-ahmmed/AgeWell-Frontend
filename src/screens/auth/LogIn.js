@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Image, Text } from "@rneui/themed";
+import { Button, Icon, Input, Image, Text, Overlay } from "@rneui/themed";
 import React, { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { useState } from "react";
@@ -31,12 +31,14 @@ const LogIn = (props) => {
   const [forgot_pass_email, setForgotPassEmail] = useState();
   const [passdialog_visible, setPassDialogVisible] = useState(false);
 
+  const [loading, setLoading] = useState(false)
+
   const onLoginButtonPress = () => {
+    setLoading(true)
     if (!email || !password) {
       alert("Please fill in all fields.");
       return;
     }
-    
     setEmail(email.trim());
     setPassword(password.trim());
 
@@ -63,6 +65,7 @@ const LogIn = (props) => {
           .then((res) => res.json())
           .then((result) => {
             // console.log(result)
+            setLoading(false)
             setEmail("");
             setPassword("");
             authCtx.setUserCache(result);
@@ -104,6 +107,14 @@ const LogIn = (props) => {
               style={styles.image_styles}
             />
           </View>
+
+          <Overlay
+            isVisible={loading}
+          >
+            <View style={{ marginLeft: 20, marginRight: 20 }}>
+              <Dialog.Loading />
+            </View>
+          </Overlay>
 
           <Input
             label="Email address"
@@ -149,7 +160,7 @@ const LogIn = (props) => {
             >
               <Text style={styles.signUpButton}>Sign up</Text>
             </TouchableOpacity>
-            
+
 
             <Pressable onPress={onLoginButtonPress} style={styles.loginButton}>
               <Text style={styles.buttonText} >Log In</Text>
@@ -202,11 +213,11 @@ const styles = StyleSheet.create({
     width: 350,
     height: 280,
     alignSelf: "center",
-    
+
   },
   input: {
     marginBottom: 5,
-  
+
   },
   forgetPassWordContainer: {
     alignSelf: "flex-end",
@@ -216,7 +227,7 @@ const styles = StyleSheet.create({
     color: "#439BE8",
     fontWeight: "bold",
     fontSize: 14,
-  
+
     marginRight: 15,
   },
   bottomRow: {
@@ -225,24 +236,24 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 14,
-  
+
     marginRight: 10,
   },
   signUpButton: {
     color: "#439BE8",
     fontWeight: "bold",
     fontSize: 14,
-  
+
   },
   loginButton: {
-    justifyContent:"center",
+    justifyContent: "center",
     width: 75,
     // height: 32,
     // textAlign: "center",
     // textAlignVertical: "center",
-    borderRadius: 10, 
+    borderRadius: 10,
     marginLeft: 40,
-    
+
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderRadius: 20,

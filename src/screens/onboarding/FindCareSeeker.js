@@ -2,29 +2,32 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../providers/AuthProviders";
 
-const FindCareSeeker = (props) => {
+const FindCareSeeker = ({ index, setStep, setProgress, progressLength, navigation }) => {
   return (
     <AuthContext.Consumer>
-        {(auth) => (
-                <View style={styles.container}>
-                <Image
-                  source={require("../../../assets/findcareseeker.png")}
-                  style={styles.image}
-                />
-                <Text style={styles.heading}>Find Careseeker,</Text>
-                <Text style={styles.subHeading}>Provide Care</Text>
-                <View style={styles.descriptionContainer}>
-                  <Text style={styles.description}>
-                    Find the suitable careseekers who{"\n"}are
-                    looking for a person like you,{"\n"} 
-                    provide good service and earn
-                  </Text>
-                </View>
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("selfinfopage")}>
-                  <Text style={styles.buttonText}>Next</Text>
-                </TouchableOpacity>
-              </View>
-        )}
+      {(auth) => (
+        <View style={styles.container}>
+          <Image
+            source={require("../../../assets/findcareseeker.png")}
+            style={styles.image}
+          />
+          <Text style={styles.heading}>Find Careseeker,</Text>
+          <Text style={styles.subHeading}>Provide Care</Text>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.description}>
+              Find the suitable careseekers who{"\n"}are
+              looking for a person like you,{"\n"}
+              provide good service and earn
+            </Text>
+          </View>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            setStep(index + 1)
+            setProgress((index + 1) / progressLength)
+          }}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </AuthContext.Consumer>
 
   );
@@ -37,22 +40,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 375,
-    height: 280,
+    width: 275,
+    height: 180,
     marginBottom: 20,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 80,
+    marginTop: 100
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#00bfff",
     opacity: 0.8,
     fontFamily: "serif",
   },
   subHeading: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 20,
     color: "#00bfff",

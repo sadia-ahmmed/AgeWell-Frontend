@@ -32,7 +32,7 @@ const ActivityTracker = ({ navigation }) => {
   const [activityTimes, setActivityTimes] = useState(
     new Array(activities.length).fill(null)
   );
-  
+
 
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
@@ -133,12 +133,12 @@ const ActivityTracker = ({ navigation }) => {
     return (
       <View style={styles.activityContainer}>
         <View style={styles.labelAndTimeContainer}>
-            <Text style={styles.activityLabel}>{label}</Text>
-            <Text style={styles.timeText}>
-              {checkedIndexes.includes(index)
-                ? formatTime(activityTimes[index])
-                : "No Update"}
-            </Text>
+          <Text style={styles.activityLabel}>{label}</Text>
+          <Text style={styles.timeText}>
+            {checkedIndexes.includes(index)
+              ? formatTime(activityTimes[index])
+              : "No Update"}
+          </Text>
         </View>
         <View style={styles.checkboxContainer}>
           <CheckBox
@@ -225,7 +225,7 @@ const ActivityTracker = ({ navigation }) => {
                       aging well!{" "}
                     </Text>
                     <TextInput
-                      style={[styles.newActivityInput, {width:300} ]}
+                      style={[styles.newActivityInput, { width: 300 }]}
                       value={newActivityInput}
                       onChangeText={setNewActivityInput}
                       placeholder="Enter new activity your loved ones!"
@@ -253,11 +253,11 @@ const ActivityTracker = ({ navigation }) => {
               ))}
               <Card.Divider />
               <TouchableOpacity
-                    style={styles.add}
-                    onPress={toggleModal}
-                  >
-                    <Text style={styles.addText}>Add Activities</Text>
-                  </TouchableOpacity>
+                style={styles.add}
+                onPress={toggleModal}
+              >
+                <Text style={styles.addText}>Add Activities</Text>
+              </TouchableOpacity>
 
             </Card>
           </View>
@@ -360,8 +360,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     textAlign: "center",
-    width:100,
-    
+    width: 100,
+
   },
   ardTitle: {
     flexDirection: "row",
@@ -381,9 +381,9 @@ const styles = StyleSheet.create({
     color: "#439BE8",
     marginLeft: 5,
   },
-  add:{
-    justifyContent:"center",
-    borderRadius: 10, 
+  add: {
+    justifyContent: "center",
+    borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderRadius: 10,
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#439BE8",
     fontWeight: "bold",
   },
-  addText:{
+  addText: {
     color: "white",
     fontSize: 14,
     textAlign: "center",

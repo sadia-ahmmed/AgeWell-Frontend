@@ -1,11 +1,11 @@
-import { StyleSheet, Text, Pressable, FlatList, View, Platform } from "react-native";
+import { StyleSheet, Text, Pressable, FlatList, View, Platform, Clipboard, Linking } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Dialog, Divider, SearchBar } from "react-native-elements";
+import { Button, Dialog, Divider, SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
-import {  Image } from "@rneui/themed";
+import { Icon, Image, Overlay } from "@rneui/themed";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import AdaptiveView from "../../../components/AdaptiveView";
 // "expo-file-system": "^15.4.3",
@@ -15,23 +15,13 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [reportlist, setReportList] = useState([]);
   const [reportlistOnQuery, setReportListOnQuery] = useState([]);
- 
-  const dynamicStringSearch = (query) => {
-    setSearch(query); // Update the search query state
-  
-    query = query.trim().toLowerCase(); // Convert query to lowercase
-  
-    if (query === "") {
-      setReportListOnQuery([]); // Clear the filtered list
-      return;
-    }
-  
-    const queried_list = reportlist.filter((item) =>
-      item.file_name.toLowerCase().includes(query)
-    );
-  
-    setReportListOnQuery(queried_list);
+  const [linkModal, setLinkModal] = useState(false)
+
+
+  const updateSearch = (search) => {
+    setSearch(search);
   };
+
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
     const httpPolling = setInterval(() => {
@@ -79,7 +69,6 @@ const Calendar = () => {
           type: doc.mimeType === "image/jpeg" ? `image/${doc.type}` : `application/${doc.type}`,
         });
       }
-      
       const uid = auth.currentUser.uid;
       const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/reports/upload/${uid}`;
       const options = {
@@ -132,7 +121,6 @@ const Calendar = () => {
 
   const ViewReportList = () => (
     <>
-    
       {
         reportlist.length === 0 ? <Text style={{ textAlign: "center", marginTop: 30 }}>No reports added yet</Text> :
           // <FlatList
@@ -145,7 +133,7 @@ const Calendar = () => {
             data={reportlistOnQuery.length > 0 ? reportlistOnQuery : reportlist}
             keyExtractor={(item) => item._id}
             renderItem={renderReportItem}
-/>
+          />
       }
     </>
   )
@@ -188,12 +176,28 @@ const Calendar = () => {
             size={15}
             color="white"
             style={styles.linkIcon}
+            onPress={() => setLinkModal(true)}
           />
         </View>
       </View>
       {
         loading ? <Dialog.Loading /> : <ViewReportList />
       }
+      <Overlay
+        isVisible={linkModal}
+        onBackdropPress={() => setLinkModal(false)}
+      >
+        <View style={{ padding: 20 }}>
+          <Text style={{ borderWidth: 1, borderRadius: 5, padding: 10 }}>{`http://localhost:3001/reports/${auth.currentUser.uid}`}</Text>
+          <View style={{ marginTop: 10, flexDirection: "row", gap: 30, alignItems: "center", alignContent: "center", justifyContent: "center" }}>
+            <Button type="outlined" title="Copy Link" onPress={() => {
+              Clipboard.setString(`http://localhost:3001/reports/${auth.currentUser.uid}`)
+              alert("Link copied")
+            }} />
+            <Button title="Open in browser" onPress={() => Linking.openURL(`http://localhost:3001/reports/${auth.currentUser.uid}`)} />
+          </View>
+        </View>
+      </Overlay>
     </AdaptiveView>
   );
 };

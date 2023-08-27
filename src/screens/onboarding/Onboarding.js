@@ -9,11 +9,16 @@ import { AuthContext } from '../../providers/AuthProviders'
 import { LinearProgress, Overlay } from "@rneui/themed";
 import OnboardingClosureScreen from './OnboardingClosureScreen'
 import AdaptiveView from '../../components/AdaptiveView'
+import DiabetesPage from './DiabetesPage'
+import BloodPressure from './BloodPressure'
+import CaringConnection from './CaringConnection'
+import FindCareSeeker from './FindCareSeeker'
+import SelfInfoPage from './SelfInfoPage'
 
 const Onboarding = () => {
 
     const authCtx = useContext(AuthContext)
-    const onboardingSteps = [AccountSelection, GenderSelection, BloodGroupSelection]
+    const onboardingSteps = [CaringConnection, FindCareSeeker, AccountSelection, SelfInfoPage, BloodGroupSelection, DiabetesPage, BloodPressure]
     const progressLen = onboardingSteps.length
 
     const [step, setStep] = useState(0)

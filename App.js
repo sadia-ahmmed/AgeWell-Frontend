@@ -106,8 +106,8 @@ const DashboardTabScreens = () => {
                 !authCtx.userCache.is_verified &&
                 route.name === "Closure"
               ) {
-                iconName = focused ? "star" : "star-o";
-                iconType = "font-awesome";
+                iconName = focused ? "star" : "star-outline";
+                iconType = "ionicon";
               }
               return (
                 <Icon name={iconName} type={iconType} color={color} size={25} />
@@ -230,7 +230,7 @@ const DashboardTabScreens = () => {
           )}
 
           {/* Main chats tab bar */}
-          {authCtx.userCache.is_verified && (
+          {/* {authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Chats"
               component={HealthConcerns}
@@ -245,7 +245,8 @@ const DashboardTabScreens = () => {
                 },
               }}
             />
-          )}
+          )} */}
+
           <DashboardTabs.Screen
             name="Settings"
             component={SettingsScreen}
