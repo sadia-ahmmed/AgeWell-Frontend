@@ -2,7 +2,7 @@ import { Button, Icon, Input, Image, Text } from "@rneui/themed";
 import React, { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { useState } from "react";
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Pressable } from "react-native";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -144,9 +144,11 @@ const LogIn = (props) => {
             >
               <Text style={styles.signUpButton}>Sign up</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onLoginButtonPress}>
-              <Text style={styles.loginButton}>Log In</Text>
-            </TouchableOpacity>
+            
+
+            <Pressable onPress={onLoginButtonPress} style={styles.loginButton}>
+              <Text style={styles.buttonText} >Log In</Text>
+            </Pressable>
           </View>
 
           <Dialog
@@ -188,26 +190,28 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   image_container: {
-    marginBottom: 20,
+    marginTop: -100,
+    marginBottom: 10,
   },
   image_styles: {
     width: 350,
     height: 280,
     alignSelf: "center",
+    
   },
   input: {
     marginBottom: 5,
-    fontFamily: "sans-serif",
+  
   },
   forgetPassWordContainer: {
     alignSelf: "flex-end",
     marginBottom: 20,
   },
   forgetPassword: {
-    color: "#00bfff",
+    color: "#439BE8",
     fontWeight: "bold",
     fontSize: 14,
-    fontFamily: "sans-serif",
+  
     marginRight: 15,
   },
   bottomRow: {
@@ -216,27 +220,34 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 14,
-    fontFamily: "sans-serif",
+  
     marginRight: 10,
   },
   signUpButton: {
-    color: "#00bfff",
+    color: "#439BE8",
     fontWeight: "bold",
     fontSize: 14,
-    fontFamily: "sans-serif",
+  
   },
   loginButton: {
-    backgroundColor: "#00bfff",
-    color: "white",
-    fontWeight: "bold",
-    width: 65,
-    height: 32,
-    textAlign: "center",
-    textAlignVertical: "center",
-    borderRadius: 10,
-    fontSize: 16,
-    fontFamily: "sans-serif",
+    justifyContent:"center",
+    width: 75,
+    // height: 32,
+    // textAlign: "center",
+    // textAlignVertical: "center",
+    borderRadius: 10, 
     marginLeft: 40,
+    
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: "#439BE8",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+    textAlign: "center",
   },
 });
 

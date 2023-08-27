@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
-import IonIcon from "react-native-vector-icons/Ionicons";
 import { Icon, Image } from "@rneui/themed";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -146,7 +145,7 @@ const Calendar = () => {
         value={search}
         lightTheme
         round
-        platform={Platform.OS}
+        platform="ios"
         blurOnSubmit={false}
         onChangeText={updateSearch}
         inputContainerStyle={{

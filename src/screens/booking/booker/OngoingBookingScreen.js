@@ -5,7 +5,7 @@ import { auth } from '../../../firebase/firebaseConfigs'
 import { IP_ADDRESS, IP_PORT } from '../../../../configs'
 import { Button, Dialog, Divider } from '@rneui/themed'
 import AdaptiveView from '../../../components/AdaptiveView'
-import AdaptiveWebView from '../../../components/AdaptiveWebView'
+
 import { Linking } from 'react-native'
 import InAppBrowser from 'react-native-inappbrowser-reborn'
 
