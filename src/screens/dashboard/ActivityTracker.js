@@ -48,7 +48,6 @@ const ActivityTracker = ({ navigation }) => {
             .then(data => {
                 setCaregiver(data.nurseDetails)
                 // setIsLoading(false)
-                console.log(data)
             })
             .catch(err => {
                 alert(err.message)
@@ -81,6 +80,9 @@ const ActivityTracker = ({ navigation }) => {
   };
 
   useEffect(() => {
+
+
+    // Initialize activities
     const initialActivities = [
       { id: 1, label: "After Lunch Glucose check", checked: false },
       { id: 2, label: "After Lunch Blood Pressure check", checked: false },
