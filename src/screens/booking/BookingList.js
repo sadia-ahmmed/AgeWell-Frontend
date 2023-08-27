@@ -127,7 +127,7 @@ const BookingList = (props) => {
           <AdaptiveView styles={styles.pageContainer}>
             <View style={styles.container}>
               <View style={styles.searchContainer}>
-                <SearchBar
+              <SearchBar
                   placeholder="Search Caregivers"
                   value={searchQuery}
                   lightTheme
@@ -164,7 +164,7 @@ const BookingList = (props) => {
 
 const styles = StyleSheet.create({
   pageContainer: {
-     flex: 1,
+    flex: 1,
     backgroundColor: "white",
   },
   container: {
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   searchContainer: {
-    marginTop: -55,
+    // marginTop: 55,
     padding: 5,
     paddingTop: 8,
     backgroundColor: "white",

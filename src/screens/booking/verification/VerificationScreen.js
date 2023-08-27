@@ -51,6 +51,8 @@ const VerificationScreen = () => {
             }
         }
 
+        console.log(fileData1, fileData2)
+
         const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/user/verification-send/${auth.currentUser.uid}`
         const options = {
             mode: "cors",
