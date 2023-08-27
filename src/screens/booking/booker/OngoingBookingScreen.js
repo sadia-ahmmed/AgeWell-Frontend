@@ -109,6 +109,18 @@ const OngoingBookingScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Complete Appointment</Text>
         </Pressable>
       )}
+
+      {authCtx.userCache.type === "user" && (
+        <Pressable style={styles.button} onPress={() => Linking.openURL(`tel:${appointment.nurseDetails.phone}`)}>
+          <Text style={styles.buttonText}>Phone: {appointment.nurseDetails.phone}</Text>
+        </Pressable>
+      )}
+
+      {authCtx.userCache.type === "nurse" && (
+        <Pressable style={styles.button} onPress={() => Linking.openURL(`tel:${appointment.userDetails.phone}`)}>
+          <Text style={styles.buttonText}>Phone: {appointment.userDetails.phone}</Text>
+        </Pressable>
+      )}
       {/* <HealthConcerns /> */}
     </Card>
   );

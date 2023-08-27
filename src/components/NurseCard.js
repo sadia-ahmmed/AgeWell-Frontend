@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     //     },
     //     margin: 20,
     //     //flexDirection: 'row'
-      
+
     // },
     // image: {
     //     width: 100,
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     //     borderRadius: 20,
     //     borderWidth: 1,
     //     borderColor: "skyblue",
-     
-       
+
+
     // },
     // nurse_name: {
     //     fontWeight: 'bold',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         marginRight: 20,
-        
+
     },
     image: {
         width: 100,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 1,
         borderColor: "skyblue",
-        marginLeft: 0, 
+        marginLeft: 0,
     },
     infoContainer: {
         flex: 1,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         paddingBottom: 8,
-        marginTop:-5,
+        marginTop: -5,
         color: "#439BE8",
 
     },
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     ratings: {
-        
+
         fontSize: 12,
-        marginTop: 10, 
-        
+        marginTop: 10,
+
     },
 })
