@@ -74,7 +74,6 @@ const OngoingBookingScreen = ({ navigation }) => {
         </AdaptiveView>
     )
 
-
     const Screen = () => (
         <>
             <Text>Appointment {authCtx.userCache.type === "nurse" ? `for:` : `nurse:`}</Text>
