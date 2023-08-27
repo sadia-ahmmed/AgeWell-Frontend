@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image,FlatList  } from "react-native";
 import React from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: -20,
     marginBottom: 8,
+    marginLeft: -5,
   },
   scrollContainer: {
     marginTop: -30,

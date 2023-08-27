@@ -69,7 +69,6 @@ const Calendar = () => {
           type: doc.mimeType === "image/jpeg" ? `image/${doc.type}` : `application/${doc.type}`,
         });
       }
-
       const uid = auth.currentUser.uid;
       const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/reports/upload/${uid}`;
       const options = {
@@ -122,7 +121,6 @@ const Calendar = () => {
 
   const ViewReportList = () => (
     <>
-
       {
         reportlist.length === 0 ? <Text style={{ textAlign: "center", marginTop: 30 }}>No reports added yet</Text> :
           // <FlatList

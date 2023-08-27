@@ -79,7 +79,7 @@ const OngoingBookingScreen = ({ navigation }) => {
           size={70}
           rounded
           marginRight={10}
-          source={{ uri: `data:image/jpeg;base64,${appointment.nurseDetails.avatar}` }}
+          source={{ uri: `data:image/jpeg;base64,${authCtx.userCache.type === "nurse" ? appointment.userDetails.avatar : appointment.nurseDetails.avatar}` }}
         />
         <View style={styles.nameContainer}>
           <Text style={styles.nurse_text}>
