@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
+//import { Swipeable } from "react-native-gesture-handler";
 import {
   StyleSheet,
   Text,
