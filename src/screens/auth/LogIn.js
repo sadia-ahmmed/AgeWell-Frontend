@@ -72,6 +72,7 @@ const LogIn = (props) => {
             authCtx.setLoggedIn(true);
           })
           .catch((err) => {
+            setLoading(false)
             alert(err.message);
           });
       })
