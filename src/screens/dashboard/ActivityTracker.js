@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 //import { Swipeable } from "react-native-gesture-handler";
 import {
   StyleSheet,
@@ -18,6 +18,7 @@ import AdaptiveView from "../../components/AdaptiveView";
 import { Pressable } from "react-native";
 import { auth } from "../../firebase/firebaseConfigs";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
+// import Checkbox from "@mui/material";
 
 const ActivityTracker = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
@@ -105,16 +106,6 @@ const ActivityTracker = ({ navigation }) => {
         return updatedTimes;
       });
     }
-    if (!checkedIndexes.includes(index)) {
-      const updatedIndexes = [...checkedIndexes, index];
-      setCheckedIndexes(updatedIndexes);
-      const currentTime = new Date();
-      setActivityTimes((prevTimes) => {
-        const updatedTimes = [...prevTimes];
-        updatedTimes[index] = currentTime;
-        return updatedTimes;
-      });
-    }
   };
 
   const ActivityCard = ({ label, checked, index }) => {
@@ -142,19 +133,12 @@ const ActivityTracker = ({ navigation }) => {
     return (
       <View style={styles.activityContainer}>
         <View style={styles.labelAndTimeContainer}>
-          <View style={styles.labelAndTimeContainer}>
             <Text style={styles.activityLabel}>{label}</Text>
             <Text style={styles.timeText}>
               {checkedIndexes.includes(index)
                 ? formatTime(activityTimes[index])
                 : "No Update"}
             </Text>
-          </View>
-          <Text style={styles.timeText}>
-            {checkedIndexes.includes(index)
-              ? formatTime(activityTimes[index])
-              : "No Update"}
-          </Text>
         </View>
         <View style={styles.checkboxContainer}>
           <CheckBox
@@ -202,37 +186,20 @@ const ActivityTracker = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
           <View style={styles.content}>
             {authCtx.userCache.ongoingAppointment && caregiver && (
-              <Card style={styles.card}>
-                <Text style={styles.headText}>Your CareGiver</Text>
-                <Card.Divider />
+              <><Text style={styles.headText}>Your CareGiver</Text><Card style={styles.card}>
                 <CaregiverCard {...caregiver} />
-              </Card>
+              </Card></>
             )}
-
+            <Text style={styles.headText}> My Activities</Text>
             <Card style={styles.card}>
               <Card.Title style={styles.cardTitle}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.headText}> My Activities</Text>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={styles.addButton}
                     onPress={toggleModal}
                   >
                     <AntIcon name="plus" size={20} color="#B8B8B8" />
-                  </TouchableOpacity>
-                </View>
-              </Card.Title>
-
-              <Card.Divider />
-
-              <Card.Title style={styles.cardTitle}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.titleText}>Activities</Text>
-                  <TouchableOpacity
-                    style={styles.addButton}
-                    onPress={toggleModal}
-                  >
-                    <AntIcon name="plus" size={20} color="#B8B8B8" />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               </Card.Title>
               <View>
@@ -271,14 +238,11 @@ const ActivityTracker = ({ navigation }) => {
                         toggleModal();
                       }}
                     >
-                      <Text style={styles.buttonText}>Add </Text>
+                      <Text style={styles.buttonText}>Add</Text>
                     </Pressable>
                   </AdaptiveView>
                 </Modal>
               </View>
-
-              <Card.Divider />
-
               {activities.map((activity, index) => (
                 <ActivityCard
                   key={activity.id}
@@ -287,6 +251,14 @@ const ActivityTracker = ({ navigation }) => {
                   index={index}
                 />
               ))}
+              <Card.Divider />
+              <TouchableOpacity
+                    style={styles.add}
+                    onPress={toggleModal}
+                  >
+                    <Text style={styles.addText}>Add Activities</Text>
+                  </TouchableOpacity>
+
             </Card>
           </View>
         </SafeAreaView>
@@ -329,8 +301,10 @@ const styles = StyleSheet.create({
   card: {
     padding: 20,
     margin: 10,
-    width: width - 20,
+    width: width - 10,
+    height: 15,
     alignSelf: "center",
+    marginTop: 10,
   },
   caregiverContainer: {
     flexDirection: "row",
@@ -407,6 +381,22 @@ const styles = StyleSheet.create({
     color: "#439BE8",
     marginLeft: 5,
   },
+  add:{
+    justifyContent:"center",
+    borderRadius: 10, 
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    elevation: 3,
+    backgroundColor: "#439BE8",
+    fontWeight: "bold",
+  },
+  addText:{
+    color: "white",
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
   addButton: {
     marginLeft: 160,
   },
@@ -427,7 +417,7 @@ const styles = StyleSheet.create({
     color: "#439BE8",
     fontWeight: "bold",
     padding: 5,
-    marginTop: -5,
+    marginTop: 8,
   },
   labelAndTimeContainer: {
     flex: 1,
@@ -462,7 +452,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   addButton: {
-    marginLeft: 190,
+    marginLeft: 215,
   },
   image_styles: {
     justifyContent: "center",
