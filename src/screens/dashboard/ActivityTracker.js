@@ -120,10 +120,7 @@ const ActivityTracker = ({ navigation }) => {
       });
 
 
-      setActivities((prevActivities) => {
-        const updatedActivities = prevActivities.filter((_, i) => i !== index);
-        return updatedActivities;
-      });
+      setCheckedIndexes((prevIndexes) => [...prevIndexes, index]);
 
     } 
     
@@ -218,7 +215,7 @@ const ActivityTracker = ({ navigation }) => {
                   </Card>
                 </>
               )}
-            <Text style={styles.headText}> My Activities</Text>
+            <Text style={styles.headText}> Upcoming Activities</Text>
             <Card style={styles.card}>
               <Card.Title style={styles.cardTitle}>
                 <View style={styles.titleContainer}>
