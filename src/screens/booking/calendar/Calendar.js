@@ -1,11 +1,11 @@
-import { StyleSheet, Text, Pressable, FlatList, View, Platform } from "react-native";
+import { StyleSheet, Text, Pressable, FlatList, View, Platform, Clipboard, Linking } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Dialog, Divider, SearchBar } from "react-native-elements";
+import { Button, Dialog, Divider, SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
-import { Icon, Image } from "@rneui/themed";
+import { Icon, Image, Overlay } from "@rneui/themed";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage } from "@fortawesome/free-regular-svg-icons";
@@ -17,6 +17,7 @@ const Calendar = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [reportlist, setReportList] = useState([]);
+  const [linkModal, setLinkModal] = useState(false)
 
 
   const updateSearch = (search) => {
@@ -175,12 +176,28 @@ const Calendar = () => {
             size={15}
             color="white"
             style={styles.linkIcon}
+            onPress={() => setLinkModal(true)}
           />
         </View>
       </View>
       {
         loading ? <Dialog.Loading /> : <ViewReportList />
       }
+      <Overlay
+        isVisible={linkModal}
+        onBackdropPress={() => setLinkModal(false)}
+      >
+        <View style={{ padding: 20 }}>
+          <Text style={{ borderWidth: 1, borderRadius: 5, padding: 10 }}>{`http://localhost:3001/reports/${auth.currentUser.uid}`}</Text>
+          <View style={{ marginTop: 10, flexDirection: "row", gap: 30, alignItems: "center", alignContent: "center", justifyContent: "center" }}>
+            <Button type="outlined" title="Copy Link" onPress={() => {
+              Clipboard.setString(`http://localhost:3001/reports/${auth.currentUser.uid}`)
+              alert("Link copied")
+            }} />
+            <Button title="Open in browser" onPress={() => Linking.openURL(`http://localhost:3001/reports/${auth.currentUser.uid}`)} />
+          </View>
+        </View>
+      </Overlay>
     </AdaptiveView>
   );
 };
