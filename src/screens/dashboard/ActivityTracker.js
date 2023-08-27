@@ -30,6 +30,7 @@ const ActivityTracker = ({ navigation }) => {
   const [activityTimes, setActivityTimes] = useState(
     new Array(activities.length).fill(null)
   );
+  
 
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
