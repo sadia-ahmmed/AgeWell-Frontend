@@ -23,6 +23,7 @@ import SettingsScreen from "./src/screens/settings/settings";
 import HospitalPackageCard from "./src/components/HospitalPackageCard";
 import packages, { Packages } from "./src/screens/dashboard/packageList";
 import { decode, encode } from 'base-64'
+import HealthConcerns from "./src/screens/onboarding/HealthConcerns";
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -105,8 +106,8 @@ const DashboardTabScreens = () => {
                 !authCtx.userCache.is_verified &&
                 route.name === "Closure"
               ) {
-                iconName = focused ? "star" : "star-o";
-                iconType = "font-awesome";
+                iconName = focused ? "star" : "star-outline";
+                iconType = "ionicon";
               }
               return (
                 <Icon name={iconName} type={iconType} color={color} size={25} />
@@ -232,7 +233,7 @@ const DashboardTabScreens = () => {
           {/* {authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Chats"
-              component={BookingList}
+              component={HealthConcerns}
               options={{
                 headerShown: false,
                 title: "Chats",

@@ -3,11 +3,11 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
 
-const CaringConnection = (props) => {
+const CaringConnection = ({ index, setStep, setProgress, progressLength, navigation }) => {
 
   return (
     <AuthContext.Consumer>
-      {(auth) => (
+      {(authCtx) => (
         <View style={styles.container}>
           <Text style={styles.headline}>Caring Connection</Text>
           <Text style={styles.headline}>for Generations!</Text>
@@ -17,7 +17,10 @@ const CaringConnection = (props) => {
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("findcareseeker")}
+            onPress={() => {
+              setStep(index + 1)
+              setProgress((index + 1) / progressLength)
+            }}
           >
             <Text style={styles.buttonText}>Get Started</Text>
           </TouchableOpacity>
@@ -34,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headline: {
-    fontSize: 35,
+    fontSize: 25,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 5,
@@ -42,8 +45,8 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 150,
+    height: 150,
     marginBottom: 30,
   },
   button: {

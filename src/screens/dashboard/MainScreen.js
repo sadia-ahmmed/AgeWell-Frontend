@@ -18,6 +18,7 @@ import HospitalPackageCard from "../../components/HospitalPackageCard";
 import Package from "./Package";
 import Packages from "./packageList";
 import { Pressable } from "react-native";
+import healthData from "./healthData";
 
 const MainScreen = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -68,44 +69,25 @@ const MainScreen = ({ navigation }) => {
             style={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
           >
-            <View style={{ margin: 11 }}>
+            <Card.Divider />
+            <View style={{ marginTop: 40 }}>
               <Text style={styles.headText}>Your Health Logs</Text>
               {/* <Card.Divider /> */}
             </View>
 
             <View style={styles.healthLogsContainer}>
-              <View style={styles.miniCard}>
-                <Image
-                  source={require("../../../assets/scale.png")}
-                  style={styles.cardImage}
-                />
-                <Text style={styles.cardName}>Weight</Text>
-                <Text style={styles.cardPoints}>65KG</Text>
-              </View>
-
-              <View style={styles.miniCard}>
-                <Image
-                  source={require("../../../assets/diabetics.png")}
-                  style={styles.cardImage}
-                />
-                <Text style={styles.cardName}>Diabetics</Text>
-                <Text style={styles.cardPoints}>4.3</Text>
-              </View>
-
-              <View style={styles.miniCard}>
-                <Image
-                  source={require("../../../assets/blood-pressure.png")}
-                  style={styles.cardImage}
-                />
-                <Text style={[styles.cardName]}>Blood Pressure</Text>
-                <Text style={styles.cardPoints}>126/78</Text>
-              </View>
+              {Object.keys(healthData).map((key) => (
+                <View style={styles.miniCard} key={key}>
+                  <Image
+                    source={healthData[key].icon}
+                    style={styles.cardImage}
+                  />
+                  <Text style={styles.cardName}>{healthData[key].name}</Text>
+                  <Text style={styles.cardPoints}>{healthData[key].value}</Text>
+                </View>
+              ))}
             </View>
 
-            <View style={{ marginTop: 40, margin: 11, marginBottom: -10 }}>
-              <Text style={styles.headText}>Your CareGiver</Text>
-              {/* <Card.Divider /> */}
-            </View>
             <ActivityTracker navigation={navigation} />
             {/* <ActivityTracker navigation={navigation} /> */}
 
@@ -134,9 +116,7 @@ const MainScreen = ({ navigation }) => {
               </Pressable>
             </View>
           </ScrollView>
-          {
-
-            authCtx.userCache.type === "user" &&
+          {authCtx.userCache.type === "user" && (
             <SpeedDial
               color="#46C1E2"
               isOpen={open}
@@ -170,7 +150,7 @@ const MainScreen = ({ navigation }) => {
                 />
               )}
             </SpeedDial>
-          }
+          )}
         </AdaptiveView>
       )}
     </AuthContext.Consumer>
@@ -183,11 +163,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
     flex: 1,
-    marginBottom:-12,
+    marginBottom: -12,
   },
 
   healthLogsContainer: {
-    marginTop: -10,
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignContent: "center",
@@ -220,8 +200,8 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   headText: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: "bold",
     color: "#439BE8",
     padding: 5,
     marginTop: -20,

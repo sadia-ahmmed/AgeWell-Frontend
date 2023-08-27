@@ -34,7 +34,11 @@ const LogIn = (props) => {
   const [loading, setLoading] = useState(false)
 
   const onLoginButtonPress = () => {
-    setLoading(true)
+    if (!email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
     setEmail(email.trim());
     setPassword(password.trim());
 

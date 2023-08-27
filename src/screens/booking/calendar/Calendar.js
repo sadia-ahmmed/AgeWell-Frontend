@@ -7,9 +7,6 @@ import { IP_ADDRESS, IP_PORT } from "../../../../configs";
 import { auth } from "../../../firebase/firebaseConfigs";
 import { Icon, Image, Overlay } from "@rneui/themed";
 import AntIcon from "react-native-vector-icons/AntDesign";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileImage } from "@fortawesome/free-regular-svg-icons";
-import { FileImageOutlined } from "@ant-design/icons";
 import AdaptiveView from "../../../components/AdaptiveView";
 // "expo-file-system": "^15.4.3",
 
@@ -17,13 +14,13 @@ const Calendar = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [reportlist, setReportList] = useState([]);
+  const [reportlistOnQuery, setReportListOnQuery] = useState([]);
   const [linkModal, setLinkModal] = useState(false)
 
 
   const updateSearch = (search) => {
     setSearch(search);
   };
-
 
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
@@ -72,8 +69,6 @@ const Calendar = () => {
           type: doc.mimeType === "image/jpeg" ? `image/${doc.type}` : `application/${doc.type}`,
         });
       }
-
-
 
       const uid = auth.currentUser.uid;
       const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/reports/upload/${uid}`;
@@ -127,10 +122,17 @@ const Calendar = () => {
 
   const ViewReportList = () => (
     <>
+
       {
         reportlist.length === 0 ? <Text style={{ textAlign: "center", marginTop: 30 }}>No reports added yet</Text> :
+          // <FlatList
+          //   data={reportlist}
+          //   keyExtractor={(item) => item._id}
+          //   renderItem={renderReportItem}
+          // />
+
           <FlatList
-            data={reportlist}
+            data={reportlistOnQuery.length > 0 ? reportlistOnQuery : reportlist}
             keyExtractor={(item) => item._id}
             renderItem={renderReportItem}
           />
@@ -148,7 +150,7 @@ const Calendar = () => {
         round
         platform="ios"
         blurOnSubmit={false}
-        onChangeText={updateSearch}
+        onChangeText={dynamicStringSearch}
         inputContainerStyle={{
           backgroundColor: "#F5FDFF",
           borderColor: "#439BE8",
