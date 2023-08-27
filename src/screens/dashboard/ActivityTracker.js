@@ -19,37 +19,41 @@ import { auth } from "../../firebase/firebaseConfigs";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
 
 const ActivityTracker = ({ navigation }) => {
-
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   const [caregiver, setCaregiver] = useState(null);
   const [activities, setActivities] = useState([]);
   const [checkedIndexes, setCheckedIndexes] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [newActivityInput, setNewActivityInput] = useState("");
+
   const [activityTimes, setActivityTimes] = useState(
     new Array(activities.length).fill(null)
   );
+
   useEffect(() => {
-    const user_access_token = auth.currentUser.stsTokenManager.accessToken
+    const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
-        const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get-appointment/${authCtx.userCache.ongoingAppointmentID}`
-        const options = {
-            mode: "cors",
-            method: "GET",
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user_access_token}` }
-        }
+    const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get-appointment/${authCtx.userCache.ongoingAppointmentID}`;
+    const options = {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user_access_token}`,
+      },
+    };
 
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setCaregiver(data.nurseDetails)
-                // setIsLoading(false)
-            })
-            .catch(err => {
-                alert(err.message)
-            })
-  }, [])
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((data) => {
+        setCaregiver(data.nurseDetails);
+        // setIsLoading(false)
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }, []);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -80,9 +84,6 @@ const ActivityTracker = ({ navigation }) => {
   };
 
   useEffect(() => {
-
-
-    // Initialize activities
     const initialActivities = [
       { id: 1, label: "After Lunch Glucose check", checked: false },
       { id: 2, label: "After Lunch Blood Pressure check", checked: false },
@@ -140,13 +141,13 @@ const ActivityTracker = ({ navigation }) => {
       <View style={styles.activityContainer}>
         <View style={styles.labelAndTimeContainer}>
           <View style={styles.labelAndTimeContainer}>
-          <Text style={styles.activityLabel}>{label}</Text>
-          <Text style={styles.timeText}>
-            {checkedIndexes.includes(index)
-              ? formatTime(activityTimes[index])
-              : "No Update"}
-          </Text>
-        </View>
+            <Text style={styles.activityLabel}>{label}</Text>
+            <Text style={styles.timeText}>
+              {checkedIndexes.includes(index)
+                ? formatTime(activityTimes[index])
+                : "No Update"}
+            </Text>
+          </View>
           <Text style={styles.timeText}>
             {checkedIndexes.includes(index)
               ? formatTime(activityTimes[index])
@@ -175,21 +176,24 @@ const ActivityTracker = ({ navigation }) => {
     imageURL,
   }) => {
     return (
-        <View style={styles.caregiverContainer}>
-          <Image style={styles.caregiverImage} source={{uri: `data:image/jpeg;base64,${caregiver.avatar}`}} />
-          <View style={styles.caregiverInfo}>
-            <Text style={styles.caregiverName}>
-              {caregiver.fullname}, {'Nurse'}
-            </Text>
-            <Text style={styles.smallText}>{loggedInTime}</Text>
-            <Text style={styles.smallText}>
-              Rating: <Text style={styles.ratingText}>{rating} out of 5</Text>
-            </Text>
-          </View>
+      <View style={styles.caregiverContainer}>
+        <Image
+          style={styles.caregiverImage}
+          source={{ uri: `data:image/jpeg;base64,${caregiver.avatar}` }}
+        />
+        <View style={styles.caregiverInfo}>
+          <Text style={styles.caregiverName}>
+            {caregiver.fullname}, {"Nurse"}
+          </Text>
+          <Text style={styles.smallText}>{loggedInTime}</Text>
+          <Text style={styles.smallText}>
+            Rating: <Text style={styles.ratingText}>{rating} out of 5</Text>
+          </Text>
         </View>
+      </View>
     );
   };
-  // authCtx.userCache.ongoingAppointment
+
   return (
     <AuthContext.Consumer>
       {(authCtx) => (
@@ -358,7 +362,6 @@ const styles = StyleSheet.create({
   },
   activityLabel: {
     width: 150,
-    // alignItems:"flex-start"
   },
   checkboxContainer: {
     marginRight: 2,
