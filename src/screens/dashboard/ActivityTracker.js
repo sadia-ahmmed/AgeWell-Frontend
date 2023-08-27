@@ -10,7 +10,7 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import { Card, Image, Button, CheckBox } from "@rneui/themed";
+import { Card, Image, CheckBox } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 import Ionicons from "react-native-ionicons";
 import AntIcon from "react-native-vector-icons/AntDesign";
