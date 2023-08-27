@@ -53,12 +53,12 @@ const BloodGroupSelection = ({ index, setStep, setProgress, progressLength }) =>
     return (
         <View>
             <Text style={styles.title_text}>Choose Blood Group</Text>
-            <View style={{ flexDirection: "row", overflow: "scroll" }}>
+            <View style={{ flexDirection: "row", overflow: "scroll" ,  }}>
                 {
                     groups.slice(0, 4).map((element, index) => <BloodGroupCard key={index} focus={element === blood_group ? true : false} text={element} onPress={() => setBloodGroup(element)} />)
                 }
             </View>
-            <View style={{ flexDirection: "row", overflow: "scroll" }}>
+            <View style={{ flexDirection: "row", overflow: "scroll" ,}}>
                 {
                     groups.slice(4, undefined).map((element, index) => <BloodGroupCard key={index} focus={element === blood_group ? true : false} text={element} onPress={() => setBloodGroup(element)} />)
                 }
