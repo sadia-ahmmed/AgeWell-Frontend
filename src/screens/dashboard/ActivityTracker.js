@@ -185,7 +185,7 @@ const ActivityTracker = ({ navigation }) => {
       {(authCtx) => (
         <SafeAreaView style={styles.container}>
           <View style={styles.content}>
-            {authCtx.userCache.ongoingAppointment && caregiver && (
+            {authCtx.userCache.ongoingAppointment && authCtx.userCache.type === "user" && caregiver && (
               <><Text style={styles.headText}>Your CareGiver</Text><Card style={styles.card}>
                 <CaregiverCard {...caregiver} />
               </Card></>
