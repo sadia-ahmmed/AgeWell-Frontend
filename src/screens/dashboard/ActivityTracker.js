@@ -101,15 +101,15 @@ const ActivityTracker = ({ navigation }) => {
 
   const toggleTrackerItem = (index) => {
     if (!checkedIndexes.includes(index)) {
-      // const updatedIndexes = [...checkedIndexes, index];
-      // setCheckedIndexes(updatedIndexes);
+      const updatedIndexes = [...checkedIndexes, index];
+      setCheckedIndexes(updatedIndexes);
       const currentTime = new Date();
       setActivityTimes((prevTimes) => {
         const updatedTimes = [...prevTimes];
         updatedTimes[index] = currentTime;
         return updatedTimes;
       });
-
+  
       setCompletedActivities((prevCompletedActivities) => {
         const updatedCompletedActivities = [...prevCompletedActivities];
         updatedCompletedActivities.push({
@@ -118,11 +118,14 @@ const ActivityTracker = ({ navigation }) => {
         });
         return updatedCompletedActivities;
       });
-
-
-      setCheckedIndexes((prevIndexes) => [...prevIndexes, index]);
-
     } 
+  
+    // setActivities((prevActivities) => {
+    //   const updatedActivities = prevActivities.filter((_, i) => i !== index);
+    //   return updatedActivities;
+    // });
+    
+    
     
   };
 

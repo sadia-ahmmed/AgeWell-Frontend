@@ -166,9 +166,11 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     backgroundColor: "white",
+    
   },
   container: {
     backgroundColor: "white",
+
   },
   containerLoading: {
     flex: 1,
@@ -181,7 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   searchContainer: {
-    // marginTop: 55,
+     marginTop: -55,
     padding: 5,
     paddingTop: 8,
     backgroundColor: "white",
