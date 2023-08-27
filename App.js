@@ -229,7 +229,7 @@ const DashboardTabScreens = () => {
           )}
 
           {/* Main chats tab bar */}
-          {authCtx.userCache.is_verified && (
+          {/* {authCtx.userCache.is_verified && (
             <DashboardTabs.Screen
               name="Chats"
               component={BookingList}
@@ -244,7 +244,8 @@ const DashboardTabScreens = () => {
                 },
               }}
             />
-          )}
+          )} */}
+
           <DashboardTabs.Screen
             name="Settings"
             component={SettingsScreen}
