@@ -141,7 +141,7 @@ const ActivityTracker = ({ navigation }) => {
           </Text>
           <Text style={styles.smallText}>{loggedInTime}</Text>
           <Text style={styles.smallText}>
-            Rating: <Text style={styles.ratingText}>{rating} out of 5</Text>
+            Rating: <Text style={styles.ratingText}>{rating} / 5</Text>
           </Text>
         </View>
       </View>
@@ -192,11 +192,10 @@ const ActivityTracker = ({ navigation }) => {
                       aging well!{" "}
                     </Text>
                     <TextInput
-                      style={styles.newActivityInput}
+                      style={[styles.newActivityInput, {width:300} ]}
                       value={newActivityInput}
-                      multiline
                       onChangeText={setNewActivityInput}
-                      placeholder="Enter new activity your beloved elderly needs!"
+                      placeholder="Enter new activity your loved ones!"
                       placeholderTextColor="#B8B8B8"
                     />
                     <Pressable
@@ -322,6 +321,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     textAlign: "center",
+    width:100,
+    
   },
   ardTitle: {
     flexDirection: "row",
