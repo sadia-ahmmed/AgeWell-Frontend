@@ -132,7 +132,7 @@ const SettingsScreen = ({ navigation }) => {
 
   const [weight, setWeight] = useState(authCtx.userCache.weight);
   const [diabetics, setDiabetics] = useState("4.3");
-  const [bloodPressure, setBloodPressure] = useState(authCtx.userCache.blood_pressure);
+  const [bloodPressure, setBloodPressure] = useState(authCtx.userCache.blood_pressure ? authCtx.userCache.blood_pressure : "Not Set");
 
   const [isEditingWeight, setIsEditingWeight] = useState(false);
   const [isEditingDiabetics, setIsEditingDiabetics] = useState(false);

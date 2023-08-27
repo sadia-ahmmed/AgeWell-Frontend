@@ -18,7 +18,7 @@ import HospitalPackageCard from "../../components/HospitalPackageCard";
 import Package from "./Package";
 import Packages from "./packageList";
 import { Pressable } from "react-native";
-import healthData from "./healthData";
+// import healthData from "./healthData";
 
 const MainScreen = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -26,6 +26,8 @@ const MainScreen = ({ navigation }) => {
   const [open, setOpen] = React.useState(false);
   const [displayedPackages, setDisplayedPackages] = useState(4);
   const [showAllPackages, setShowAllPackages] = useState(false);
+  const [healthData, setHealthData] = useState({})
+ 
   const toggleShowAllPackages = () => {
     setShowAllPackages(true);
   };
@@ -51,6 +53,24 @@ const MainScreen = ({ navigation }) => {
           setUser(result);
           // console.log(result);
           authCtx.setUserCache(result);
+          hd = {
+            weight: {
+              name: "Weight",
+              value: result.weight,
+              icon: require("../../../assets/scale.png"),
+            },
+            diabetics: {
+              name: "Diabetics",
+              value: result.diabetes ? result.diabetes : "No Diabetes",
+              icon: require("../../../assets/diabetics.png"),
+            },
+            bloodPressure: {
+              name: "Blood Pressure",
+              value: result.blood_pressure,
+              icon: require("../../../assets/blood-pressure.png"),
+            },
+          }
+          setHealthData(hd)
         })
         .catch((error) => {
           console.log(error);
@@ -190,14 +210,14 @@ const styles = StyleSheet.create({
   },
   cardName: {
     marginTop: 5,
-    fontSize: 11,
-    fontWeight: "bold",
+    fontSize: 10,
     textAlign: "center",
+    color: "#666",
   },
   cardPoints: {
     marginTop: 2,
-    fontSize: 10,
-    color: "#666",
+    fontSize: 14,
+    fontWeight: "bold",
   },
   headText: {
     fontSize: 20,
