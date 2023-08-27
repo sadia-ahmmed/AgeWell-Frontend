@@ -289,7 +289,7 @@ const SettingsScreen = ({ navigation }) => {
           containerStyle={{ backgroundColor: "#6733b9" }}
         />
         <Text style={styles.nameTop}>{name}</Text>
-
+        {/* {authCtx.userCache.is_verified && <Text>Verified</Text>} */}
         <Text style={styles.emailTop}>{email}</Text>
       </View>
 
@@ -335,14 +335,7 @@ const SettingsScreen = ({ navigation }) => {
         isMultiline={true}
         numberOfLines={4}
       />
-      <EditableRow
-        label="Password"
-        value={password}
-        isEditing={isEditingPassword}
-        onChangeText={setPassword}
-        onEdit={() => setIsEditingPassword(true)}
-        onSave={handlePasswordChange}
-      />
+      
 
       <Text style={styles.editText}>Edit Health Logs </Text>
 
