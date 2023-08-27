@@ -32,6 +32,11 @@ const LogIn = (props) => {
   const [passdialog_visible, setPassDialogVisible] = useState(false);
 
   const onLoginButtonPress = () => {
+    if (!email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    
     setEmail(email.trim());
     setPassword(password.trim());
 
