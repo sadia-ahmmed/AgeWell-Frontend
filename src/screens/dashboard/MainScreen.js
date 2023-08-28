@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image,FlatList  } from "react-native";
+import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import React from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
@@ -26,8 +26,9 @@ const MainScreen = ({ navigation }) => {
   const [open, setOpen] = React.useState(false);
   const [displayedPackages, setDisplayedPackages] = useState(4);
   const [showAllPackages, setShowAllPackages] = useState(false);
-  const [healthData, setHealthData] = useState({})
- 
+  const [healthUserData, setHealthUserData] = useState({})
+  const [healthPatientData, setHealthPatientData] = useState({})
+
   const toggleShowAllPackages = () => {
     setShowAllPackages(true);
   };
@@ -53,24 +54,27 @@ const MainScreen = ({ navigation }) => {
           setUser(result);
           // console.log(result);
           authCtx.setUserCache(result);
-          hd = {
-            weight: {
-              name: "Weight",
-              value: result.weight,
-              icon: require("../../../assets/scale.png"),
-            },
-            diabetics: {
-              name: "Diabetics",
-              value: result.diabetes ? result.diabetes : "No Diabetes",
-              icon: require("../../../assets/diabetics.png"),
-            },
-            bloodPressure: {
-              name: "Blood Pressure",
-              value: result.blood_pressure,
-              icon: require("../../../assets/blood-pressure.png"),
-            },
+          if (result.type === "user") {
+            hd = {
+              weight: {
+                name: "Weight",
+                value: result.weight,
+                icon: require("../../../assets/scale.png"),
+              },
+              diabetics: {
+                name: "Diabetics",
+                value: result.diabetes ? result.diabetes : "No Diabetes",
+                icon: require("../../../assets/diabetics.png"),
+              },
+              bloodPressure: {
+                name: "Blood Pressure",
+                value: result.blood_pressure,
+                icon: require("../../../assets/blood-pressure.png"),
+              },
+            }
+            setHealthUserData(hd)
+
           }
-          setHealthData(hd)
         })
         .catch((error) => {
           console.log(error);
@@ -78,7 +82,54 @@ const MainScreen = ({ navigation }) => {
         });
     }, 5000);
 
-    return () => clearInterval(httpPolling);
+
+    const fetchAppointmentWeightLogs = setInterval(() => {
+      if (authCtx.userCache.ongoingAppointment && authCtx.userCache.type === "nurse") {
+        const user_access_token = auth.currentUser.stsTokenManager.accessToken;
+
+        fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/get-appointment/${authCtx.userCache.ongoingAppointmentID}`, {
+          mode: "cors",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user_access_token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            hd = {
+              weight: {
+                name: "Weight",
+                value: data.userDetails.weight,
+                icon: require("../../../assets/scale.png"),
+              },
+              diabetics: {
+                name: "Diabetics",
+                value: data.userDetails.diabetes ? data.userDetails.diabetes : "No Diabetes",
+                icon: require("../../../assets/diabetics.png"),
+              },
+              bloodPressure: {
+                name: "Blood Pressure",
+                value: data.userDetails.blood_pressure,
+                icon: require("../../../assets/blood-pressure.png"),
+              },
+            }
+            // setHealthPatientData(hd)
+            console.log(data.userDetails)
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+
+      }
+    }, 5000)
+
+    return () => {
+      clearInterval(httpPolling)
+      if (authCtx.userCache.type === "nurse" && authCtx.userCache.ongoingAppointment) {
+        clearInterval(fetchAppointmentWeightLogs)
+      }
+    };
   }, []);
 
   return (
@@ -90,23 +141,49 @@ const MainScreen = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
           >
             <Card.Divider />
-            <View style={{ marginTop: 40 }}>
-              <Text style={styles.headText}>Your Health Logs</Text>
-              {/* <Card.Divider /> */}
-            </View>
 
-            <View style={styles.healthLogsContainer}>
-              {Object.keys(healthData).map((key) => (
-                <View style={styles.miniCard} key={key}>
-                  <Image
-                    source={healthData[key].icon}
-                    style={styles.cardImage}
-                  />
-                  <Text style={styles.cardName}>{healthData[key].name}</Text>
-                  <Text style={styles.cardPoints}>{healthData[key].value}</Text>
+            {
+              authCtx.userCache.type === "user" &&
+              <>
+                <View style={{ marginTop: 40 }}>
+                  <Text style={styles.headText}>Your Health Logs</Text>
+                  {/* <Card.Divider /> */}
                 </View>
-              ))}
-            </View>
+                <View style={styles.healthLogsContainer}>
+                  {Object.keys(healthUserData).map((key) => (
+                    <View style={styles.miniCard} key={key}>
+                      <Image
+                        source={healthUserData[key].icon}
+                        style={styles.cardImage}
+                      />
+                      <Text style={styles.cardName}>{healthUserData[key].name}</Text>
+                      <Text style={styles.cardPoints}>{healthUserData[key].value}</Text>
+                    </View>
+                  ))}
+                </View>
+              </>}
+
+            {
+              authCtx.userCache.ongoingAppointment && authCtx.userCache.type === "nurse" &&
+              <>
+                <View style={{ marginTop: 40 }}>
+                  <Text style={styles.headText}>Patient Health Logs</Text>
+                  {/* <Card.Divider /> */}
+                </View>
+                <View style={styles.healthLogsContainer}>
+                  {Object.keys(healthPatientData).map((key) => (
+                    <View style={styles.miniCard} key={key}>
+                      <Image
+                        source={healthPatientData[key].icon}
+                        style={styles.cardImage}
+                      />
+                      <Text style={styles.cardName}>{healthPatientData[key].name}</Text>
+                      <Text style={styles.cardPoints}>{healthPatientData[key].value}</Text>
+                    </View>
+                  ))}
+                </View>
+              </>
+            }
 
             <ActivityTracker navigation={navigation} />
             {/* <ActivityTracker navigation={navigation} /> */}
