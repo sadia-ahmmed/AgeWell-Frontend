@@ -6,6 +6,8 @@ import { invokeSignupService } from "../../services/user/authService";
 import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfigs";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
+import AdaptiveView from "../../components/AdaptiveView";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 
 const SignUp = (props) => {
   const [fullname, setFullName] = useState();
@@ -67,8 +69,12 @@ const SignUp = (props) => {
   return (
     <AuthContext.Consumer>
       {(authCtx) => (
-        <View style={styles.page_container}>
-
+        <AdaptiveView style={styles.page_container}>
+          <KeyboardAvoidingView
+            style={styles.keyboardAvoidingView}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Text style={styles.headline}>Create your account</Text>
           <View style={styles.line}></View>
           <View
@@ -121,11 +127,14 @@ const SignUp = (props) => {
             >
               <Text style={styles.loginButton}>Log In</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onSignupButtonPress}>
-              <Text style={styles.signupButton}>Sign Up</Text>
+            <TouchableOpacity style={styles.button} onPress={onSignupButtonPress}>
+              <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
-        </View>
+
+          </ScrollView>
+          </KeyboardAvoidingView>
+        </AdaptiveView>
       )}
     </AuthContext.Consumer>
   );
@@ -181,5 +190,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 5,
     width: 300,
     marginBottom: 20,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    // paddingVertical: 14,
+    // paddingHorizontal: 32,
+    borderRadius: 14,
+    elevation: 3,
+    backgroundColor: "#00bfff",
+    margin: 12,
+    width: 70,
+    height: 35,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 12,
   },
 });

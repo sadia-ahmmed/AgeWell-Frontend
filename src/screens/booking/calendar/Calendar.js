@@ -21,7 +21,23 @@ const Calendar = () => {
   const updateSearch = (search) => {
     setSearch(search);
   };
-
+  
+  const dynamicStringSearch = (query) => {
+    setSearch(query); // Update the search query state
+  
+    query = query.trim().toLowerCase(); // Convert query to lowercase
+  
+    if (query === "") {
+      setReportListOnQuery([]); // Clear the filtered list
+      return;
+    }
+  
+    const queried_list = reportlist.filter((item) =>
+      item.file_name.toLowerCase().includes(query)
+    );
+  
+    setReportListOnQuery(queried_list);
+  };
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
     const httpPolling = setInterval(() => {

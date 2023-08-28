@@ -86,6 +86,7 @@ const EditableBio = ({
               <TextInput
                 value={editedValue}
                 onChangeText={setEditedValue}
+                placeholder="Enter your Bio"
                 style={[
                   styles.modalinput,
                   { borderColor: "#439BE8", borderRadius: 10 },
@@ -110,7 +111,7 @@ const EditableBio = ({
               style={styles.bioScrollView}
             >
               <Text style={[styles.textValue, { textAlign: "justify" }]}>
-                {value}
+               {value}
               </Text>
             </ScrollView>
           </TouchableOpacity>

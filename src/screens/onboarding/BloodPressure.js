@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image,ScrollView,KeyboardAvoidingView } from "react-native";
 import { Icon, Input } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
 import CustomButton from "../../components/CustomButton";
+import AdaptiveView from "../../components/AdaptiveView";
+
 
 const BloodPressure = ({ index, setStep, setProgress, progressLength }) => {
 
@@ -45,7 +47,7 @@ const BloodPressure = ({ index, setStep, setProgress, progressLength }) => {
   return (
     <AuthContext.Consumer>
       {(auth) => (
-        <View style={styles.container}>
+        <AdaptiveView style={styles.container}>
           <Image
             source={require("../../../assets/blood-pressure.png")}
             style={styles.image}
@@ -62,7 +64,9 @@ const BloodPressure = ({ index, setStep, setProgress, progressLength }) => {
             />
           </View>
           <CustomButton title="Next" width={150} marginTop={30} onPress={handleClick} />
-        </View>
+         
+          
+        </AdaptiveView>
       )}
     </AuthContext.Consumer>
 
@@ -74,6 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop:-20,
   },
   input: {
     flex: 1,

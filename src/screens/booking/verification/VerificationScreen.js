@@ -174,10 +174,11 @@ const VerificationScreen = () => {
         >
             <AdaptiveView
                 style={{
-                    padding: 50
+                    padding: 50,
+                    orderRadius:20,
                 }}
             >
-                <Button title="Upload from camera" onPress={() => openCamera("img1")} />
+                <Button style={{marginBottom:20,}}   title="Upload from camera" onPress={() => openCamera("img1")} />
                 <Divider />
                 <Button title="Upload from gallery" onPress={() => pickImageFromGallery("img1")} />
             </AdaptiveView>
@@ -191,10 +192,11 @@ const VerificationScreen = () => {
         >
             <AdaptiveView
                 style={{
-                    padding: 50
+                    padding: 50,
+                    borderRadius:20,
                 }}
             >
-                <Button title="Upload from camera" onPress={() => openCamera("img2")} />
+                <Button style={{marginBottom:20,}} title="Upload from camera" onPress={() => openCamera("img2")} />
                 <Divider />
                 <Button title="Upload from gallery" onPress={() => pickImageFromGallery("img2")} />
             </AdaptiveView>
