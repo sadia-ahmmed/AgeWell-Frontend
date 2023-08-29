@@ -18,6 +18,7 @@ import AdaptiveView from "../../components/AdaptiveView";
 import { Pressable } from "react-native";
 import { auth } from "../../firebase/firebaseConfigs";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
+import { element } from "prop-types";
 // import Checkbox from "@mui/material";
 
 const ActivityTracker = ({ navigation }) => {
@@ -77,27 +78,63 @@ const ActivityTracker = ({ navigation }) => {
   };
 
   const addNewActivity = () => {
-    if (newActivityInput.trim() !== "") {
-      const newActivity = {
-        id: activities.length + 1,
-        label: newActivityInput,
-        checked: false,
-      };
-      setActivities((prevActivities) => [...prevActivities, newActivity]);
-      setNewActivityInput("");
-    }
+    console.log("add", newActivityInput)
+    const newActivity = {
+      id: activities.length + 1,
+      label: newActivityInput,
+      checked: false,
+    };
+    // let newAct = activities.push(newActivity)
+    // console.log("act", newActivity)
+    // setActivities(newActivity);
+    // setNewActivityInput("");
+    console.log("Fatay", newActivity)
+
+    fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/activity/add/${authCtx.userCache.uid}/${newActivityInput}`, {
+      mode: "cors",
+      method: "POST",
+      // body: JSON.stringify(newActivity)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("data")
+      })
+      .catch(err => {
+        alert(err.message)
+      })
+
   };
 
   useEffect(() => {
-    const initialActivities = [
-      { id: 1, label: "After Lunch Glucose check", checked: false },
-      { id: 2, label: "After Lunch Blood Pressure check", checked: false },
-      { id: 3, label: "After Lunch Therapy", checked: false },
-    ];
-    setActivities(initialActivities);
+    // const initialActivities = [
+    //   { id: 1, label: "After Lunch Glucose check", checked: false },
+    //   { id: 2, label: "After Lunch Blood Pressure check", checked: false },
+    //   { id: 3, label: "After Lunch Therapy", checked: false },
+    // ];
+
+    // setActivities(initialActivities);
+
+    const poll = setInterval(() => {
+      fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/activity/get/${authCtx.userCache.uid}`, {
+        mode: "cors",
+        method: "GET"
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          setActivities(data)
+        })
+        .catch(err => {
+          alert(err)
+        })
+    }, 5000)
+
+
+    return () => clearInterval(poll)
+
   }, []);
 
-  
+
 
   const toggleTrackerItem = (index) => {
     if (!checkedIndexes.includes(index)) {
@@ -109,7 +146,7 @@ const ActivityTracker = ({ navigation }) => {
         updatedTimes[index] = currentTime;
         return updatedTimes;
       });
-  
+
       setCompletedActivities((prevCompletedActivities) => {
         const updatedCompletedActivities = [...prevCompletedActivities];
         updatedCompletedActivities.push({
@@ -118,15 +155,15 @@ const ActivityTracker = ({ navigation }) => {
         });
         return updatedCompletedActivities;
       });
-    } 
-  
+    }
+
     // setActivities((prevActivities) => {
     //   const updatedActivities = prevActivities.filter((_, i) => i !== index);
     //   return updatedActivities;
     // });
-    
-    
-    
+
+
+
   };
 
 
@@ -135,14 +172,14 @@ const ActivityTracker = ({ navigation }) => {
     const [showTime, setShowTime] = useState(checked);
     const checkboxColor = checked ? "#46C1E2" : "#fff";
 
-    useEffect(() => {
-      if (checked) {
-        const timeoutId = setTimeout(() => {
-          setShowTime(true);
-        }, 2000);
-        return () => clearTimeout(timeoutId);
-      }
-    }, [checked]);
+    // useEffect(() => {
+    //   if (checked) {
+    //     const timeoutId = setTimeout(() => {
+    //       setShowTime(true);
+    //     }, 2000);
+    //     return () => clearTimeout(timeoutId);
+    //   }
+    // }, [checked]);
 
     const formatTime = (time) => {
       const hours = time.getHours();
@@ -165,8 +202,25 @@ const ActivityTracker = ({ navigation }) => {
         </View>
         <View style={styles.checkboxContainer}>
           <CheckBox
-            checked={checkedIndexes.includes(index)}
-            onPress={() => toggleTrackerItem(index)}
+            checked={checked}
+            onPress={() => {
+              toggleTrackerItem(index)
+              fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/activity/checked/${authCtx.userCache.uid}/${activities[index]._id}`, {
+                mode: "cors",
+                method: "POST",
+                body: JSON.stringify({})
+              })
+                .then(res => res.json())
+                .then(data => {
+                  setCheckedIndexes(checkedIndexes.filter((element, idx) => {
+                    return index !== idx
+                  }))
+                  // setActivities(data)
+                })
+                .catch(err => {
+                  alert(err.message)
+                })
+            }}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             color={checkboxColor}
@@ -271,14 +325,14 @@ const ActivityTracker = ({ navigation }) => {
                   </AdaptiveView>
                 </Modal>
               </View>
-              {activities.map((activity, index) => (
+              {activities.length > 0 ? activities.map((activity, index) => (
                 <ActivityCard
                   key={activity.id}
                   label={activity.label}
                   checked={activity.checked}
                   index={index}
                 />
-              ))}
+              )) : <Text>No activites</Text>}
               <Card.Divider />
 
               <View style={styles.buttonlist}>
@@ -286,7 +340,7 @@ const ActivityTracker = ({ navigation }) => {
                   style={styles.add}
                   onPress={() =>
                     navigation.navigate("ActivityList", {
-                      completedActivities, 
+                      completedActivities,
                     })
                   }
                 >

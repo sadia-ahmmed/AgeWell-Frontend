@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { EmailAuthProvider, GoogleAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup, signOut, updateEmail } from "firebase/auth";
+import { EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup, signOut, updateEmail } from "firebase/auth";
 import AdaptiveView from "../../components/AdaptiveView";
 import { Image, Divider, Avatar, Button } from "@rneui/themed";
 import { AuthContext } from "../../providers/AuthProviders";
@@ -111,7 +111,7 @@ const EditableBio = ({
               style={styles.bioScrollView}
             >
               <Text style={[styles.textValue, { textAlign: "justify" }]}>
-               {value}
+                {value}
               </Text>
             </ScrollView>
           </TouchableOpacity>
@@ -404,6 +404,7 @@ const SettingsScreen = ({ navigation }) => {
           </Pressable>
         }
 
+        <Text style={styles.editText}>Reward Points: {authCtx.userCache.rewards} points</Text>
         <Text style={styles.editText}>Edit General Information </Text>
 
         <Divider />

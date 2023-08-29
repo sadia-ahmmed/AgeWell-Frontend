@@ -1,5 +1,5 @@
 
-const Packages =[
+let Packages = [
   {
     id: 1,
     hospitalName: "Square Hospital",

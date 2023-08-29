@@ -114,7 +114,7 @@ const MainScreen = ({ navigation }) => {
                 icon: require("../../../assets/blood-pressure.png"),
               },
             }
-            // setHealthPatientData(hd)
+            setHealthPatientData(hd)
             console.log(data.userDetails)
           })
           .catch((err) => {
