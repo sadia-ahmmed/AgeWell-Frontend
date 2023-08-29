@@ -10,9 +10,40 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Card } from "@rneui/themed";
+import { auth } from "../firebase/firebaseConfigs";
+import { IP_ADDRESS, IP_PORT } from "../../configs";
+import { Linking } from "react-native";
+import Packages from "../screens/dashboard/packageList";
 
 const HospitalPackageCard = ({ packageData }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
+
+  const book = (packageData, price) => {
+    const user_access_token = auth.currentUser.stsTokenManager.accessToken
+
+    price = price.replace("BDT ", "")
+    price = price.replace(",", "")
+
+    const url = `http://${IP_ADDRESS}:${IP_PORT}/api/auth/payment/book-package/${price}`
+    const options = {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${user_access_token}`
+      }
+    }
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        Linking.openURL(data.url)
+      })
+      .catch(err => {
+        alert(err)
+      })
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardContainer}>
@@ -25,7 +56,7 @@ const HospitalPackageCard = ({ packageData }) => {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.bookButton}>
+            <TouchableOpacity style={styles.bookButton} onPress={() => book(packageData, packageData.packagePrice)}>
               <Text style={styles.bookButtonText}>Book</Text>
             </TouchableOpacity>
             <Pressable
