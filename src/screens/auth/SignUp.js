@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Platform, Dimensions } from "react-native";
 import React, { useState } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { Button, Card, Input } from "@rneui/themed";
@@ -75,64 +75,64 @@ const SignUp = (props) => {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.headline}>Create your account</Text>
-          <View style={styles.line}></View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 300,
-            }}
-          >
-            <Input label="Full Name" onChangeText={setFullName} />
-          </View>
-          <View
-            style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
-          >
-            <Input label="Email" onChangeText={setEmail} />
-          </View>
-          <View
-            style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
-          >
-            <Input
-              label="Password"
-              secureTextEntry={true}
-              onChangeText={setPassword}
-            />
-          </View>
-          <View
-            style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
-          >
-            <Input
-              label="Retype Password"
-              secureTextEntry={true}
-              onChangeText={setRetypePassword}
-            />
-          </View>
-          <View
-            style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
-          >
-            <Input label="Phone" onChangeText={setPhone} />
-          </View>
-          <View
-            style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
-          >
-            <Input label="Address" onChangeText={setAddress} />
-          </View>
-          <View style={styles.bottomRow}>
-            <Text style={styles.loginText}>Already have an account?</Text>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate("login")}
-            >
-              <Text style={styles.loginButton}>Log In</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onSignupButtonPress}>
-              <Text style={styles.buttonText}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+              <Text style={styles.headline}>Create your account</Text>
+              <View style={styles.line}></View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 300,
+                }}
+              >
+                <Input label="Full Name" onChangeText={setFullName} />
+              </View>
+              <View
+                style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
+              >
+                <Input label="Email" onChangeText={setEmail} />
+              </View>
+              <View
+                style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
+              >
+                <Input
+                  label="Password"
+                  secureTextEntry={true}
+                  onChangeText={setPassword}
+                />
+              </View>
+              <View
+                style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
+              >
+                <Input
+                  label="Retype Password"
+                  secureTextEntry={true}
+                  onChangeText={setRetypePassword}
+                />
+              </View>
+              <View
+                style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
+              >
+                <Input label="Phone" onChangeText={setPhone} />
+              </View>
+              <View
+                style={{ flexDirection: "row", alignItems: "stretch", width: 300 }}
+              >
+                <Input label="Address" onChangeText={setAddress} />
+              </View>
+              <View style={styles.bottomRow}>
+                <Text style={styles.loginText}>Already have an account?</Text>
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate("login")}
+                >
+                  <Text style={styles.loginButton}>Log In</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={onSignupButtonPress}>
+                  <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+              </View>
 
-          </ScrollView>
+            </ScrollView>
           </KeyboardAvoidingView>
         </AdaptiveView>
       )}
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    margin: 20,
+    marginTop: 60,
   },
   bottomRow: {
     flexDirection: "row",
@@ -159,13 +159,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   loginButton: {
-    color: "#00bfff",
+    color: "#439BE8",
     fontWeight: "bold",
     fontSize: 14,
     fontFamily: "sans-serif",
   },
   signupButton: {
-    backgroundColor: "#00bfff",
+    backgroundColor: "#439BE8",
     color: "white",
     fontWeight: "bold",
     width: 70,
@@ -182,10 +182,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "sans-serif",
     marginBottom: 20,
-    color: "#00bfff",
+    color: "#439BE8",
   },
   line: {
-    borderBottomColor: "#00bfff",
+    borderBottomColor: "#439BE8",
     opacity: 0.5,
     borderBottomWidth: 5,
     width: 300,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 32,
     borderRadius: 14,
     elevation: 3,
-    backgroundColor: "#00bfff",
+    backgroundColor: "#439BE8",
     margin: 12,
     width: 70,
     height: 35,
