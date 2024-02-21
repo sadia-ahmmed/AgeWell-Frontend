@@ -103,7 +103,6 @@ const DashboardTabScreens = () => {
                 iconName = focused ? "shield-alert" : "shield-alert-outline";
                 iconType = "material-community";
               } else if (
-                !authCtx.userCache.is_verified &&
                 route.name === "Closure"
               ) {
                 iconName = focused ? "star" : "star-outline";

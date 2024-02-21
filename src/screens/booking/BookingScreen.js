@@ -142,6 +142,7 @@ const BookingScreen = ({ route, navigation }) => {
                     onChangeText={(value) => {
                       setStartDate(startDate)
                     }}
+                    testID='start-date'
                   />
                 </View>
               </Pressable>
