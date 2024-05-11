@@ -21,21 +21,21 @@ const Calendar = () => {
   const updateSearch = (search) => {
     setSearch(search);
   };
-  
+
   const dynamicStringSearch = (query) => {
     setSearch(query); // Update the search query state
-  
+
     query = query.trim().toLowerCase(); // Convert query to lowercase
-  
+
     if (query === "") {
       setReportListOnQuery([]); // Clear the filtered list
       return;
     }
-  
+
     const queried_list = reportlist.filter((item) =>
       item.file_name.toLowerCase().includes(query)
     );
-  
+
     setReportListOnQuery(queried_list);
   };
   useEffect(() => {
@@ -162,12 +162,12 @@ const Calendar = () => {
         value={search}
         lightTheme
         round
-        platform="ios"
+        platform={Platform.OS === "ios" ? "ios" : "android"}
         blurOnSubmit={false}
         onChangeText={dynamicStringSearch}
         inputContainerStyle={{
           backgroundColor: "#F5FDFF",
-          borderColor: "#439BE8",
+          borderColor: "#6cc456",
           borderWidth: 0,
           marginLeft: 10,
           marginRight: 10,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 14,
     elevation: 3,
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     margin: 12,
   },
   buttonText: {
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     marginTop: 5,
     fontWeight: "500",
-    color: "#439BE8",
+    color: "#6cc456",
     marginBottom: 2,
     padding: 10,
     flexDirection: "row",
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   linkIconContainer: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     padding: 6,
     borderRadius: 50,
     marginRight: 2,

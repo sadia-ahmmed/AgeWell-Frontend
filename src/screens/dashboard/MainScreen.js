@@ -8,7 +8,7 @@ import { Button, Card } from "@rneui/themed";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { IP_ADDRESS, IP_PORT } from "../../../configs";
+import { IP_ADDRESS, IP_PORT, POLL_TIME } from "../../../configs";
 import { SpeedDial } from "@rneui/themed";
 import ActivityTracker from "./ActivityTracker";
 import AdaptiveView from "../../components/AdaptiveView";
@@ -18,6 +18,7 @@ import HospitalPackageCard from "../../components/HospitalPackageCard";
 import Package from "./Package";
 import Packages from "./packageList";
 import { Pressable } from "react-native";
+import socket from "../../providers/socket";
 // import healthData from "./healthData";
 
 const MainScreen = ({ navigation }) => {
@@ -32,6 +33,7 @@ const MainScreen = ({ navigation }) => {
   const toggleShowAllPackages = () => {
     setShowAllPackages(true);
   };
+
   useEffect(() => {
     // const user_access_token = auth.currentUser.stsTokenManager.accessToken;
 
@@ -73,14 +75,13 @@ const MainScreen = ({ navigation }) => {
               },
             }
             setHealthUserData(hd)
-
           }
         })
         .catch((error) => {
           console.log(error);
           alert("Error getting user details");
         });
-    }, 5000);
+    }, POLL_TIME);
 
 
     const fetchAppointmentWeightLogs = setInterval(() => {
@@ -115,14 +116,13 @@ const MainScreen = ({ navigation }) => {
               },
             }
             setHealthPatientData(hd)
-            console.log(data.userDetails)
           })
           .catch((err) => {
             alert(err.message);
           });
 
       }
-    }, 5000)
+    }, POLL_TIME)
 
     return () => {
       clearInterval(httpPolling)
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   headText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#439BE8",
+    color: "#6cc456",
     padding: 5,
     marginTop: -20,
     marginBottom: 8,
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     marginTop: -30,
   },
   showMoreButton: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,

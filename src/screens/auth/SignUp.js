@@ -120,6 +120,15 @@ const SignUp = (props) => {
               >
                 <Input label="Address" onChangeText={setAddress} />
               </View>
+
+              <View
+                style={{ flexDirection: "row", alignItems: "stretch" }}
+              >
+                <TouchableOpacity style={styles.button} onPress={onSignupButtonPress}>
+                  <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+              </View>
+
               <View style={styles.bottomRow}>
                 <Text style={styles.loginText}>Already have an account?</Text>
                 <TouchableOpacity
@@ -127,9 +136,7 @@ const SignUp = (props) => {
                 >
                   <Text style={styles.loginButton}>Log In</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={onSignupButtonPress}>
-                  <Text style={styles.buttonText}>Sign Up</Text>
-                </TouchableOpacity>
+
               </View>
 
             </ScrollView>
@@ -159,13 +166,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   loginButton: {
-    color: "#439BE8",
+    color: "#6cc456",
     fontWeight: "bold",
     fontSize: 14,
     fontFamily: "sans-serif",
   },
   signupButton: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     color: "white",
     fontWeight: "bold",
     width: 70,
@@ -178,16 +185,16 @@ const styles = StyleSheet.create({
     marginLeft: 40,
   },
   headline: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
     fontFamily: "sans-serif",
-    marginBottom: 20,
-    color: "#439BE8",
+    marginBottom: 10,
+    color: "#6cc456",
   },
   line: {
-    borderBottomColor: "#439BE8",
+    borderBottomColor: "#6cc456",
     opacity: 0.5,
-    borderBottomWidth: 5,
+    borderBottomWidth: 2,
     width: 300,
     marginBottom: 20,
   },
@@ -196,12 +203,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // paddingVertical: 14,
     // paddingHorizontal: 32,
-    borderRadius: 14,
+    borderRadius: 10,
     elevation: 3,
-    backgroundColor: "#439BE8",
-    margin: 12,
-    width: 70,
+    // paddingVertical: 12,
+    paddingHorizontal: 10,
+    backgroundColor: "#6cc456",
+    marginLeft: Dimensions.get("window").width / 2 - 140,
+    width: 200,
     height: 35,
+    marginBottom: 20,
   },
   buttonText: {
     color: "white",

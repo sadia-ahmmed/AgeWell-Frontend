@@ -25,6 +25,8 @@ import packages, { Packages } from "./src/screens/dashboard/packageList";
 import { decode, encode } from 'base-64'
 import HealthConcerns from "./src/screens/onboarding/HealthConcerns";
 import ActivityList from "./src/screens/ActivityList";
+import socket from './src/providers/socket'
+
 if (!global.btoa) {
   global.btoa = encode;
 }
@@ -32,7 +34,6 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode;
 }
-
 
 
 const AuthStack = createStackNavigator();
@@ -112,7 +113,7 @@ const DashboardTabScreens = () => {
                 <Icon name={iconName} type={iconType} color={color} size={25} />
               );
             },
-            tabBarActiveTintColor: "#46C1E2",
+            tabBarActiveTintColor: "#6cc456",
             tabBarInactiveTintColor: "grey",
           })}
         >
@@ -128,7 +129,7 @@ const DashboardTabScreens = () => {
               headerTitleStyle: {
                 fontSize: 18,
                 textAlign: "center",
-                color: "#439BE8",
+                color: "#6cc456",
               },
             }}
           />
@@ -148,7 +149,7 @@ const DashboardTabScreens = () => {
                   headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -164,7 +165,7 @@ const DashboardTabScreens = () => {
               headerTitleStyle: {
                 fontSize: 18,
                 textAlign: "center",
-                color: "#439BE8",
+                color: "#6cc456",
               },
 
               tabBarItemStyle: { marginBottom: 5 },
@@ -185,7 +186,7 @@ const DashboardTabScreens = () => {
                   headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -204,7 +205,7 @@ const DashboardTabScreens = () => {
                 headerTitleStyle: {
                   fontSize: 18,
                   textAlign: "center",
-                  color: "#439BE8",
+                  color: "#6cc456",
                 },
               }}
             />
@@ -222,7 +223,7 @@ const DashboardTabScreens = () => {
                 headerTitleStyle: {
                   fontSize: 18,
                   textAlign: "center",
-                  color: "#439BE8",
+                  color: "#6cc456",
                 },
               }}
             />
@@ -240,7 +241,7 @@ const DashboardTabScreens = () => {
                 headerTitleStyle: {
                   fontSize: 18,
                   textAlign: "center",
-                  color: "#439BE8",
+                  color: "#6cc456",
                 },
               }}
             />
@@ -256,7 +257,7 @@ const DashboardTabScreens = () => {
               headerTitleStyle: {
                 fontSize: 18,
                 textAlign: "center",
-                color: "#439BE8",
+                color: "#6cc456",
               },
             }}
           />
@@ -275,7 +276,7 @@ const DashboardTabScreens = () => {
                 headerTitleStyle: {
                   fontSize: 18,
                   textAlign: "center",
-                  color: "#439BE8",
+                  color: "#6cc456",
                 },
               }}
             />
@@ -311,7 +312,7 @@ const HomeStackScreens = () => {
                   headerTitle: "View nurse", headerShown: true, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -322,7 +323,7 @@ const HomeStackScreens = () => {
                   headerTitle: "Book nurse", headerShown: true, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -333,7 +334,7 @@ const HomeStackScreens = () => {
                   headerTitle: "Join a Circle", headerShown: false, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -344,7 +345,7 @@ const HomeStackScreens = () => {
                   headerTitle: "Create a Circle", headerShown: false, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -355,7 +356,7 @@ const HomeStackScreens = () => {
                   headerTitle: "My Circle", headerShown: true, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -377,7 +378,7 @@ const HomeStackScreens = () => {
                   headerTitle: "Package", headerShown: true, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />
@@ -393,7 +394,7 @@ const HomeStackScreens = () => {
                   headerTitle: "All Activities", headerShown: true, headerTitleStyle: {
                     fontSize: 18,
                     textAlign: "center",
-                    color: "#439BE8",
+                    color: "#6cc456",
                   },
                 }}
               />

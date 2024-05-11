@@ -121,7 +121,6 @@ const ActivityTracker = ({ navigation }) => {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data)
           setActivities(data)
         })
         .catch(err => {
