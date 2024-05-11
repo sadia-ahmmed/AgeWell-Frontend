@@ -17,6 +17,7 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { auth } from "../../firebase/firebaseConfigs";
 import { invokeLogoutService } from "../../services/user/authService";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
+import socket from "../../providers/socket";
 
 const EditableRow = ({
   label,
@@ -199,7 +200,7 @@ const SettingsScreen = ({ navigation }) => {
     fetch(url, options)
       .then(res => res.json())
       .then(data => {
-        console.log(data)
+        // console.log(data)
         authCtx.setUserCache(data)
       })
       .catch(err => {

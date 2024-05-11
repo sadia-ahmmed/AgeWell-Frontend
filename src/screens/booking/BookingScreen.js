@@ -107,21 +107,24 @@ const BookingScreen = ({ route, navigation }) => {
 
     const body = JSON.stringify(appointmentBody);
 
-    fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/book/${nurse_details.uid}`, {
-      method: "POST",
-      mode: "cors",
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${auth.currentUser.stsTokenManager.accessToken}` },
-      body: body
-    })
-      .then(res => res.json())
-      .then(result => {
-        console.log(result)
-        alert("Success")
-        navigation.navigate("Home")
-      })
-      .catch(error => {
-        alert("Error")
-      })
+    // fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/auth/appointment/book/${nurse_details.uid}`, {
+    //   method: "POST",
+    //   mode: "cors",
+    //   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${auth.currentUser.stsTokenManager.accessToken}` },
+    //   body: body
+    // })
+    //   .then(res => res.json())
+    //   .then(result => {
+    //     console.log(result)
+    //     alert("Success")
+    //     navigation.navigate("Home")
+    //   })
+    //   .catch(error => {
+    //     alert("Error")
+    //   })
+
+
+
   }
 
   return (

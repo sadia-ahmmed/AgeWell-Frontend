@@ -2,7 +2,7 @@ import { Button, Icon, Input, Image, Text, Overlay } from "@rneui/themed";
 import React, { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import { useState } from "react";
-import { TouchableOpacity, View, StyleSheet, Pressable } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Pressable, Dimensions } from "react-native";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -16,6 +16,7 @@ import { Dialog } from "@rneui/themed";
 import { invokeLoginService } from "../../services/user/authService";
 import { IP_ADDRESS, IP_PORT } from "../../../configs";
 import { TextInput } from "@react-native-material/core";
+import socket from "../../providers/socket";
 
 const LogIn = (props) => {
   // TODO: FIX IMAGE PATH
@@ -61,6 +62,8 @@ const LogIn = (props) => {
           body: JSON.stringify(body),
         };
 
+
+
         fetch(url, options)
           .then((res) => res.json())
           .then((result) => {
@@ -68,6 +71,10 @@ const LogIn = (props) => {
             setLoading(false)
             setEmail("");
             setPassword("");
+            socket.once('connect', () => {
+              socket.emit("login", { email, password })
+            })
+            console.log(socket.connected)
             authCtx.setUserCache(result);
             authCtx.setLoggedIn(true);
           })
@@ -150,13 +157,13 @@ const LogIn = (props) => {
             <Text style={styles.forgetPassword}>Forgot Password?</Text>
           </TouchableOpacity>
 
+          <Pressable onPress={onLoginButtonPress} style={styles.loginButton}>
+            <Text style={styles.buttonText} >Log In</Text>
+          </Pressable>
+
+
           <View style={styles.bottomRow}>
             <Text style={styles.signupText}>Don't have an account?</Text>
-            {/* <TouchableOpacity
-              onPress={() => props.navigation.navigate("signup")}
-            >
-              <Text style={styles.signUpButton}>Sign up</Text>
-            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => props.navigation.navigate("signup")}
             >
@@ -164,9 +171,7 @@ const LogIn = (props) => {
             </TouchableOpacity>
 
 
-            <Pressable onPress={onLoginButtonPress} style={styles.loginButton}>
-              <Text style={styles.buttonText} >Log In</Text>
-            </Pressable>
+
           </View>
 
           <Dialog
@@ -226,7 +231,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   forgetPassword: {
-    color: "#439BE8",
+    color: "#6cc456",
     fontWeight: "bold",
     fontSize: 14,
 
@@ -235,32 +240,32 @@ const styles = StyleSheet.create({
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 30
   },
   signupText: {
     fontSize: 14,
-
-    marginRight: 10,
+    marginRight: 5,
   },
   signUpButton: {
-    color: "#439BE8",
+    color: "#6cc456",
     fontWeight: "bold",
     fontSize: 14,
 
   },
   loginButton: {
     justifyContent: "center",
-    width: 75,
+    width: 200,
     // height: 32,
     // textAlign: "center",
     // textAlignVertical: "center",
-    borderRadius: 10,
-    marginLeft: 40,
-
+    marginLeft: Dimensions.get("window").width / 2 - 200,
     paddingVertical: 12,
     paddingHorizontal: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     elevation: 3,
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
+    fontWeight: "bold",
+
   },
   buttonText: {
     color: "white",
