@@ -116,8 +116,8 @@ const HospitalPackageCard = ({ packageData }) => {
             <TouchableOpacity style={styles.bookButton}>
               <Text style={styles.bookButtonText}>Book</Text>
             </TouchableOpacity>
-            <Pressable style={styles.moreDetails}  onPress={() => setModalVisible(true)}>
-              <Text  style={styles.bookButtonText}>Details</Text>
+            <Pressable style={styles.moreDetails} onPress={() => setModalVisible(true)}>
+              <Text style={styles.bookButtonText}>Details</Text>
             </Pressable>
           </View>
         </Card>
@@ -144,7 +144,7 @@ const HospitalPackageCard = ({ packageData }) => {
               <Text style={styles.innerDescription}>
                 {packageData.packageName}
               </Text>
-              <Text style={styles.innerTitle}>Package Detials: </Text>
+              <Text style={styles.innerTitle}>Package Details: </Text>
               <Text style={styles.innerDescription}>
                 {packageData.packageIncludes}
               </Text>
@@ -152,8 +152,8 @@ const HospitalPackageCard = ({ packageData }) => {
               <Text style={styles.innerDescription}>
                 {packageData.packagePrice}
               </Text>
-              <TouchableOpacity style={styles.button}onPress={() => setModalVisible(false)}>
-                <Text style={[styles.closeButton, ]}>Close</Text>
+              <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}>
+                <Text style={[styles.closeButton,]}>Close</Text>
               </TouchableOpacity>
             </View>
           </Card>
@@ -166,7 +166,7 @@ const HospitalPackageCard = ({ packageData }) => {
 const Package = () => {
   return (
     <AdaptiveView style={styles.container}>
-      
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* <Text style={styles.pageTitle}>Hospital Packages</Text> */}
         {/* <Card.Divider style={{ backgroundColor: "#00bfff", height: 1 }} /> */}
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginTop:-20,
+    marginTop: -20,
   },
   card: {
     flexDirection: "row",
@@ -265,16 +265,16 @@ const styles = StyleSheet.create({
     marginLeft: 180,
     borderRadius: 8,
     elevation: 3,
-    backgroundColor: "#439BE8",
-   
+    backgroundColor: "#6cc456",
+
   },
-  
+
   bookButton: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 5,
-    marginLeft:2,
+    marginLeft: 2,
   },
   bookButtonText: {
     fontSize: 14,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     marginTop: 20,
     borderRadius: 8,
     paddingVertical: 10,
@@ -325,7 +325,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   closeButton: {
-
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
@@ -344,7 +343,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingVertical: 50,
-    marginTop:-50,
+    marginTop: -50,
   },
   pageTitle: {
     fontSize: 20,

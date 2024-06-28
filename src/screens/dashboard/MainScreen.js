@@ -145,7 +145,7 @@ const MainScreen = ({ navigation }) => {
             {
               authCtx.userCache.type === "user" &&
               <>
-                <View style={{ marginTop: 40 }}>
+                <View style={{ marginTop: 40, marginLeft: 10 }}>
                   <Text style={styles.headText}>Your Health Logs</Text>
                   {/* <Card.Divider /> */}
                 </View>
@@ -161,6 +161,7 @@ const MainScreen = ({ navigation }) => {
                     </View>
                   ))}
                 </View>
+
               </>}
 
             {
@@ -185,7 +186,7 @@ const MainScreen = ({ navigation }) => {
               </>
             }
 
-            <ActivityTracker navigation={navigation} />
+            {authCtx.userCache.ongoingAppointment && <ActivityTracker navigation={navigation} />}
             {/* <ActivityTracker navigation={navigation} /> */}
 
             <View style={{ margin: 11, marginTop: 40 }}>
@@ -215,7 +216,7 @@ const MainScreen = ({ navigation }) => {
           </ScrollView>
           {authCtx.userCache.type === "user" && (
             <SpeedDial
-              color="#46C1E2"
+              color="#6cc456"
               isOpen={open}
               icon={{ name: "people", color: "#fff" }}
               openIcon={{ name: "close", color: "#fff" }}
@@ -224,7 +225,7 @@ const MainScreen = ({ navigation }) => {
             >
               {!authCtx.userCache.in_circle && (
                 <SpeedDial.Action
-                  color="#46C1E2"
+                  color="#6cc456"
                   icon={{ name: "add", color: "#fff" }}
                   title="Create Family Circle"
                   onPress={() => navigation.navigate("create-family-circle")}
@@ -232,7 +233,7 @@ const MainScreen = ({ navigation }) => {
               )}
               {!authCtx.userCache.in_circle && (
                 <SpeedDial.Action
-                  color="#46C1E2"
+                  color="#6cc456"
                   icon={{ name: "person-add", color: "#fff" }}
                   title="Join Family Circle"
                   onPress={() => navigation.navigate("join-family-circle")}
@@ -240,7 +241,7 @@ const MainScreen = ({ navigation }) => {
               )}
               {authCtx.userCache.in_circle && (
                 <SpeedDial.Action
-                  color="#46C1E2"
+                  color="#6cc456"
                   icon={{ name: "create", color: "#fff" }}
                   title="My Circle"
                   onPress={() => navigation.navigate("family-circle-dashboard")}
