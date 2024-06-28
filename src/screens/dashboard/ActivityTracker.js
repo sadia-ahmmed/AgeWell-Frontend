@@ -115,7 +115,14 @@ const ActivityTracker = ({ navigation }) => {
     // setActivities(initialActivities);
 
     const poll = setInterval(() => {
-      fetch(`http://${IP_ADDRESS}:${IP_PORT}/api/activity/get/${authCtx.userCache.uid}`, {
+      let url = ""
+      if (authCtx.userCache.type === "nurse") {
+        url = `http://${IP_ADDRESS}:${IP_PORT}/api/activity/get/by/appointment/${authCtx.userCache.ongoingAppointmentID}`
+      } else {
+        url = `http://${IP_ADDRESS}:${IP_PORT}/api/activity/get/${authCtx.userCache.uid}`
+      }
+
+      fetch(url, {
         mode: "cors",
         method: "GET"
       })
@@ -126,6 +133,7 @@ const ActivityTracker = ({ navigation }) => {
         .catch(err => {
           alert(err)
         })
+
     }, 5000)
 
 
@@ -334,21 +342,25 @@ const ActivityTracker = ({ navigation }) => {
               )) : <Text>No activites</Text>}
               <Card.Divider />
 
-              <View style={styles.buttonlist}>
-                <TouchableOpacity
-                  style={styles.add}
-                  onPress={() =>
-                    navigation.navigate("ActivityList", {
-                      completedActivities,
-                    })
-                  }
-                >
-                  <Text style={styles.addText}>All Activity</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.add2} onPress={toggleModal}>
-                  <Text style={styles.addText}>Add Activity</Text>
-                </TouchableOpacity>
-              </View>
+              {
+                authCtx.userCache.type === "user" &&
+                <View style={styles.buttonlist}>
+                  <TouchableOpacity
+                    style={styles.add}
+                    onPress={() =>
+                      navigation.navigate("ActivityList", {
+                        completedActivities,
+                      })
+                    }
+                  >
+                    <Text style={styles.addText}>All Activity</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.add2} onPress={toggleModal}>
+                    <Text style={styles.addText}>Add Activity</Text>
+                  </TouchableOpacity>
+                </View>
+              }
+
             </Card>
           </View>
         </SafeAreaView>
@@ -477,7 +489,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 12,
     elevation: 3,
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     fontWeight: "bold",
     position: "relative",
     marginRight: 50,
@@ -489,7 +501,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 12,
     elevation: 3,
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     fontWeight: "bold",
     position: "relative",
     marginLeft: 50,
@@ -517,7 +529,7 @@ const styles = StyleSheet.create({
   },
   headText: {
     fontSize: 20,
-    color: "#439BE8",
+    color: "#6cc456",
     fontWeight: "bold",
     padding: 5,
     marginTop: 8,
@@ -534,7 +546,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginBottom: 20,
     alignItems: "center",
-    borderColor: "#439BE8",
+    borderColor: "#6cc456",
     borderRadius: 10,
     fontSize: 16,
     textAlign: "center",

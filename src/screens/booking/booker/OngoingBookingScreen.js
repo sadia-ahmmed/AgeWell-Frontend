@@ -11,12 +11,22 @@ import { TouchableOpacity } from "react-native";
 import { Pressable } from "react-native";
 import { Card, Image, CheckBox } from "@rneui/themed";
 import healthData from "../../dashboard/healthData";
+import MapView from 'react-native-maps';
+import { Marker } from "react-native-maps";
+import GeoLocation, { getCurrentPosition } from 'react-native-geolocation-service';
 
 const OngoingBookingScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
   const [appointment, setAppointment] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [paymentLink, setPaymentLink] = useState("-");
+
+  const currentRegion = {
+    latitude: 23.749090,
+    longitude: 90.366901,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
 
   useEffect(() => {
     const user_access_token = auth.currentUser.stsTokenManager.accessToken;
@@ -40,6 +50,17 @@ const OngoingBookingScreen = ({ navigation }) => {
       .catch((err) => {
         alert(err.message);
       });
+
+    GeoLocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+      },
+      (error) => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    )
   }, []);
 
   const setAppointmentClosure = () => {
@@ -91,13 +112,13 @@ const OngoingBookingScreen = ({ navigation }) => {
       </View>
       <View style={styles.screen2container}>
         <View style={styles.infoContainer}>
-          <Icon name="time-outline" type="ionicon" size={20} color="#00bfff" />
+          <Icon name="time-outline" type="ionicon" size={20} color="#6cc456" />
           <Text style={styles.infoText}>
             {appointment.working_days} D & {appointment.working_hours} H
           </Text>
         </View>
         <View style={styles.info2Container}>
-          <Icon name="cash-outline" type="ionicon" size={20} color="#00bfff" />
+          <Icon name="cash-outline" type="ionicon" size={20} color="#6cc456" />
           <Text style={styles.infoText}>
             <Text style={styles.infoText}>{appointment.cost} BDT</Text>
           </Text>
@@ -122,6 +143,15 @@ const OngoingBookingScreen = ({ navigation }) => {
         </Pressable>
       )}
       {/* <HealthConcerns /> */}
+      <MapView
+        style={styles.map}
+        initialRegion={currentRegion}
+      >
+        <Marker
+          coordinate={currentRegion}
+          pinColor="green"
+        />
+      </MapView>
     </Card>
   );
 
@@ -135,6 +165,10 @@ const OngoingBookingScreen = ({ navigation }) => {
 export default OngoingBookingScreen;
 
 const styles = StyleSheet.create({
+  map: {
+    width: '100%',
+    height: '60%',
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -173,7 +207,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 10,
     elevation: 3,
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     marginTop: 15,
     marginBottom: 10,
   },

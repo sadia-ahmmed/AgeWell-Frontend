@@ -195,11 +195,11 @@ const styles = StyleSheet.create({
     marginLeft: 140,
     borderRadius: 8,
     elevation: 3,
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
   },
 
   bookButton: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 5,
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    backgroundColor: "#439BE8",
+    backgroundColor: "#6cc456",
     marginTop: 20,
     borderRadius: 8,
     paddingVertical: 10,
